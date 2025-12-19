@@ -13,11 +13,14 @@ public static class MartenExtensions
             events.StartStream(aggregate.Id, domainEvents);
             aggregate.ClearDomainEvents();
         }
-        
-        public void AppendAggregateEvents<T>(T aggregate) where T : AggregateRoot
+    }
+    
+    extension<T>(IEventStream<T> stream) where T : AggregateRoot
+    {
+        public void AppendToAggregateStream(T aggregate)
         {
             var domainEvents = aggregate.GetDomainEvents();
-            events.Append(aggregate.Id, domainEvents);
+            stream.AppendMany(domainEvents);
             aggregate.ClearDomainEvents();
         }
     }

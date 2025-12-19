@@ -32,6 +32,7 @@ builder.UseWolverine(o =>
 {
     o.ApplicationAssembly = typeof(CreateImagePostCommandHandler).Assembly;
     o.Durability.Mode = DurabilityMode.MediatorOnly;
+    o.Policies.AutoApplyTransactions();
     o.UseFluentValidation();
 });
 
@@ -43,6 +44,8 @@ builder.Services.AddMarten(o =>
         o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
         o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
         o.OpenTelemetry.TrackEventCounters();
+
+        o.Schema.For<TagCount>().Identity(x => x.Id);
     })
     .UseNpgsqlDataSource()
     .IntegrateWithWolverine()
@@ -73,6 +76,6 @@ api.MapGet("/tags/top",
         await bus.InvokeAsync<Result<PagedResult<TagCount>>>(request));
 
 api.MapPostToWolverine<GetTagsBySearchTermQuery, Result<PagedResult<TagCount>>>("/tags/search");
-api.MapPostToWolverine<CreateImagePostCommand, Result<ImagePost>>("/imageposts");
+api.MapPostToWolverine<CreateImagePostCommand, Result>("/imageposts");
 
 app.Run();

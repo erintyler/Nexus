@@ -5,22 +5,22 @@ using Nexus.Domain.Primitives;
 
 namespace Nexus.Domain.Entities;
 
-public class Comment : Entity
+public class Comment
 {
     public const int MaxContentLength = 2000;
-
-    private Comment(Guid id, Guid userId, string content) : base(id)
+    
+    internal Comment(Guid id, Guid userId, string content)
     {
+        Id = id;
         UserId = userId;
         Content = content;
     }
     
-    private Comment()
-    {
-    }
+    private Comment() { }
     
-    public Guid UserId { get; private init; }
-    public string Content { get; private set; } = null!;
+    public Guid Id { get; internal set; }
+    public Guid UserId { get; internal set; }
+    public string Content { get; internal set; } = null!;
     
     public static Result<Comment> Create(Guid id, Guid userId, string content)
     {
@@ -60,10 +60,5 @@ public class Comment : Entity
         }
 
         return new CommentUpdatedDomainEvent(Id, userId, newContent);
-    }
-    
-    internal void Apply(CommentUpdatedDomainEvent @event)
-    {
-        Content = @event.Content;
     }
 }

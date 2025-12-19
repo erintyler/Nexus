@@ -12,7 +12,7 @@ public static class GetTagsBySearchTermQueryHandler
     public static async Task<Result<PagedResult<TagCount>>> Handle(GetTagsBySearchTermQuery request, IQuerySession session, CancellationToken cancellationToken = default)
     {
         var searchQuery =  session.Query<TagCount>()
-            .Where(x => x.TagValue.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase));
+            .Where(x => x.Id.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase));
         
         var totalCount = await searchQuery.CountAsync(cancellationToken);
         

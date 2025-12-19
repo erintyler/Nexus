@@ -1,45 +1,30 @@
-using Marten;
-using Nexus.Application.Common.Models;
-using Nexus.Application.Extensions;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
-using Nexus.Domain.Events.Tags;
+using Nexus.Domain.Events.ImagePosts;
+using Nexus.Domain.ValueObjects;
+using Wolverine.Marten;
 
 namespace Nexus.Application.Features.ImagePosts.CreateImagePost;
 
 public static class CreateImagePostCommandHandler
 {
-    public static async Task<Result<ImagePost>> Handle(CreateImagePostCommand request, IDocumentSession session, CancellationToken cancellationToken = default)
+    public static (Result, IStartStream?) Handle(CreateImagePostCommand request)
     {
-        var postId = Guid.NewGuid();
-        var imagePostResult = ImagePost.Create(postId, request.Title);
+        var tagResults = request.Tags
+            .Select(t => Tag.Create(t.TagValue, t.TagType))
+            .ToList();
         
-        if (imagePostResult.IsFailure)
+        if (tagResults.Any(tr => tr.IsFailure))
         {
-            return imagePostResult;
+            var firstError = tagResults.First(tr => tr.IsFailure).Error;
+            return (firstError, null);
         }
         
-        var imagePost = imagePostResult.Value;
+        var tags = tagResults.Select(tr => tr.Value).ToList();
         
-        foreach (var tagDto in request.Tags)
-        {
-            var addTagResult = AddTag(tagDto, imagePost);
-            
-            if (addTagResult.IsFailure)
-            {
-                return addTagResult.Error;
-            }
-        }
+        var createEvent = new ImagePostCreatedDomainEvent(Guid.NewGuid(), request.Title, tags);
+        var stream = MartenOps.StartStream<ImagePost>(createEvent);
         
-        session.Events.StartAggregateStream(imagePost);
-        await session.SaveChangesAsync(cancellationToken);
-        return imagePost;
-    }
-
-    private static Result AddTag(TagDto tagDto, ImagePost imagePost)
-    {
-        var tagResult = tagDto.ToDomainTag();
-            
-        return tagResult.IsFailure ? tagResult.Error : imagePost.AddTag(tagResult.Value);
+        return (Result.Success(), stream);
     }
 }

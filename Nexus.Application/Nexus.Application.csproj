@@ -12,7 +12,8 @@
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.1"/>
         <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.119.1"/>
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.1"/>
-        <PackageReference Include="WolverineFx.Marten" Version="5.8.0"/>
+        <PackageReference Include="WolverineFx.Http.Marten" Version="5.9.0" />
+        <PackageReference Include="WolverineFx.Marten" Version="5.9.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Features\ImagePosts\RemoveTagsFromImagePost\" />
       <Folder Include="Features\ImagePosts\UpdateImagePost\" />
       <Folder Include="Features\ImageProcessing\ConvertToWebP\" />
       <Folder Include="Features\ImageProcessing\CreateThumbnail\" />
