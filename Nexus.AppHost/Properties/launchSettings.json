@@ -26,6 +26,20 @@
         "ASPIRE_DASHBOARD_MCP_ENDPOINT_URL": "http://localhost:18272",
         "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20161"
       }
+    },
+    "migrate": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:17243;http://localhost:15245",
+      "commandLineArgs": "-- db-patch",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21232",
+        "ASPIRE_DASHBOARD_MCP_ENDPOINT_URL": "https://localhost:23003",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22039"
+      }
     }
   }
 }

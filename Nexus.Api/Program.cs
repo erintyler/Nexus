@@ -1,3 +1,5 @@
+using JasperFx;
+using JasperFx.CodeGeneration;
 using JasperFx.Events.Daemon;
 using JasperFx.Events.Projections;
 using Marten;
@@ -10,6 +12,7 @@ using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.Tags.Common.Projections;
 using Nexus.Application.Features.Tags.GetTagsBySearchTerm;
 using Nexus.Application.Features.Tags.GetTopTags;
+using Nexus.Application.Helpers;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Scalar.AspNetCore;
@@ -30,26 +33,50 @@ builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
 });
 builder.UseWolverine(o =>
 {
-    o.ApplicationAssembly = typeof(CreateImagePostCommandHandler).Assembly;
+    o.Discovery.IncludeAssembly(typeof(CreateImagePostCommandHandler).Assembly);
     o.Durability.Mode = DurabilityMode.MediatorOnly;
     o.Policies.AutoApplyTransactions();
     o.UseFluentValidation();
+
+    o.Services.CritterStackDefaults(c =>
+    {
+        c.Production.GeneratedCodeMode = TypeLoadMode.Static;
+        c.Production.ResourceAutoCreate = AutoCreate.None;
+    });
 });
+
+if (CodeGeneration.IsRunningGeneration())
+{
+    builder.Services.DisableAllExternalWolverineTransports();
+    builder.Services.DisableAllWolverineMessagePersistence();
+}
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddMarten(o =>
-    {
-        o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
-        o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
-        o.OpenTelemetry.TrackEventCounters();
 
-        o.Schema.For<TagCount>().Identity(x => x.Id);
-    })
-    .UseNpgsqlDataSource()
-    .IntegrateWithWolverine()
-    .AddAsyncDaemon(DaemonMode.HotCold);
+if (CodeGeneration.IsRunningGeneration())
+{
+    builder.Services
+        .AddMarten("Server=.;Database=Foo")
+        .AddAsyncDaemon(DaemonMode.Disabled)
+        .UseLightweightSessions();
+}
+else
+{
+    builder.Services.AddMarten(o =>
+        {
+            o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
+            o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
+            o.OpenTelemetry.TrackEventCounters();
+            o.Schema.For<TagCount>().Identity(x => x.Id);
+        })
+        .UseNpgsqlDataSource()
+        .IntegrateWithWolverine()
+        .AddAsyncDaemon(DaemonMode.HotCold);
+}
+
+
 
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -78,4 +105,4 @@ api.MapGet("/tags/top",
 api.MapPostToWolverine<GetTagsBySearchTermQuery, Result<PagedResult<TagCount>>>("/tags/search");
 api.MapPostToWolverine<CreateImagePostCommand, Result>("/imageposts");
 
-app.Run();
+await app.RunJasperFxCommands(args);
