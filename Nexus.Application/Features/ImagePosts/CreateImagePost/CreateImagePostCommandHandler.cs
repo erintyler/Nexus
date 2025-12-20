@@ -1,6 +1,7 @@
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Events.ImagePosts;
+using Nexus.Domain.Extensions;
 using Nexus.Domain.ValueObjects;
 using Wolverine.Marten;
 
@@ -8,20 +9,19 @@ namespace Nexus.Application.Features.ImagePosts.CreateImagePost;
 
 public static class CreateImagePostCommandHandler
 {
-    public static (Result<Guid>, IStartStream?) Handle(CreateImagePostCommand request)
+    public static (Result<CreateImagePostResponse>, IStartStream?) Handle(CreateImagePostCommand request)
     {
         var tagResults = request.Tags
             .Select(t => Tag.Create(t.Value, t.Type))
             .ToList();
 
         var errors = tagResults
-            .Where(r => r.IsFailure)
-            .SelectMany(r => r.Errors)
+            .WithIndexedErrors(nameof(request.Tags))
             .ToList();
         
         if (errors.Count != 0)
         {
-            return (Result.Failure<Guid>(errors), null);
+            return (Result.Failure<CreateImagePostResponse>(errors), null);
         }
         
         var tags = tagResults.Select(tr => tr.Value).ToList();
@@ -30,6 +30,8 @@ public static class CreateImagePostCommandHandler
         var createEvent = new ImagePostCreatedDomainEvent(id, request.Title, tags);
         var stream = MartenOps.StartStream<ImagePost>(createEvent);
         
-        return (id, stream);
+        var response = new CreateImagePostResponse(id, request.Title, DateTime.UtcNow);
+        
+        return (response, stream);
     }
 }

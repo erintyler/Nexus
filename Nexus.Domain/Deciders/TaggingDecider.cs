@@ -1,6 +1,7 @@
 using Nexus.Domain.Abstractions;
 using Nexus.Domain.Common;
 using Nexus.Domain.Events.Tags;
+using Nexus.Domain.Extensions;
 using Nexus.Domain.ValueObjects;
 
 namespace Nexus.Domain.Deciders;
@@ -11,8 +12,7 @@ public static class TaggingDecider
     {
         var errors = tags
             .Select(t => Tag.Create(t.Value, t.Type))
-            .Where(r => r.IsFailure)
-            .SelectMany(r => r.Errors)
+            .WithIndexedErrors(nameof(tags))
             .ToList();
 
         if (errors.Count != 0)

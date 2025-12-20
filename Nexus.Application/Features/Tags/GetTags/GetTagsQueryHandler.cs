@@ -11,17 +11,22 @@ public static class GetTagsQueryHandler
 {
     public static async Task<Result<PagedResult<TagCount>>> Handle(GetTagsQuery request, IQuerySession session, CancellationToken cancellationToken = default)
     {
-        var searchQuery =  session.Query<TagCount>()
-            .Where(x => x.Id.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase));
+        IQueryable<TagCount> query = session.Query<TagCount>();
         
-        var totalCount = await searchQuery.CountAsync(cancellationToken);
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            var searchTerm = request.SearchTerm.Trim();
+            query = query.Where(t => t.Id.Contains(searchTerm));
+        }
+        
+        var totalCount = await query.CountAsync(cancellationToken);
         
         if (totalCount == 0)
         {
             return TagErrors.NoResults;
         }
 
-        return await searchQuery
+        return await query
             .OrderByDescending(x => x.Count)
             .ToPagedResultAsync(request, cancellationToken);
     }

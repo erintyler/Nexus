@@ -8,7 +8,7 @@ public class Result : IResult
     
     protected Result(bool isSuccess, Error error)
     {
-        if (isSuccess && error != Error.None || !isSuccess && error == Error.None)
+        if ((isSuccess && error != Error.None) || (!isSuccess && error == Error.None))
         {
             throw new ArgumentException("Invalid error state for Result", nameof(error));
         }
@@ -21,7 +21,7 @@ public class Result : IResult
     {
         var validErrors = errors.Where(e => e != Error.None).ToList();
         
-        if (isSuccess || !isSuccess && validErrors.Count == 0)
+        if (isSuccess || (!isSuccess && validErrors.Count == 0))
         {
             throw new ArgumentException("Invalid error state for Result", nameof(errors));
         }

@@ -10,7 +10,7 @@ public class Tag : ValueObject
     public const int MinLength = 3;
     public const int MaxLength = 30;
     
-    public Tag(string value, TagType type)
+    internal Tag(string value, TagType type)
     {
         Value = value;
         Type = type;

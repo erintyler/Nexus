@@ -8,7 +8,7 @@ public class CreateImagePostCommandValidator : AbstractValidator<CreateImagePost
     {
         RuleFor(x => x.Title)
             .Length(5, 200)
-            .WithMessage("Title must be between 5 and 100 characters long.");
+            .WithMessage("Title must be between 5 and 200 characters long.");
         
         // Ensure no duplicate tags are provided
         RuleFor(x => x.Tags)

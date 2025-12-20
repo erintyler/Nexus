@@ -52,7 +52,7 @@ public class ImagePost : ITaggable
     
     public void Apply(TagAddedDomainEvent @event)
     {
-        var tag = Tag.Create(@event.TagValue, @event.TagType);
-        _tags.Add(tag.Value);
+        // Use constructor instead of Tag.Create since tag was validated before event was created
+        _tags.Add(new Tag(@event.TagValue, @event.TagType));
     }
 }

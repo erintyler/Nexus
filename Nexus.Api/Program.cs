@@ -6,7 +6,6 @@ using JasperFx.Events.Projections;
 using Marten;
 using Marten.Services;
 using Nexus.Api.Endpoints;
-using Nexus.Api.Filters;
 using Nexus.Api.Middleware;
 using Nexus.Application.Common.Pagination;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
@@ -15,6 +14,7 @@ using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Helpers;
 using Nexus.Domain.Common;
 using Scalar.AspNetCore;
+using Serilog;
 using Wolverine;
 using Wolverine.FluentValidation;
 using Wolverine.Http;
@@ -49,6 +49,10 @@ if (CodeGeneration.IsRunningGeneration())
     builder.Services.DisableAllExternalWolverineTransports();
     builder.Services.DisableAllWolverineMessagePersistence();
 }
+
+builder.Services.AddSerilog((services, lc) => lc
+    .ReadFrom.Configuration(builder.Configuration)
+    .ReadFrom.Services(services));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -85,6 +89,7 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 app.MapDefaultEndpoints();
 
@@ -97,8 +102,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var api = app.MapGroup("/api")
-    .AddEndpointFilter<ResultEndpointFilter>();
+var api = app.MapGroup("/api");
 
 api.MapImageEndpoints();
 
