@@ -5,11 +5,11 @@ using Nexus.Application.Features.Tags.Common.Projections;
 using Nexus.Domain.Common;
 using Nexus.Domain.Errors;
 
-namespace Nexus.Application.Features.Tags.GetTagsBySearchTerm;
+namespace Nexus.Application.Features.Tags.GetTags;
 
-public static class GetTagsBySearchTermQueryHandler
+public static class GetTagsQueryHandler
 {
-    public static async Task<Result<PagedResult<TagCount>>> Handle(GetTagsBySearchTermQuery request, IQuerySession session, CancellationToken cancellationToken = default)
+    public static async Task<Result<PagedResult<TagCount>>> Handle(GetTagsQuery request, IQuerySession session, CancellationToken cancellationToken = default)
     {
         var searchQuery =  session.Query<TagCount>()
             .Where(x => x.Id.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase));

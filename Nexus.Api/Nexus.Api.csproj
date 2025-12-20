@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="Aspire.Npgsql" Version="13.1.0" />
+        <PackageReference Include="MicroElements.OpenApi.FluentValidation" Version="7.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
         <PackageReference Include="Scalar.AspNetCore" Version="2.11.8" />
         <PackageReference Include="WolverineFx.FluentValidation" Version="5.9.0" />

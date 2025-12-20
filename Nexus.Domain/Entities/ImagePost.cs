@@ -35,7 +35,6 @@ public class ImagePost : ITaggable
     public void Apply(CommentCreatedDomainEvent @event)
     {
         var comment = new Comment(@event.Id, @event.UserId, @event.Content);
-        
         _comments.Add(comment);
     }
     
@@ -48,23 +47,12 @@ public class ImagePost : ITaggable
     public void Apply(CommentDeletedDomainEvent @event)
     {
         var comment = _comments.First(c => c.Id == @event.Id);
-        if (comment is null)
-        {
-            throw new InvalidOperationException("Failed to apply CommentDeleted event: Comment not found.");
-        }
-        
         _comments.Remove(comment);
     }
     
     public void Apply(TagAddedDomainEvent @event)
     {
         var tag = Tag.Create(@event.TagValue, @event.TagType);
-        
-        if (tag.IsFailure)
-        {
-            throw new InvalidOperationException($"Failed to apply TagAdded event: {tag.Error.Code}");
-        }
-        
         _tags.Add(tag.Value);
     }
 }

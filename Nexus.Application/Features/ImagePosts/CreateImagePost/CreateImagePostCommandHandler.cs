@@ -8,23 +8,28 @@ namespace Nexus.Application.Features.ImagePosts.CreateImagePost;
 
 public static class CreateImagePostCommandHandler
 {
-    public static (Result, IStartStream?) Handle(CreateImagePostCommand request)
+    public static (Result<Guid>, IStartStream?) Handle(CreateImagePostCommand request)
     {
         var tagResults = request.Tags
-            .Select(t => Tag.Create(t.TagValue, t.TagType))
+            .Select(t => Tag.Create(t.Value, t.Type))
+            .ToList();
+
+        var errors = tagResults
+            .Where(r => r.IsFailure)
+            .SelectMany(r => r.Errors)
             .ToList();
         
-        if (tagResults.Any(tr => tr.IsFailure))
+        if (errors.Count != 0)
         {
-            var firstError = tagResults.First(tr => tr.IsFailure).Error;
-            return (firstError, null);
+            return (Result.Failure<Guid>(errors), null);
         }
         
         var tags = tagResults.Select(tr => tr.Value).ToList();
         
-        var createEvent = new ImagePostCreatedDomainEvent(Guid.NewGuid(), request.Title, tags);
+        var id = Guid.NewGuid();
+        var createEvent = new ImagePostCreatedDomainEvent(id, request.Title, tags);
         var stream = MartenOps.StartStream<ImagePost>(createEvent);
         
-        return (Result.Success(), stream);
+        return (id, stream);
     }
 }

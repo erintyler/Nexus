@@ -1,20 +1,19 @@
+using System.Text.Json.Serialization;
 using JasperFx;
 using JasperFx.CodeGeneration;
 using JasperFx.Events.Daemon;
 using JasperFx.Events.Projections;
 using Marten;
 using Marten.Services;
-using Microsoft.AspNetCore.Mvc;
+using Nexus.Api.Endpoints;
 using Nexus.Api.Filters;
 using Nexus.Api.Middleware;
 using Nexus.Application.Common.Pagination;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.Tags.Common.Projections;
-using Nexus.Application.Features.Tags.GetTagsBySearchTerm;
-using Nexus.Application.Features.Tags.GetTopTags;
+using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Helpers;
 using Nexus.Domain.Common;
-using Nexus.Domain.Entities;
 using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.FluentValidation;
@@ -76,7 +75,10 @@ else
         .AddAsyncDaemon(DaemonMode.HotCold);
 }
 
-
+builder.Services.ConfigureHttpJsonOptions(o =>
+{
+    o.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -98,11 +100,8 @@ app.UseHttpsRedirection();
 var api = app.MapGroup("/api")
     .AddEndpointFilter<ResultEndpointFilter>();
 
-api.MapGet("/tags/top",
-    async ([AsParameters] GetTopTagsQuery request, IMessageBus bus) =>
-        await bus.InvokeAsync<Result<PagedResult<TagCount>>>(request));
+api.MapImageEndpoints();
 
-api.MapPostToWolverine<GetTagsBySearchTermQuery, Result<PagedResult<TagCount>>>("/tags/search");
-api.MapPostToWolverine<CreateImagePostCommand, Result>("/imageposts");
+api.MapPostToWolverine<GetTagsQuery, Result<PagedResult<TagCount>>>("/tags/search");
 
 await app.RunJasperFxCommands(args);

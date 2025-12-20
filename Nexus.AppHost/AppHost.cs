@@ -5,8 +5,7 @@ var postgres = builder.AddPostgres("postgres")
     .WithDataVolume();
 
 var apiService = builder.AddProject<Projects.Nexus_Api>("nexus-api")
-    .WithReference(postgres)
-    .WaitFor(postgres);
+    .WithReference(postgres);
 
 if (args.Contains("db-patch"))
 {
