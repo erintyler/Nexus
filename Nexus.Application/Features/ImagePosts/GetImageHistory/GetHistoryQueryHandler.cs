@@ -1,5 +1,6 @@
 using JasperFx.Events;
 using Marten;
+using Marten.Events;
 using Microsoft.Extensions.Logging;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Pagination;
@@ -10,12 +11,12 @@ using Nexus.Domain.Events;
 
 namespace Nexus.Application.Features.ImagePosts.GetImageHistory;
 
-public class GetImageHistoryQueryHandler
+public class GetHistoryQueryHandler
 {
     public static async Task<Result<PagedResult<HistoryDto>>> Handle(
-        GetImageHistoryQuery request, 
+        GetHistoryQuery request, 
         IQuerySession querySession,
-        ILogger<GetImageHistoryQueryHandler> logger,
+        ILogger<GetHistoryQueryHandler> logger,
         CancellationToken cancellationToken)
     {
         var events = await querySession.Events.FetchStreamAsync(
@@ -36,18 +37,9 @@ public class GetImageHistoryQueryHandler
         var validPaginationRequest = request.WithValidPageNumber(count);
 
         return events
-            .Select(e => MapEventsToHistoryDtos(e, logger))
+            .OfType<IEvent<INexusEvent>>()
+            .Select(e => e.ToHistoryDto())
+            .OrderByDescending(e => e.Timestamp)
             .ToPagedResult(validPaginationRequest, count);
-    }
-    
-    private static HistoryDto MapEventsToHistoryDtos(IEvent @event, ILogger<GetImageHistoryQueryHandler> logger)
-    {
-        if (@event.Data is not INexusEvent data)
-        {
-            logger.LogWarning("Event with ID {EventId} is not a valid INexusEvent", @event.Id);
-            return new HistoryDto("Unknown Event", "No description available", @event.Timestamp, @event.UserName);
-        }
-        
-        return new HistoryDto(@data.EventName, @data.Description, @event.Timestamp, @event.UserName);
     }
 }

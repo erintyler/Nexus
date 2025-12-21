@@ -1,6 +1,5 @@
+using System.Text.Json.Serialization;
 using Nexus.Domain.Abstractions;
-using Nexus.Domain.Common;
-using Nexus.Domain.Errors;
 using Nexus.Domain.Events.Comments;
 using Nexus.Domain.Events.ImagePosts;
 using Nexus.Domain.Events.Tags;
@@ -10,15 +9,29 @@ namespace Nexus.Domain.Entities;
 
 public class ImagePost : ITaggable
 {
-    private readonly List<Comment> _comments = [];
-    private readonly HashSet<Tag> _tags = [];
+    [JsonInclude]
+    [JsonPropertyName("Comments")]
+    private List<Comment> _comments = [];
     
+    [JsonInclude]
+    [JsonPropertyName("Tags")]
+    private HashSet<Tag> _tags = [];
+    
+    [JsonConstructor]
     private ImagePost() { }
     
     public Guid Id { get; set; }
     public string Title { get; set; } = null!;
     
+    public DateTimeOffset CreatedAt { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTimeOffset LastModified { get; set; }
+    public string LastModifiedBy { get; set; }
+    
+    [JsonIgnore]
     public IReadOnlyList<Comment> Comments => _comments.AsReadOnly();
+    
+    [JsonIgnore]
     public IReadOnlySet<Tag> Tags => _tags.AsReadOnly();
     
     public void Apply(ImagePostCreatedDomainEvent @event)
