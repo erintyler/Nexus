@@ -12,13 +12,14 @@ using Nexus.Api.Middleware;
 using Nexus.Api.Middleware.Wolverine;
 using Nexus.Api.Services;
 using Nexus.Application.Common.Pagination;
+using Nexus.Application.Common.Services;
+using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Application.Features.ImagePosts.Common.Projections;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.Tags.Common.Projections;
 using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Helpers;
 using Nexus.Domain.Common;
-using Nexus.Domain.Entities;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -91,7 +92,7 @@ else
             
             o.Schema.For<TagCount>().Identity(x => x.Id);
             
-            o.Schema.For<ImagePost>().Metadata(m =>
+            o.Schema.For<ImagePostReadModel>().Metadata(m =>
             {
                 m.CreatedAt.MapTo(x => x.CreatedAt);
                 m.LastModified.MapTo(x => x.LastModified);

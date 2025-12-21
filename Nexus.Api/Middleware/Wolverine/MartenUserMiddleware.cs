@@ -1,5 +1,5 @@
 using Marten;
-using Nexus.Api.Services;
+using Nexus.Application.Common.Services;
 
 namespace Nexus.Api.Middleware.Wolverine;
 

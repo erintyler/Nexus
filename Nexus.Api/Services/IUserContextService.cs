@@ -1,6 +1,3 @@
-namespace Nexus.Api.Services;
+// Interface moved to Nexus.Application.Common.Services.IUserContextService
+// This file can be deleted
 
-public interface IUserContextService
-{
-    string GetUserName();
- }

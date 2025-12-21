@@ -1,7 +1,6 @@
+using Nexus.Application.Common.Services;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
-using Nexus.Domain.Events.ImagePosts;
-using Nexus.Domain.Extensions;
 using Nexus.Domain.ValueObjects;
 using Wolverine.Marten;
 
@@ -9,28 +8,36 @@ namespace Nexus.Application.Features.ImagePosts.CreateImagePost;
 
 public static class CreateImagePostCommandHandler
 {
-    public static (Result<CreateImagePostResponse>, IStartStream?) Handle(CreateImagePostCommand request)
+    public static (Result<CreateImagePostResponse>, IStartStream?) Handle(
+        CreateImagePostCommand request,
+        IUserContextService userContextService)
     {
+        var userId = userContextService.GetUserId();
+        
+        // Convert DTOs to domain value objects - let Tag.Create handle validation
         var tagResults = request.Tags
             .Select(t => Tag.Create(t.Value, t.Type))
             .ToList();
-
-        var errors = tagResults
-            .WithIndexedErrors(nameof(request.Tags))
+        
+        // Extract tags for aggregate (aggregate will validate them again, but that's OK for double validation)
+        var tags = tagResults
+            .Where(t => t.IsSuccess)
+            .Select(t => t.Value)
             .ToList();
         
-        if (errors.Count != 0)
+        // Let the aggregate handle validation and event creation
+        var createEventResult = ImagePost.Create(userId, request.Title, tags);
+        
+        if (createEventResult.IsFailure)
         {
-            return (Result.Failure<CreateImagePostResponse>(errors), null);
+            return (Result.Failure<CreateImagePostResponse>(createEventResult.Errors), null);
         }
         
-        var tags = tagResults.Select(tr => tr.Value).ToList();
-        
-        var createEvent = new ImagePostCreatedDomainEvent(request.Title, tags);
-        var stream = MartenOps.StartStream<ImagePost>(createEvent);
-        
+        // Start the event stream with the created event
+        var stream = MartenOps.StartStream<ImagePost>(createEventResult.Value);
         var response = new CreateImagePostResponse(stream.StreamId, request.Title, DateTime.UtcNow);
         
         return (response, stream);
     }
 }
+
