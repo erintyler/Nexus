@@ -23,7 +23,6 @@ public class ImagePost : ITaggable
     
     public void Apply(ImagePostCreatedDomainEvent @event)
     {
-        Id = @event.Id;
         Title = @event.Title;
         
         foreach (var tag in @event.Tags)

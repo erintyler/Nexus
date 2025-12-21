@@ -8,7 +8,6 @@ public class ImagePostProjection : SingleStreamProjection<ImagePost, Guid>
 {
     public void Apply(ImagePostCreatedDomainEvent @event, ImagePost imagePost)
     {
-        imagePost.Id = @event.Id;
         imagePost.Title = @event.Title;
     }
 }

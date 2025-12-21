@@ -1,49 +1,53 @@
+using JasperFx.Events;
 using Marten;
-using Marten.Pagination;
+using Microsoft.Extensions.Logging;
+using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Pagination;
 using Nexus.Application.Extensions;
 using Nexus.Domain.Common;
 using Nexus.Domain.Errors;
+using Nexus.Domain.Events;
 
 namespace Nexus.Application.Features.ImagePosts.GetImageHistory;
 
-public static class GetImageHistoryQueryHandler
+public class GetImageHistoryQueryHandler
 {
-    public static async Task<Result<PagedResult<string>>> Handle(
+    public static async Task<Result<PagedResult<HistoryDto>>> Handle(
         GetImageHistoryQuery request, 
         IQuerySession querySession,
+        ILogger<GetImageHistoryQueryHandler> logger,
         CancellationToken cancellationToken)
     {
-        var query = querySession.Events
-            .QueryAllRawEvents()
-            .Where(e => e.StreamId == request.Id);
+        var events = await querySession.Events.FetchStreamAsync(
+            request.Id, 
+            timestamp: request.DateTo, 
+            token: cancellationToken);
         
-        if (request.DateFrom.HasValue) 
-        {
-            query = query.Where(e => e.Timestamp >= request.DateFrom.Value);
-        }
+        events = events
+            .Where(e => request.DateFrom == null || e.Timestamp >= request.DateFrom)
+            .ToList();
         
-        if (request.DateTo.HasValue) 
-        {
-            query = query.Where(e => e.Timestamp <= request.DateTo.Value);
-        }
-        
-        var totalCount = await query.CountAsync(cancellationToken);
-        
-        if (totalCount == 0)
+        var count = events.Count;
+        if (count == 0)
         {
             return ImagePostErrors.NotFound;
         }
 
-        var events = await query
-            .OrderByDescending(e => e.Timestamp)
-            .ToPagedResultAsync(request, cancellationToken);
+        var validPaginationRequest = request.WithValidPageNumber(count);
 
-        foreach (var e in events.Items)
-        {
-            
-        }
+        return events
+            .Select(e => MapEventsToHistoryDtos(e, logger))
+            .ToPagedResult(validPaginationRequest, count);
     }
     
-    
+    private static HistoryDto MapEventsToHistoryDtos(IEvent @event, ILogger<GetImageHistoryQueryHandler> logger)
+    {
+        if (@event.Data is not INexusEvent data)
+        {
+            logger.LogWarning("Event with ID {EventId} is not a valid INexusEvent", @event.Id);
+            return new HistoryDto("Unknown Event", "No description available", @event.Timestamp, @event.UserName);
+        }
+        
+        return new HistoryDto(@data.EventName, @data.Description, @event.Timestamp, @event.UserName);
+    }
 }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Nexus.Domain.Common;
 using Nexus.Domain.Enums;
 using Nexus.Domain.Errors;
@@ -10,6 +11,7 @@ public class Tag : ValueObject
     public const int MinLength = 3;
     public const int MaxLength = 30;
     
+    [JsonConstructor]
     internal Tag(string value, TagType type)
     {
         Value = value;

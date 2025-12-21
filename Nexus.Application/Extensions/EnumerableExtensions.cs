@@ -1,25 +1,24 @@
-using Marten;
 using Nexus.Application.Common.Pagination;
 
 namespace Nexus.Application.Extensions;
 
-public static class QueryableExtensions
+public static class EnumerableExtensions
 {
-    extension<T>(IQueryable<T> query) where T : notnull
+    extension<T>(IEnumerable<T> source)
     {
-        public IQueryable<T> ApplyPagination(PaginationRequest paginationRequest)
+        public IEnumerable<T> ApplyPagination(PaginationRequest paginationRequest)
         {
-            return query
+            return source
                 .Skip(paginationRequest.Skip)
                 .Take(paginationRequest.PageSize);
         }
-
-        public async Task<PagedResult<T>> ToPagedResultAsync(PaginationRequest paginationRequest, int totalCount, CancellationToken cancellationToken = default)
+        
+        public PagedResult<T> ToPagedResult(PaginationRequest paginationRequest, int totalCount)
         {
             var validPaginationRequest = paginationRequest.WithValidPageNumber(totalCount);
-            var items = await query
+            var items = source
                 .ApplyPagination(validPaginationRequest)
-                .ToListAsync(cancellationToken);
+                .ToList();
 
             return PagedResult<T>.Create(items, totalCount, validPaginationRequest);
         }

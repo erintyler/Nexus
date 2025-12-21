@@ -26,11 +26,10 @@ public static class CreateImagePostCommandHandler
         
         var tags = tagResults.Select(tr => tr.Value).ToList();
         
-        var id = Guid.NewGuid();
-        var createEvent = new ImagePostCreatedDomainEvent(id, request.Title, tags);
+        var createEvent = new ImagePostCreatedDomainEvent(request.Title, tags);
         var stream = MartenOps.StartStream<ImagePost>(createEvent);
         
-        var response = new CreateImagePostResponse(id, request.Title, DateTime.UtcNow);
+        var response = new CreateImagePostResponse(stream.StreamId, request.Title, DateTime.UtcNow);
         
         return (response, stream);
     }

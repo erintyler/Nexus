@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Api.Extensions;
+using Nexus.Application.Common.Models;
+using Nexus.Application.Common.Pagination;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
+using Nexus.Application.Features.ImagePosts.GetImageHistory;
 using Nexus.Domain.Common;
 using Wolverine;
 
@@ -39,6 +42,29 @@ public static class CreateImageEndpoint
             .WithDescription("Creates a new image post with the specified title and tags.")
             .Produces<CreateImagePostResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem();
+            
+            app.MapGet("/{id:guid}/history", async Task<Results<Ok<PagedResult<HistoryDto>>, NotFound, ProblemHttpResult>> (
+                Guid id,
+                DateTimeOffset? dateFrom,
+                DateTimeOffset? dateTo,
+                IMessageBus bus,
+                CancellationToken cancellationToken) =>
+            {
+                var query = new GetImageHistoryQuery(id, dateFrom, dateTo);
+                var result = await bus.InvokeAsync<Result<PagedResult<HistoryDto>>>(query, cancellationToken);
+
+                if (result.IsSuccess)
+                {
+                    return TypedResults.Ok(result.Value);
+                } 
+                
+                return TypedResults.NotFound();
+            }).WithName("GetImageHistory")
+            .WithSummary("Get image history")
+            .WithDescription("Retrieves the history of changes for the specified image post.")
+            .Produces<PagedResult<HistoryDto>>()
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesValidationProblem();
             
             app.MapGet("/{id:guid}", () => Results.Ok())

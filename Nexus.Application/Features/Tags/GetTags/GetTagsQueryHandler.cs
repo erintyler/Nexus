@@ -28,6 +28,6 @@ public static class GetTagsQueryHandler
 
         return await query
             .OrderByDescending(x => x.Count)
-            .ToPagedResultAsync(request, cancellationToken);
+            .ToPagedResultAsync(request, totalCount, cancellationToken);
     }
 }
