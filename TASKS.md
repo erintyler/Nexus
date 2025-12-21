@@ -1,0 +1,2 @@
+# Tasks
+- Create a local script that automates the creation of migrations (by applying existing migrations against a non-aspire database and then running the db-patch). This should also then run the migrations integration tests against the updated database.

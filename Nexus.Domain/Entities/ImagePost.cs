@@ -15,8 +15,8 @@ public class ImagePost : ITaggable
     
     private ImagePost() { }
     
-    public Guid Id { get; private set; }
-    public string Title { get; private set; } = null!;
+    public Guid Id { get; set; }
+    public string Title { get; set; } = null!;
     
     public IReadOnlyList<Comment> Comments => _comments.AsReadOnly();
     public IReadOnlySet<Tag> Tags => _tags.AsReadOnly();

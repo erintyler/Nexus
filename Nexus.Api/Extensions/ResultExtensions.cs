@@ -10,8 +10,15 @@ public static class ResultExtensions
         public ValidationProblem ToValidationProblem()
         {
             if (!result.IsFailure)
+            {
                 throw new InvalidOperationException("Cannot convert successful result to validation problem");
-
+            }
+            
+            if (result.Errors.Any(e => e.Type != ErrorType.Validation))
+            {
+                throw new InvalidOperationException("Result contains non-validation errors");
+            }
+            
             return TypedResults.ValidationProblem(
                 result.Errors.ToDictionary(e => e.Code, e => new[] { e.Description ?? string.Empty }),
                 title: "One or more validation errors occurred");
@@ -20,7 +27,14 @@ public static class ResultExtensions
         public ProblemHttpResult ToUnprocessableEntityProblem()
         {
             if (!result.IsFailure)
+            {
                 throw new InvalidOperationException("Cannot convert successful result to problem");
+            }
+            
+            if (result.Errors.Any(e => e.Type != ErrorType.BusinessRule))
+            {
+                throw new InvalidOperationException("Result contains non-business rule errors");
+            }
 
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status422UnprocessableEntity,
