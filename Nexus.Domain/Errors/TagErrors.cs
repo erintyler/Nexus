@@ -34,4 +34,14 @@ public static class TagErrors
         "Tag.NoResults",
         ErrorType.NotFound,
         "No tags were found matching the specified criteria.");
+    
+    public static readonly Error NoNewTags = new(
+        "Tag.NoNewTags",
+        ErrorType.BusinessRule,
+        "No new tags were provided to add.");
+    
+    public static readonly Error NoTagsToRemove = new(
+        "Tag.NoTagsToRemove",
+        ErrorType.BusinessRule,
+        "No tags were found to remove from the image post.");
 }

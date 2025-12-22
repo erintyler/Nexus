@@ -3,7 +3,7 @@ using Nexus.Domain.Primitives;
 
 namespace Nexus.Domain.Events.Tags;
 
-public record TagAddedDomainEvent(string TagValue, TagType TagType) : INexusEvent
+public record TagAddedDomainEvent(TagType TagType, string TagValue) : INexusEvent
 {
     public string EventName { get; } = "Tag added";
     public string Description { get; } = $"{TagType}:{TagValue}";

@@ -15,6 +15,11 @@ public class ImagePostErrors
         ErrorType.BusinessRule,
         "The title of the image post cannot be empty.");
     
+    public static readonly Error TitleTooShort = new(
+        "ImagePost.Title.TooShort",
+        ErrorType.BusinessRule,
+        $"Title must be at least {ImagePost.MinTitleLength} characters long.");
+    
     public static readonly Error TitleTooLong = new(
         "ImagePost.Title.TooLong",
         ErrorType.BusinessRule,
@@ -24,6 +29,11 @@ public class ImagePostErrors
         "ImagePost.UserId.Empty",
         ErrorType.BusinessRule,
         "User ID cannot be empty.");
+    
+    public static readonly Error AtLeastOneTagRequired = new(
+        "ImagePost.Tags.AtLeastOneRequired",
+        ErrorType.BusinessRule,
+        "At least one tag is required for the image post.");
 }
 
 

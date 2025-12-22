@@ -29,8 +29,10 @@ public class ImagePost : ITaggable
     // Properties with private setters for encapsulation
     public Guid Id { get; private set; }
     public string Title { get; private set; } = null!;
-    public DateTimeOffset CreatedAt { get; private set; }
     public string CreatedBy { get; private set; } = null!;
+    
+    // Marten event sourcing metadata
+    public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset LastModified { get; private set; }
     public string LastModifiedBy { get; private set; } = null!;
     
@@ -56,11 +58,19 @@ public class ImagePost : ITaggable
             return ImagePostErrors.TitleEmpty;
         }
         
-        if (title.Length > MaxTitleLength)
+        switch (title.Length)
         {
-            return ImagePostErrors.TitleTooLong;
+            case < MinTitleLength:
+                return ImagePostErrors.TitleTooShort;
+            case > MaxTitleLength:
+                return ImagePostErrors.TitleTooLong;
         }
-        
+
+        if (tags.Count == 0)
+        {
+            return ImagePostErrors.AtLeastOneTagRequired;
+        }
+
         // Validate tags
         var tagResults = tags
             .Select(t => Tag.Create(t.Type, t.Value))
@@ -75,10 +85,8 @@ public class ImagePost : ITaggable
             return Result.Failure<ImagePostCreatedDomainEvent>(errors);
         }
         
-        var validatedTags = tagResults.Select(tr => tr.Value).ToList();
-        
-        // Create and return the domain event
-        return new ImagePostCreatedDomainEvent(userId, title, validatedTags);
+        // Tags are validated, pass the original TagData primitives to the event
+        return new ImagePostCreatedDomainEvent(userId, title, tags);
     }
     
     /// <summary>
@@ -106,9 +114,45 @@ public class ImagePost : ITaggable
         // Only create events for tags that don't already exist
         var events = validatedTags
             .Except(_tags)
-            .Select(t => new TagAddedDomainEvent(t.Value, t.Type));
+            .Select(t => new TagAddedDomainEvent(t.Type, t.Value))
+            .ToList();
         
-        return Result.Success(events);
+        return events.Count == 0 
+            ? Result.Failure<IEnumerable<TagAddedDomainEvent>>(TagErrors.NoNewTags) 
+            : Result.Success(events.AsEnumerable());
+    }
+
+    /// <summary>
+    /// Remove tags from the image post.
+    /// Returns events for only the tags that were present and removed.
+    /// </summary>
+    public Result<IEnumerable<TagRemovedDomainEvent>> RemoveTags(IReadOnlyList<TagData> tags)
+    {
+        // Validate tags
+        var tagResults = tags
+            .Select(t => Tag.Create(t.Type, t.Value))
+            .ToList();
+
+        var errors = tagResults
+            .WithIndexedErrors("tags")
+            .ToList();
+        
+        if (errors.Count != 0)
+        {
+            return Result.Failure<IEnumerable<TagRemovedDomainEvent>>(errors);
+        }
+        
+        var validatedTags = tagResults.Select(tr => tr.Value).ToList();
+        
+        // Only create events for tags that currently exist
+        var events = validatedTags
+            .Intersect(_tags)
+            .Select(t => new TagRemovedDomainEvent(t.Type, t.Value))
+            .ToList();
+        
+        return events.Count == 0 
+            ? Result.Failure<IEnumerable<TagRemovedDomainEvent>>(TagErrors.NoTagsToRemove)
+            : Result.Success(events.AsEnumerable());
     }
     
     /// <summary>
@@ -162,15 +206,35 @@ public class ImagePost : ITaggable
     }
     
     // Event application methods for event sourcing
+    // Note: No validation in Apply methods - events represent historical facts that were already validated
+    // when created. During reconstruction, we trust the event stream.
     public void Apply(ImagePostCreatedDomainEvent @event)
     {
         Title = @event.Title;
         CreatedBy = @event.UserId.ToString();
         
-        foreach (var tag in @event.Tags)
+        // Reconstruct Tag value objects from primitive TagData stored in the event
+        foreach (var tagData in @event.Tags)
         {
-            _tags.Add(tag);
+            _tags.Add(new Tag(tagData.Type, tagData.Value));
         }
+    }
+    
+    public void Apply(TagAddedDomainEvent @event)
+    {
+        _tags.Add(new Tag(@event.TagType, @event.TagValue));
+    }
+    
+    public void Apply(TagRemovedDomainEvent @event)
+    {
+        var tag = _tags.FirstOrDefault(t => t.Type == @event.TagType && t.Value == @event.TagValue);
+        
+        if (tag is null)
+        {
+            return;
+        }
+        
+        _tags.Remove(tag);
     }
     
     public void Apply(CommentCreatedDomainEvent @event)
@@ -181,19 +245,20 @@ public class ImagePost : ITaggable
     
     public void Apply(CommentUpdatedDomainEvent @event) 
     {
-        var comment = _comments.First(c => c.Id == @event.Id);
-        comment.Content = @event.Content;
+        var comment = _comments.FirstOrDefault(c => c.Id == @event.Id);
+
+        comment?.Content = @event.Content;
     }
     
     public void Apply(CommentDeletedDomainEvent @event)
     {
-        var comment = _comments.First(c => c.Id == @event.Id);
+        var comment = _comments.FirstOrDefault(c => c.Id == @event.Id);
+        
+        if (comment is null)
+        {
+            return;
+        }
+        
         _comments.Remove(comment);
-    }
-    
-    public void Apply(TagAddedDomainEvent @event)
-    {
-        // Use constructor instead of Tag.Create since tag was validated before event was created
-        _tags.Add(new Tag(@event.TagType, @event.TagValue));
     }
 }
