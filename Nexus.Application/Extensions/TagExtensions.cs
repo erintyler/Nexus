@@ -10,7 +10,7 @@ public static class TagExtensions
     {
         public Result<Tag> ToDomainTag()
         {
-            return Tag.Create(tagDto.Value, tagDto.Type);
+            return Tag.Create(tagDto.Type, tagDto.Value);
         }
     }
 }

@@ -12,7 +12,7 @@ public class Tag : ValueObject
     public const int MaxLength = 30;
     
     [JsonConstructor]
-    internal Tag(string value, TagType type)
+    internal Tag(TagType type, string value)
     {
         Value = value;
         Type = type;
@@ -21,7 +21,7 @@ public class Tag : ValueObject
     public string Value { get; }
     public TagType Type { get; }
 
-    public static Result<Tag> Create(string value, TagType type)
+    public static Result<Tag> Create(TagType type, string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -43,7 +43,7 @@ public class Tag : ValueObject
             return TagErrors.InvalidType;
         }
 
-        return new Tag(value, type);
+        return new Tag(type, value);
     }
     
     public override IEnumerable<object> GetAtomicValues()

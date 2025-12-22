@@ -42,7 +42,7 @@ public class ImagePost : ITaggable
     /// Factory method to create a new ImagePost with validation and business rules.
     /// Returns the creation event if successful.
     /// </summary>
-    public static Result<ImagePostCreatedDomainEvent> Create(Guid userId, string title, IReadOnlyList<Tag> tags)
+    public static Result<ImagePostCreatedDomainEvent> Create(Guid userId, string title, IReadOnlyList<TagData> tags)
     {
         // Validate userId
         if (userId == Guid.Empty)
@@ -63,7 +63,7 @@ public class ImagePost : ITaggable
         
         // Validate tags
         var tagResults = tags
-            .Select(t => Tag.Create(t.Value, t.Type))
+            .Select(t => Tag.Create(t.Type, t.Value))
             .ToList();
 
         var errors = tagResults
@@ -85,11 +85,11 @@ public class ImagePost : ITaggable
     /// Add tags to the image post, ensuring no duplicates.
     /// Returns events for only the new tags.
     /// </summary>
-    public Result<IEnumerable<TagAddedDomainEvent>> AddTags(IReadOnlyList<Tag> newTags)
+    public Result<IEnumerable<TagAddedDomainEvent>> AddTags(IReadOnlyList<TagData> newTags)
     {
         // Validate tags
         var tagResults = newTags
-            .Select(t => Tag.Create(t.Value, t.Type))
+            .Select(t => Tag.Create(t.Type, t.Value))
             .ToList();
 
         var errors = tagResults
@@ -194,6 +194,6 @@ public class ImagePost : ITaggable
     public void Apply(TagAddedDomainEvent @event)
     {
         // Use constructor instead of Tag.Create since tag was validated before event was created
-        _tags.Add(new Tag(@event.TagValue, @event.TagType));
+        _tags.Add(new Tag(@event.TagType, @event.TagValue));
     }
 }

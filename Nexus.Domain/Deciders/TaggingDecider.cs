@@ -11,7 +11,7 @@ public static class TaggingDecider
     public static Result<IEnumerable<TagAddedDomainEvent>> DetermineNewTags(ITaggable state, IReadOnlyList<Tag> tags)
     {
         var errors = tags
-            .Select(t => Tag.Create(t.Value, t.Type))
+            .Select(t => Tag.Create(t.Type, t.Value))
             .WithIndexedErrors(nameof(tags))
             .ToList();
 

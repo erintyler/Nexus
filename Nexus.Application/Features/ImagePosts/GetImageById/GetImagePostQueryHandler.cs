@@ -18,7 +18,7 @@ public static class GetImagePostQueryHandler
         }
 
         var tags = imagePost.Tags
-            .Select(t => new TagDto(t.Value, t.Type))
+            .Select(t => new TagDto(t.Type, t.Value))
             .ToList();
 
         return new ImagePostDto(
