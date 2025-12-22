@@ -1,4 +1,5 @@
 using Marten;
+using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Pagination;
 using Nexus.Application.Extensions;
 using Nexus.Application.Features.Tags.Common.Projections;
@@ -9,7 +10,7 @@ namespace Nexus.Application.Features.Tags.GetTags;
 
 public static class GetTagsQueryHandler
 {
-    public static async Task<Result<PagedResult<TagCount>>> Handle(GetTagsQuery request, IQuerySession session, CancellationToken cancellationToken = default)
+    public static async Task<Result<PagedResult<TagCountDto>>> Handle(GetTagsQuery request, IQuerySession session, CancellationToken cancellationToken = default)
     {
         IQueryable<TagCount> query = session.Query<TagCount>();
         
@@ -28,6 +29,7 @@ public static class GetTagsQueryHandler
 
         return await query
             .OrderByDescending(x => x.Count)
+            .Select(x => new TagCountDto(x.Id, x.Count))
             .ToPagedResultAsync(request, totalCount, cancellationToken);
     }
 }

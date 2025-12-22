@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Api.Extensions;
+using Nexus.Application.Common.Models;
+using Nexus.Application.Common.Pagination;
+using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Features.Tags.MigrateTag;
 using Nexus.Domain.Common;
 using Wolverine;
@@ -17,9 +20,42 @@ public static class TagEndpoints
                 .WithTags("Tags")
                 .WithDescription("Endpoints for managing tags.");
                 
+            tags.MapSearchTagsEndpoint();
             tags.MapMigrateTagEndpoint();
         
             return tags;
+        }
+
+        public void MapSearchTagsEndpoint()
+        {
+            app.MapGet("/search", async Task<Results<Ok<PagedResult<TagCountDto>>, ProblemHttpResult>> (
+                string? searchTerm,
+                IMessageBus bus,
+                int pageNumber = PaginationConstants.DefaultPageNumber,
+                int pageSize = PaginationConstants.DefaultPageSize,
+                CancellationToken cancellationToken = default) =>
+                {
+                    var query = new GetTagsQuery(searchTerm)
+                    {
+                        PageNumber = pageNumber,
+                        PageSize = pageSize
+                    };
+
+                    var result = await bus.InvokeAsync<Result<PagedResult<TagCountDto>>>(query, cancellationToken);
+
+                    if (result.IsSuccess)
+                    {
+                        return TypedResults.Ok(result.Value);
+                    }
+
+                    return result.ToUnprocessableEntityProblem();
+                })
+            .WithName("SearchTags")
+            .WithSummary("Search tags")
+            .WithDescription("Searches for tags with optional filtering by search term and returns paginated results with tag counts.")
+            .Produces<PagedResult<TagCountDto>>()
+            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem();
         }
 
         public void MapMigrateTagEndpoint()

@@ -11,21 +11,17 @@ using Nexus.Api.Extensions;
 using Nexus.Api.Middleware;
 using Nexus.Api.Middleware.Wolverine;
 using Nexus.Api.Services;
-using Nexus.Application.Common.Pagination;
 using Nexus.Application.Common.Services;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Application.Features.ImagePosts.Common.Projections;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.Tags.Common.Projections;
-using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Helpers;
-using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
 using Wolverine.FluentValidation;
-using Wolverine.Http;
 using Wolverine.Marten;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -118,6 +114,7 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 builder.Services.AddSingleton<IUserContextService, UserContextService>();
 builder.Services.AddScoped<ITagMigrationService, TagMigrationService>();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication("Test") // Set default scheme name
@@ -129,7 +126,6 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
-
 app.UseExceptionHandler();
 app.MapDefaultEndpoints();
 
@@ -149,6 +145,5 @@ var api = app.MapGroup("/api");
 api.MapImageEndpoints();
 api.MapTagEndpoints();
 
-api.MapPostToWolverine<GetTagsQuery, Result<PagedResult<TagCount>>>("/tags/search");
 
 await app.RunJasperFxCommands(args);

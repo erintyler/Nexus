@@ -7,6 +7,7 @@ using Nexus.Application.Features.ImagePosts.AddTagsToImagePost;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.ImagePosts.GetImageById;
 using Nexus.Application.Features.ImagePosts.GetImageHistory;
+using Nexus.Application.Features.ImagePosts.GetImagesByTags;
 using Nexus.Domain.Common;
 using Nexus.Domain.Primitives;
 using Wolverine;
@@ -46,6 +47,34 @@ public static class CreateImageEndpoint
             .Produces<CreateImagePostResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
+            
+            app.MapGet("/search", async Task<Results<Ok<PagedResult<ImagePostDto>>, NotFound>> (
+                [FromQuery] TagDto[] tags,
+                IMessageBus bus,
+                int pageNumber = PaginationConstants.DefaultPageNumber,
+                int pageSize = PaginationConstants.DefaultPageSize,
+                CancellationToken cancellationToken = default) =>
+                {
+                    var query = new GetImagesByTagsQuery(tags)
+                    {
+                        PageNumber = pageNumber,
+                        PageSize = pageSize
+                    };
+
+                    var result = await bus.InvokeAsync<Result<PagedResult<ImagePostDto>>>(query, cancellationToken);
+
+                    if (result.IsSuccess)
+                    {
+                        return TypedResults.Ok(result.Value);
+                    }
+
+                    return TypedResults.NotFound();
+                }).WithName("GetImagesByTags")
+                .WithSummary("Get images by tags")
+                .WithDescription("Retrieves image posts that match the specified tags, returning paginated results.")
+                .Produces<PagedResult<ImagePostDto>>()
+                .Produces(StatusCodes.Status404NotFound)
+                .ProducesValidationProblem();
             
             app.MapGet("/{id:guid}", async Task<Results<Ok<ImagePostDto>, NotFound>> (Guid id, IMessageBus bus, CancellationToken cancellationToken) =>
                 {
