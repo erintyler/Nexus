@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Nexus.Api.Extensions;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Pagination;
+using Nexus.Application.Features.ImagePosts.AddTagsToImagePost;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.ImagePosts.GetImageById;
 using Nexus.Application.Features.ImagePosts.GetImageHistory;
 using Nexus.Domain.Common;
+using Nexus.Domain.Primitives;
 using Wolverine;
 
 namespace Nexus.Api.Endpoints;
@@ -63,14 +65,44 @@ public static class CreateImageEndpoint
                 .Produces<ImagePostDto>()
                 .Produces(StatusCodes.Status404NotFound);
             
+            app.MapPost("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>>(
+                Guid id,
+                [FromBody] IReadOnlyList<TagDto> tags,
+                IMessageBus bus,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new AddTagsToImagePostCommand(id, tags);
+                var result = await bus.InvokeAsync<Result>(command, cancellationToken);
+
+                if (result.IsSuccess)
+                {
+                    return TypedResults.Ok();
+                }
+                
+                return result.ToUnprocessableEntityProblem();
+            }).WithName("AddTagsToImage")
+            .WithSummary("Add tags to image post")
+            .WithDescription("Adds tags to the specified image post.")
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem();
+            
             app.MapGet("/{id:guid}/history", async Task<Results<Ok<PagedResult<HistoryDto>>, NotFound>> (
                 Guid id,
                 DateTimeOffset? dateFrom,
                 DateTimeOffset? dateTo,
                 IMessageBus bus,
-                CancellationToken cancellationToken) =>
+                int pageNumber = PaginationConstants.DefaultPageNumber,
+                int pageSize = PaginationConstants.DefaultPageSize,
+                CancellationToken cancellationToken = default) =>
             {
-                var query = new GetHistoryQuery(id, dateFrom, dateTo);
+                var query = new GetHistoryQuery(id, dateFrom, dateTo)
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+                
                 var result = await bus.InvokeAsync<Result<PagedResult<HistoryDto>>>(query, cancellationToken);
 
                 if (result.IsSuccess)

@@ -27,8 +27,12 @@ public class GetHistoryQueryHandler
         events = events
             .Where(e => request.DateFrom == null || e.Timestamp >= request.DateFrom)
             .ToList();
+
+        var nexusEvents = events
+            .OfType<IEvent<INexusEvent>>()
+            .ToList();
         
-        var count = events.Count;
+        var count = nexusEvents.Count;
         if (count == 0)
         {
             return ImagePostErrors.NotFound;
@@ -36,8 +40,7 @@ public class GetHistoryQueryHandler
 
         var validPaginationRequest = request.WithValidPageNumber(count);
 
-        return events
-            .OfType<IEvent<INexusEvent>>()
+        return nexusEvents
             .Select(e => e.ToHistoryDto())
             .OrderByDescending(e => e.Timestamp)
             .ToPagedResult(validPaginationRequest, count);

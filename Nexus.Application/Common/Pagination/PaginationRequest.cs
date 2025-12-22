@@ -1,6 +1,6 @@
 namespace Nexus.Application.Common.Pagination;
 
-public abstract record PaginationRequest
+public record PaginationRequest
 {
     public int PageNumber { get; init; } = PaginationConstants.DefaultPageNumber;
     public int PageSize { get; init; } = PaginationConstants.DefaultPageSize;
