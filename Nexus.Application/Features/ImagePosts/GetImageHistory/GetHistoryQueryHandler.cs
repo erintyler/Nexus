@@ -13,7 +13,7 @@ namespace Nexus.Application.Features.ImagePosts.GetImageHistory;
 
 public class GetHistoryQueryHandler
 {
-    public static async Task<Result<PagedResult<HistoryDto>>> Handle(
+    public static async Task<Result<PagedResult<HistoryDto>>> HandleAsync(
         GetHistoryQuery request, 
         IQuerySession querySession,
         ILogger<GetHistoryQueryHandler> logger,

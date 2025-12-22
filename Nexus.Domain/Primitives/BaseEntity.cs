@@ -1,19 +1,19 @@
 namespace Nexus.Domain.Primitives;
 
-public abstract class Entity : IEquatable<Entity>
+public abstract class BaseEntity : IEquatable<BaseEntity>
 {
-    protected Entity(Guid id)
+    protected BaseEntity(Guid id)
     {
         Id = id;
     }
 
-    protected Entity()
+    protected BaseEntity()
     {
     }
     
     public Guid Id { get; }
 
-    public bool Equals(Entity? other)
+    public bool Equals(BaseEntity? other)
     {
         if (other is null)
         {
@@ -35,7 +35,7 @@ public abstract class Entity : IEquatable<Entity>
             return true;
         }
         
-        return obj.GetType() == GetType() && Equals((Entity)obj);
+        return obj.GetType() == GetType() && Equals((BaseEntity)obj);
     }
 
     public override int GetHashCode()

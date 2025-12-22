@@ -9,7 +9,7 @@ namespace Nexus.Application.Features.ImagePosts.AddTagsToImagePost;
 
 public class AddTagsToImagePostCommandHandler
 {
-    public static async Task<(Result, Events)> Handle(
+    public static async Task<(Result, Events)> HandleAsync(
         AddTagsToImagePostCommand request, 
         [WriteAggregate(OnMissing = OnMissing.ProblemDetailsWith404)] ImagePost imagePost,
         ITagMigrationService tagMigrationService,

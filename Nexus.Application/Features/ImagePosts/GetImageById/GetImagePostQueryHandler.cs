@@ -10,7 +10,7 @@ namespace Nexus.Application.Features.ImagePosts.GetImageById;
 
 public static class GetImagePostQueryHandler
 {
-    public static async Task<Result<ImagePostDto>> Handle(GetImagePostQuery request, IQuerySession session, [ReadAggregate] ImagePostReadModel? imagePost)
+    public static async Task<Result<ImagePostDto>> HandleAsync(GetImagePostQuery request, IQuerySession session, [ReadAggregate] ImagePostReadModel? imagePost)
     {
         if (imagePost is null)
         {

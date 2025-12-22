@@ -1,17 +1,17 @@
 namespace Nexus.Domain.Primitives;
 
-public abstract class ValueObject : IEquatable<ValueObject>
+public abstract class BaseValueObject : IEquatable<BaseValueObject>
 {
     public abstract IEnumerable<object> GetAtomicValues();
     
-    public bool Equals(ValueObject? other)
+    public bool Equals(BaseValueObject? other)
     {
         return other is not null && ValuesAreEqual(other);
     }
     
     public override bool Equals(object? obj)
     {
-        return obj is ValueObject other && ValuesAreEqual(other);
+        return obj is BaseValueObject other && ValuesAreEqual(other);
     }
     
     public override int GetHashCode()
@@ -19,7 +19,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
         return GetAtomicValues().Aggregate(0, HashCode.Combine);
     }
     
-    private bool ValuesAreEqual(ValueObject other)
+    private bool ValuesAreEqual(BaseValueObject other)
     {
         return GetAtomicValues().SequenceEqual(other.GetAtomicValues());
     }

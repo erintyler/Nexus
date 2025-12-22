@@ -15,7 +15,7 @@ namespace Nexus.Domain.Entities;
 /// This entity follows event sourcing and is reconstructed from domain events.
 /// Encapsulates business rules and generates domain events.
 /// </summary>
-public class ImagePost : ITaggable
+public sealed class ImagePost : BaseEntity, ITaggable
 {
     public const int MinTitleLength = 1;
     public const int MaxTitleLength = 200;
@@ -23,8 +23,7 @@ public class ImagePost : ITaggable
     private readonly List<Comment> _comments = [];
     private readonly HashSet<Tag> _tags = [];
     
-    // Private constructor for event sourcing reconstruction
-    private ImagePost() { }
+    internal ImagePost() { }
     
     // Properties with private setters for encapsulation
     public Guid Id { get; private set; }

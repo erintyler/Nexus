@@ -3,7 +3,7 @@ using Nexus.Application.Common.Pagination;
 
 namespace Nexus.Application.Features.Tags.GetTags;
 
-public class GetTagsQueryValidator : PaginationRequestValidator<GetTagsQuery>
+public class GetTagsQueryValidator : BasePaginationRequestValidator<GetTagsQuery>
 {
     public const int MaxSearchTermLength = 60;
     

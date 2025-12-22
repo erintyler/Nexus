@@ -5,7 +5,7 @@ using Nexus.Domain.Primitives;
 
 namespace Nexus.Domain.Entities;
 
-public class Comment
+public sealed class Comment : BaseEntity
 {
     public const int MaxContentLength = 2000;
     

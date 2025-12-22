@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace Nexus.Application.Common.Pagination;
 
-public abstract class PaginationRequestValidator<T> : AbstractValidator<T> where T : PaginationRequest
+public abstract class BasePaginationRequestValidator<T> : AbstractValidator<T> where T : PaginationRequest
 {
-    public PaginationRequestValidator()
+    public BasePaginationRequestValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(PaginationConstants.DefaultPageNumber)

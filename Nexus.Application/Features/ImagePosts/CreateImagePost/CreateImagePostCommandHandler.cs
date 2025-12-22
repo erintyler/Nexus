@@ -8,7 +8,7 @@ namespace Nexus.Application.Features.ImagePosts.CreateImagePost;
 
 public class CreateImagePostCommandHandler
 {
-    public static async Task<(Result<CreateImagePostResponse>, IStartStream?)> Handle(
+    public static async Task<(Result<CreateImagePostResponse>, IStartStream?)> HandleAsync(
         CreateImagePostCommand request,
         IUserContextService userContextService,
         ITagMigrationService tagMigrationService,

@@ -14,7 +14,7 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 {
     private const int BatchSize = 500;
 
-    public async Task<Result<MigrateTagResponse>> Handle(MigrateTagCommand request, CancellationToken ct)
+    public async Task<Result<MigrateTagResponse>> HandleAsync(MigrateTagCommand request, CancellationToken ct)
     {
         var userId = userContextService.GetUserId();
         

@@ -10,7 +10,7 @@ namespace Nexus.Application.Features.Tags.GetTags;
 
 public static class GetTagsQueryHandler
 {
-    public static async Task<Result<PagedResult<TagCountDto>>> Handle(GetTagsQuery request, IQuerySession session, CancellationToken cancellationToken = default)
+    public static async Task<Result<PagedResult<TagCountDto>>> HandleAsync(GetTagsQuery request, IQuerySession session, CancellationToken cancellationToken = default)
     {
         IQueryable<TagCount> query = session.Query<TagCount>();
         

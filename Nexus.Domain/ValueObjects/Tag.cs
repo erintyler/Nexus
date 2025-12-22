@@ -6,7 +6,7 @@ using Nexus.Domain.Primitives;
 
 namespace Nexus.Domain.ValueObjects;
 
-public class Tag : ValueObject
+public sealed class Tag : BaseValueObject
 {
     public const int MinLength = 3;
     public const int MaxLength = 30;

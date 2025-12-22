@@ -11,7 +11,7 @@ namespace Nexus.Domain.Entities;
 /// TagMigration document - represents a mapping from a source tag to a target tag.
 /// This is stored as a simple document (not event-sourced) for fast lookups.
 /// </summary>
-public class TagMigration
+public sealed class TagMigration : BaseEntity
 {
     [JsonConstructor]
     private TagMigration() { } // For Marten

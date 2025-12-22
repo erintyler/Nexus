@@ -9,12 +9,11 @@ using Nexus.Application.Features.ImagePosts.GetImageById;
 using Nexus.Application.Features.ImagePosts.GetImageHistory;
 using Nexus.Application.Features.ImagePosts.GetImagesByTags;
 using Nexus.Domain.Common;
-using Nexus.Domain.Primitives;
 using Wolverine;
 
 namespace Nexus.Api.Endpoints;
 
-public static class CreateImageEndpoint
+public static class ImageEndpoints
 {
     extension(IEndpointRouteBuilder app)
     {

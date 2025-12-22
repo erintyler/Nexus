@@ -4,7 +4,7 @@ using Nexus.Application.Features.ImagePosts.CreateImagePost;
 
 namespace Nexus.Application.Features.ImagePosts.GetImageHistory;
 
-public class GetImageHistoryQueryValidator : PaginationRequestValidator<GetHistoryQuery>
+public class GetImageHistoryQueryValidator : BasePaginationRequestValidator<GetHistoryQuery>
 {
     public GetImageHistoryQueryValidator()
     {
