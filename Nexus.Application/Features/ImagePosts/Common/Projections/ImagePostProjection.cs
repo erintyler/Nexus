@@ -19,6 +19,8 @@ public class ImagePostProjection : SingleStreamProjection<ImagePostReadModel, Gu
         ProjectEvent<CommentUpdatedDomainEvent>(Apply);
         ProjectEvent<CommentDeletedDomainEvent>(Apply);
         ProjectEvent<TagAddedDomainEvent>(Apply);
+        ProjectEvent<TagRemovedDomainEvent>(Apply);
+        ProjectEvent<TagMigratedDomainEvent>(Apply);
     }
     
     private static void Apply(ImagePostReadModel readModel, ImagePostCreatedDomainEvent @event)
@@ -49,7 +51,53 @@ public class ImagePostProjection : SingleStreamProjection<ImagePostReadModel, Gu
     
     private static void Apply(ImagePostReadModel readModel, TagAddedDomainEvent @event)
     {
-        readModel.Tags.Add(new TagReadModel(@event.TagValue, @event.TagType));
+        // Idempotent: only add if tag doesn't already exist
+        var tagExists = readModel.Tags.Any(t => 
+            t.Type == @event.TagType && 
+            t.Value == @event.TagValue);
+        
+        if (!tagExists)
+        {
+            readModel.Tags.Add(new TagReadModel(@event.TagValue, @event.TagType));
+        }
+    }
+    
+    private static void Apply(ImagePostReadModel readModel, TagRemovedDomainEvent @event)
+    {
+        // Idempotent: only remove if tag exists
+        var tag = readModel.Tags.FirstOrDefault(t => 
+            t.Type == @event.TagType && 
+            t.Value == @event.TagValue);
+        
+        if (tag is not null)
+        {
+            readModel.Tags.Remove(tag);
+        }
+    }
+    
+    private static void Apply(ImagePostReadModel readModel, TagMigratedDomainEvent @event)
+    {
+        // Remove source tag if it exists
+        var sourceTag = readModel.Tags.FirstOrDefault(t => 
+            t.Type == @event.Source.Type && 
+            t.Value == @event.Source.Value);
+        
+        if (sourceTag is not null)
+        {
+            readModel.Tags.Remove(sourceTag);
+        }
+        
+        // Add target tag only if it doesn't already exist (idempotent)
+        var targetTagExists = readModel.Tags.Any(t => 
+            t.Type == @event.Target.Type && 
+            t.Value == @event.Target.Value);
+        
+        if (!targetTagExists)
+        {
+            readModel.Tags.Add(new TagReadModel(@event.Target.Value, @event.Target.Type));
+        }
     }
 }
+
+
 

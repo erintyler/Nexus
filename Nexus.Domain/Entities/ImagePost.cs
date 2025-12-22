@@ -222,19 +222,37 @@ public class ImagePost : ITaggable
     
     public void Apply(TagAddedDomainEvent @event)
     {
-        _tags.Add(new Tag(@event.TagType, @event.TagValue));
+        var tag = new Tag(@event.TagType, @event.TagValue);
+        _tags.Add(tag);
     }
     
     public void Apply(TagRemovedDomainEvent @event)
     {
-        var tag = _tags.FirstOrDefault(t => t.Type == @event.TagType && t.Value == @event.TagValue);
+        // Idempotent: only remove if present
+        var tag = _tags.FirstOrDefault(t => 
+            t.Type == @event.TagType && 
+            t.Value == @event.TagValue);
         
-        if (tag is null)
+        if (tag is not null)
         {
-            return;
+            _tags.Remove(tag);
+        }
+    }
+    
+    public void Apply(TagMigratedDomainEvent @event)
+    {
+        // Remove source tag if present
+        var sourceTag = _tags.FirstOrDefault(t => 
+            t.Type == @event.Source.Type && 
+            t.Value == @event.Source.Value);
+        
+        if (sourceTag is not null)
+        {
+            _tags.Remove(sourceTag);
         }
         
-        _tags.Remove(tag);
+        var targetTag = new Tag(@event.Target.Type, @event.Target.Value);
+        _tags.Add(targetTag);
     }
     
     public void Apply(CommentCreatedDomainEvent @event)

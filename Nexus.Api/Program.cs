@@ -140,6 +140,7 @@ app.UseAuthorization();
 var api = app.MapGroup("/api");
 
 api.MapImageEndpoints();
+api.MapTagEndpoints();
 
 api.MapPostToWolverine<GetTagsQuery, Result<PagedResult<TagCount>>>("/tags/search");
 
