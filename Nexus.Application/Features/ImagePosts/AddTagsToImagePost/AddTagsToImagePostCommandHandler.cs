@@ -1,10 +1,7 @@
-using Marten;
+using Nexus.Application.Common.Services;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
-using Nexus.Domain.Errors;
 using Nexus.Domain.Primitives;
-using Nexus.Domain.ValueObjects;
-using Wolverine.Http.Marten;
 using Wolverine.Marten;
 using Wolverine.Persistence;
 
@@ -12,13 +9,20 @@ namespace Nexus.Application.Features.ImagePosts.AddTagsToImagePost;
 
 public class AddTagsToImagePostCommandHandler
 {
-    public static (Result, Events) Handle(AddTagsToImagePostCommand request, [WriteAggregate(OnMissing = OnMissing.ProblemDetailsWith404)] ImagePost imagePost)
+    public static async Task<(Result, Events)> Handle(
+        AddTagsToImagePostCommand request, 
+        [WriteAggregate(OnMissing = OnMissing.ProblemDetailsWith404)] ImagePost imagePost,
+        ITagMigrationService tagMigrationService,
+        CancellationToken ct)
     {
         var tags = request.Tags
             .Select(t => new TagData(t.Type, t.Value))
             .ToList();
         
-        var result = imagePost.AddTags(tags);
+        // Resolve any tag migrations before adding tags
+        var resolvedTags = await tagMigrationService.ResolveMigrationsAsync(tags, ct);
+        
+        var result = imagePost.AddTags(resolvedTags);
         
         if (result.IsFailure)
         {

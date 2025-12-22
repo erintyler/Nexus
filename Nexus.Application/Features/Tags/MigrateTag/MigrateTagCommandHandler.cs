@@ -16,15 +16,29 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
     public async Task<Result<MigrateTagResponse>> Handle(MigrateTagCommand request, CancellationToken ct)
     {
-        // Step 1: Validate the migration at the domain level
+        var userId = userContextService.GetUserId();
+        
+        // Step 1: Create and store the TagMigration document
         var migrationResult = TagMigration.Create(
-            userId: userContextService.GetUserId(),
+            userId: userId,
             source: new TagData(request.Source.Type, request.Source.Value),
             target: new TagData(request.Target.Type, request.Target.Value)
         );
 
         if (migrationResult.IsFailure)
             return Result.Failure<MigrateTagResponse>(migrationResult.Errors);
+
+        var migration = migrationResult.Value;
+        
+        // Store the migration document for future lookups
+        session.Store(migration);
+        await session.SaveChangesAsync(ct);
+        
+        logger.LogInformation(
+            "Tag migration document created: Id={MigrationId}, Source={Source}, Target={Target}",
+            migration.Id,
+            $"{migration.SourceTag.Type}:{migration.SourceTag.Value}",
+            $"{migration.TargetTag.Type}:{migration.TargetTag.Value}");
 
         // Step 2: Query all posts that have the source tag
         var affectedPosts = session
@@ -38,17 +52,15 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
         logger.LogInformation("Tag migration started: Source={@Source}, Target={Target}", request.Source, request.Target);
 
-        // Step 3: Process in batches using Chunk
+        // Step 3: Create the migration event for bulk updates
+        var migrationEvent = migration.CreateMigrationEvent(userId);
+
+        // Step 4: Process in batches using Chunk
         await foreach (var batch in affectedPosts.Chunk(BatchSize).WithCancellation(ct))
         {
             var postIds = batch.Select(p => p.Id).ToList();
             
-            await AppendTagMigrationEvents(
-                postIds, 
-                request.Source, 
-                request.Target, 
-                migrationResult.Value,
-                ct);
+            await AppendTagMigrationEvents(postIds, migrationEvent, ct);
                 
             totalProcessed += postIds.Count;
             
@@ -73,15 +85,12 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
     private async Task AppendTagMigrationEvents(
         List<Guid> postIds,
-        TagDto source,
-        TagDto target,
         TagMigratedDomainEvent domainEvent,
         CancellationToken ct)
     {
         foreach (var postId in postIds)
         {
-            // Append single migration event for semantic clarity
-            // TagMigratedDomainEvent expects TagData (from Nexus.Domain.Primitives)
+            // Append migration event to each affected ImagePost aggregate
             session.Events.Append(postId, domainEvent);
         }
 

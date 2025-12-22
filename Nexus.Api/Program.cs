@@ -20,6 +20,7 @@ using Nexus.Application.Features.Tags.Common.Projections;
 using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Helpers;
 using Nexus.Domain.Common;
+using Nexus.Domain.Entities;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -92,6 +93,11 @@ else
             
             o.Schema.For<TagCount>().Identity(x => x.Id);
             
+            // Configure TagMigration document with index on source tag for fast lookups
+            o.Schema.For<TagMigration>()
+                .Index(x => x.SourceTag.Type)
+                .Index(x => x.SourceTag.Value);
+            
             o.Schema.For<ImagePostReadModel>().Metadata(m =>
             {
                 m.CreatedAt.MapTo(x => x.CreatedAt);
@@ -110,6 +116,7 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 });
 
 builder.Services.AddSingleton<IUserContextService, UserContextService>();
+builder.Services.AddScoped<ITagMigrationService, TagMigrationService>();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddProblemDetails();
 
