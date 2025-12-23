@@ -12,12 +12,15 @@ using Nexus.Api.Middleware;
 using Nexus.Api.Middleware.Wolverine;
 using Nexus.Api.Services;
 using Nexus.Application.Common.Services;
+using Nexus.Application.Configuration.Models;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Application.Features.ImagePosts.Common.Projections;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
+using Nexus.Application.Features.ImageProcessing.ProcessImage;
 using Nexus.Application.Features.Tags.Common.Projections;
 using Nexus.Application.Helpers;
 using Nexus.Domain.Entities;
+using Nexus.Infrastructure;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -108,6 +111,11 @@ builder.Services.ConfigureHttpJsonOptions(o =>
     o.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.Configure<ImageOptions>(builder.Configuration.GetSection(nameof(ImageOptions)));
+builder.Services.AddSingleton<IImageConversionService, ImageConversionService>();
+builder.Services.AddSingleton<IThumbnailService, ThumbnailService>();
+builder.Services.AddSingleton<IImageService, ImageService>();
 builder.Services.AddSingleton<IUserContextService, UserContextService>();
 builder.Services.AddScoped<ITagMigrationService, TagMigrationService>();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();

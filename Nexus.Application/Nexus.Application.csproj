@@ -22,9 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Features\ImagePosts\RemoveTagsFromImagePost\" />
-      <Folder Include="Features\ImagePosts\UpdateImagePost\" />
-      <Folder Include="Features\ImageProcessing\ConvertToWebP\" />
-      <Folder Include="Features\ImageProcessing\CreateThumbnail\" />
     </ItemGroup>
 
 </Project>

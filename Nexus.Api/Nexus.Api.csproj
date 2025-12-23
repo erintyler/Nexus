@@ -22,6 +22,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />
       <ProjectReference Include="..\Nexus.Domain\Nexus.Domain.csproj" />
+      <ProjectReference Include="..\Nexus.Infrastructure\Nexus.Infrastructure.csproj" />
       <ProjectReference Include="..\Nexus.ServiceDefaults\Nexus.ServiceDefaults.csproj" />
     </ItemGroup>
 

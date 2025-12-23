@@ -7,5 +7,6 @@ public enum ErrorType
     NotFound,
     Conflict,
     BusinessRule,
-    Forbidden
+    Forbidden,
+    Failure
 }

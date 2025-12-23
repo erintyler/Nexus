@@ -8,6 +8,7 @@ using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.ImagePosts.GetImageById;
 using Nexus.Application.Features.ImagePosts.GetImageHistory;
 using Nexus.Application.Features.ImagePosts.GetImagesByTags;
+using Nexus.Application.Features.ImageProcessing.ProcessImage;
 using Nexus.Domain.Common;
 using Wolverine;
 
@@ -74,6 +75,19 @@ public static class ImageEndpoints
                 .Produces<PagedResult<ImagePostDto>>()
                 .Produces(StatusCodes.Status404NotFound)
                 .ProducesValidationProblem();
+            
+            app.MapGet("/{id:guid}/download", async Task<Results<Ok<ProcessImageResponse>, NotFound>> (Guid id, IMessageBus bus, CancellationToken cancellationToken) =>
+            {
+                var query = new ProcessImageCommand(id);
+                var result = await bus.InvokeAsync<Result<ProcessImageResponse>>(query, cancellationToken);
+
+                if (result.IsFailure)
+                {
+                    throw new Exception("Image processing failed.");
+                }
+
+                return TypedResults.Ok(result.Value);
+            });
             
             app.MapGet("/{id:guid}", async Task<Results<Ok<ImagePostDto>, NotFound>> (Guid id, IMessageBus bus, CancellationToken cancellationToken) =>
                 {

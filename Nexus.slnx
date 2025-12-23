@@ -10,6 +10,7 @@
   <Project Path="Nexus.Application/Nexus.Application.csproj" />
   <Project Path="Nexus.Domain/Nexus.Domain.csproj" />
   <Project Path="Nexus.ImageProcessor/Nexus.ImageProcessor.csproj" />
+  <Project Path="Nexus.Infrastructure/Nexus.Infrastructure.csproj" />
   <Project Path="Nexus.Migrations/Nexus.Migrations.csproj" />
   <Project Path="Nexus.ServiceDefaults/Nexus.ServiceDefaults.csproj" />
 </Solution>
