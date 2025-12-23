@@ -77,23 +77,20 @@ else
         {
             o.Projections.Add<ImagePostProjection>(ProjectionLifecycle.Inline);
             o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
-            
+
             o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
             o.OpenTelemetry.TrackEventCounters();
-            
+
             o.Events.MetadataConfig.UserNameEnabled = true;
-            o.Policies.ForAllDocuments(x =>
-            {
-                x.Metadata.CreatedAt.Enabled = true;
-            });
-            
+            o.Policies.ForAllDocuments(x => { x.Metadata.CreatedAt.Enabled = true; });
+
             o.Schema.For<TagCount>().Identity(x => x.Id);
-            
+
             // Configure TagMigration document with index on source tag for fast lookups
             o.Schema.For<TagMigration>()
                 .Index(x => x.SourceTag.Type)
                 .Index(x => x.SourceTag.Value);
-            
+
             o.Schema.For<ImagePostReadModel>().Metadata(m =>
             {
                 m.CreatedAt.MapTo(x => x.CreatedAt);
