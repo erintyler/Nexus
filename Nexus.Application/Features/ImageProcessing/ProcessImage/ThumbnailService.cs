@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using Nexus.Application.Constants;
 using Nexus.Application.Features.ImageProcessing.Errors;
 using Nexus.Domain.Common;
 using SkiaSharp;
@@ -11,6 +13,7 @@ public class ThumbnailService : IThumbnailService
     
     public Result<byte[]> CreateThumbnail(Stream inputImageStream)
     {
+        using var activity = TelemetryConstants.ActivitySource.StartActivity("Create Thumbnail");
         using var bitmap = SKBitmap.Decode(inputImageStream);
         
         if (bitmap is null)

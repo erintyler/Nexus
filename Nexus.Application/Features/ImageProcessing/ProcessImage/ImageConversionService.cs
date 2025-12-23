@@ -1,3 +1,4 @@
+using Nexus.Application.Constants;
 using Nexus.Application.Features.ImageProcessing.Errors;
 using Nexus.Domain.Common;
 using SkiaSharp;
@@ -8,6 +9,7 @@ public class ImageConversionService : IImageConversionService
 {
     public Result<byte[]> ConvertToWebP(Stream inputImageStream)
     {
+        using var activity = TelemetryConstants.ActivitySource.StartActivity("Convert Image to WebP");
         using var bitmap = SKBitmap.Decode(inputImageStream);
 
         if (bitmap is null)

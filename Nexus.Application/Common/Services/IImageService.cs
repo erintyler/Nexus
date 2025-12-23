@@ -7,5 +7,5 @@ public interface IImageService
     Task SaveProcessedImageAsync(Guid imageId, byte[] data, CancellationToken cancellationToken = default);
     string GetThumbnailUrl(Guid imageId);
     Task SaveThumbnailAsync(Guid imageId, byte[] data, CancellationToken cancellationToken = default);
-    string GenerateImageUploadUrl(Guid imageId, int expirationMinutes = 15);
+    string GenerateImageUploadUrl(Guid imageId, string contentType, int expirationMinutes = 15);
 }

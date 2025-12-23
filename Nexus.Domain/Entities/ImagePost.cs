@@ -205,6 +205,44 @@ public sealed class ImagePost : BaseEntity, ITaggable
         
         return new CommentDeletedDomainEvent(commentId, userId);
     }
+
+    /// <summary>
+    /// Mark the image post as processing, validating user and current status.
+    /// </summary>
+    public Result<StatusChangedDomainEvent> MarkAsProcessing(Guid userId)
+    {
+        if (CreatedBy != userId.ToString())
+        {
+            //return ImagePostErrors.NotCreator;
+        }
+        
+        if (Status is not UploadStatus.Pending)
+        {
+            return ImagePostErrors.InvalidStatusTransition;
+        }
+        
+        return new StatusChangedDomainEvent(Id, UploadStatus.Processing, userId);
+    }
+    
+    public Result<StatusChangedDomainEvent> MarkAsCompleted()
+    {
+        if (Status is not UploadStatus.Processing)
+        {
+            return ImagePostErrors.InvalidStatusTransition;
+        }
+        
+        return new StatusChangedDomainEvent(Id, UploadStatus.Completed);
+    }
+    
+    public Result<StatusChangedDomainEvent> MarkAsFailed()
+    {
+        if (Status is not UploadStatus.Processing)
+        {
+            return ImagePostErrors.InvalidStatusTransition;
+        }
+        
+        return new StatusChangedDomainEvent(Id, UploadStatus.Failed);
+    }
     
     // Event application methods for event sourcing
     // Note: No validation in Apply methods - events represent historical facts that were already validated
@@ -280,5 +318,10 @@ public sealed class ImagePost : BaseEntity, ITaggable
         }
         
         _comments.Remove(comment);
+    }
+    
+    public void Apply(StatusChangedDomainEvent @event)
+    {
+        Status = @event.UploadStatus;
     }
 }

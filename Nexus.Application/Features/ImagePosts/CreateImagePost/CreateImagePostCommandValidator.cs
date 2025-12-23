@@ -14,5 +14,26 @@ public class CreateImagePostCommandValidator : AbstractValidator<CreateImagePost
         RuleFor(x => x.Tags)
             .Must(tags => tags.Count == tags.Distinct().Count())
             .WithMessage("Duplicate tags are not allowed.");
+        
+        RuleFor(x => x.ContentType)
+            .Must(BeAnImageContentType)
+            .WithMessage("Content type must be a valid image format (jpeg, jpg, png, gif, webp).");
+    }
+    
+    private static bool BeAnImageContentType(string contentType)
+    {
+        if (string.IsNullOrWhiteSpace(contentType))
+            return false;
+
+        var allowedTypes = new[]
+        {
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp"
+        };
+
+        return allowedTypes.Contains(contentType.ToLowerInvariant());
     }
 }

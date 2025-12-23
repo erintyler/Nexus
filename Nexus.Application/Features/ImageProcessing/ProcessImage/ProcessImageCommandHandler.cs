@@ -1,56 +1,90 @@
+using Microsoft.Extensions.Logging;
 using Nexus.Application.Common.Services;
-using Nexus.Application.Features.ImageProcessing.Errors;
 using Nexus.Domain.Common;
+using Nexus.Domain.Entities;
+using Wolverine.Marten;
 
 namespace Nexus.Application.Features.ImageProcessing.ProcessImage;
 
 public class ProcessImageCommandHandler
 {
-    public async Task<Result<ProcessImageResponse>> HandleAsync(
+    public static async Task<Events> HandleAsync(
         ProcessImageCommand request, 
         IImageService imageService,
         IImageConversionService imageConversionService, 
         IThumbnailService thumbnailService,
+        ILogger<ProcessImageCommandHandler> logger,
+        [ReadAggregate] ImagePost imagePost,
         CancellationToken cancellationToken)
     {
-        await using var originalImage = await imageService.GetOriginalImageStreamAsync(request.ImageId, cancellationToken);
+        await using var originalImage = await imageService.GetOriginalImageStreamAsync(request.Id, cancellationToken);
         
         if (originalImage is null)
         {
-            return ImageProcessingErrors.NotFound;
+            logger.LogError("Original image not found for ImageId: {ImageId}", request.Id);
+            return [imagePost.MarkAsFailed()];
         }
         
-        using var imageStream = new MemoryStream();
-        await originalImage.CopyToAsync(imageStream, cancellationToken);
-        imageStream.Position = 0;
+        // Read the original image data into a byte array
+        var imageData = new byte[originalImage.Length];
+        await originalImage.ReadExactlyAsync(imageData, cancellationToken);
         
-        var webpResult = imageConversionService.ConvertToWebP(imageStream);
+        var tasks = new List<Task<Result>>
+        {
+            CreateAndStoreWebPAsync(imageService, imageConversionService, request.Id, imageData, cancellationToken),
+            CreateAndStoreThumbnailAsync(imageService, thumbnailService, request.Id, imageData, cancellationToken)
+        };
+        
+        var results = await Task.WhenAll(tasks);
+        var failures = results.Where(r => r.IsFailure).ToList();
+        
+        if (failures.Count != 0)
+        {
+            var allErrors = failures.SelectMany(f => f.Errors).ToList();
+            
+            logger.LogError("Image processing failed for ImageId: {ImageId} with errors: {@Errors}", request.Id, allErrors);
+            return [imagePost.MarkAsFailed()];
+        }
+        
+        logger.LogInformation("Image processing completed successfully for ImageId: {ImageId}", request.Id);
+        return [imagePost.MarkAsCompleted()];
+    }
+    
+    private static async Task<Result> CreateAndStoreWebPAsync(
+        IImageService imageService,
+        IImageConversionService imageConversionService,
+        Guid imageId,
+        byte[] imageData,
+        CancellationToken cancellationToken)
+    {
+        using var imageStream = new MemoryStream(imageData);
+        var webpResult = await Task.Run(() => imageConversionService.ConvertToWebP(imageStream), cancellationToken);
         
         if (webpResult.IsFailure)
         {
-            return Result.Failure<ProcessImageResponse>(webpResult.Errors);
+            return Result.Failure(webpResult.Errors);
         }
         
-        // Reset stream position before creating thumbnail
-        using var thumbnailStream = new MemoryStream(webpResult.Value);
-        var thumbnailResult = thumbnailService.CreateThumbnail(thumbnailStream);
+        await imageService.SaveProcessedImageAsync(imageId, webpResult.Value, cancellationToken);
+        return Result.Success();
+    }
+    
+    private static async Task<Result> CreateAndStoreThumbnailAsync(
+        IImageService imageService,
+        IThumbnailService thumbnailService,
+        Guid imageId,
+        byte[] imageData,
+        CancellationToken cancellationToken)
+    {
+        using var imageStream = new MemoryStream(imageData);
+        var thumbnailResult = await Task.Run(() => thumbnailService.CreateThumbnail(imageStream), cancellationToken);
         
         if (thumbnailResult.IsFailure)
         {
-            return Result.Failure<ProcessImageResponse>(thumbnailResult.Errors);
+            return Result.Failure(thumbnailResult.Errors);
         }
         
-        var tasks = new List<Task>
-        {
-            imageService.SaveProcessedImageAsync(request.ImageId, webpResult.Value, cancellationToken),
-            imageService.SaveThumbnailAsync(request.ImageId, thumbnailResult.Value, cancellationToken)
-        };
-        
-        await Task.WhenAll(tasks);
-        var imageUrl = imageService.GetProcessedImageUrl(request.ImageId);
-        var thumbnailUrl = imageService.GetThumbnailUrl(request.ImageId);
-        var response = new ProcessImageResponse(imageUrl, thumbnailUrl);
-        
-        return response;
+        await imageService.SaveThumbnailAsync(imageId, thumbnailResult.Value, cancellationToken);
+        return Result.Success();
     }
 }

@@ -15,7 +15,7 @@ public static class DependencyInjection
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         
         // Register AWS S3 client
-        services.AddAwsService<IAmazonS3>();
+        services.AddAwsService<IAmazonS3>(useServiceUrl: true);
         
         // Register S3 service
         services.AddSingleton<IStorageService, S3StorageService>();
@@ -23,4 +23,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

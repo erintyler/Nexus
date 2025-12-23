@@ -23,15 +23,102 @@ Resources:
     Properties:
       BucketName: !Ref OriginalImageBucketName
 
+  OriginalImageBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref OriginalImageBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyNonImageUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Sub '${OriginalImageBucket.Arn}/*'
+            Condition:
+              StringNotLike:
+                's3:content-type':
+                  - 'image/jpeg'
+                  - 'image/jpg'
+                  - 'image/png'
+                  - 'image/gif'
+                  - 'image/webp'
+          - Sid: DenyOversizedUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Sub '${OriginalImageBucket.Arn}/*'
+            Condition:
+              NumericGreaterThan:
+                's3:content-length': 10485760  # 10MB in bytes
+
   ProcessedImageBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref ProcessedImageBucketName
 
+  ProcessedImageBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ProcessedImageBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyNonImageUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Sub '${ProcessedImageBucket.Arn}/*'
+            Condition:
+              StringNotLike:
+                's3:content-type':
+                  - 'image/jpeg'
+                  - 'image/jpg'
+                  - 'image/png'
+                  - 'image/gif'
+                  - 'image/webp'
+          - Sid: DenyOversizedUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Sub '${ProcessedImageBucket.Arn}/*'
+            Condition:
+              NumericGreaterThan:
+                's3:content-length': 10485760  # 10MB in bytes
+
   ThumbnailBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref ThumbnailBucketName
+
+  ThumbnailBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ThumbnailBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyNonImageUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Sub '${ThumbnailBucket.Arn}/*'
+            Condition:
+              StringNotLike:
+                's3:content-type':
+                  - 'image/jpeg'
+                  - 'image/jpg'
+                  - 'image/png'
+                  - 'image/gif'
+                  - 'image/webp'
+          - Sid: DenyOversizedUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Sub '${ThumbnailBucket.Arn}/*'
+            Condition:
+              NumericGreaterThan:
+                's3:content-length': 10485760  # 10MB in bytes
 
 Outputs:
   OriginalImageBucketName:

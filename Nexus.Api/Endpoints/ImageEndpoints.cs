@@ -8,6 +8,7 @@ using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.ImagePosts.GetImageById;
 using Nexus.Application.Features.ImagePosts.GetImageHistory;
 using Nexus.Application.Features.ImagePosts.GetImagesByTags;
+using Nexus.Application.Features.ImagePosts.ImageUploaded;
 using Nexus.Application.Features.ImageProcessing.ProcessImage;
 using Nexus.Domain.Common;
 using Wolverine;
@@ -76,19 +77,6 @@ public static class ImageEndpoints
                 .Produces(StatusCodes.Status404NotFound)
                 .ProducesValidationProblem();
             
-            app.MapGet("/{id:guid}/download", async Task<Results<Ok<ProcessImageResponse>, NotFound>> (Guid id, IMessageBus bus, CancellationToken cancellationToken) =>
-            {
-                var query = new ProcessImageCommand(id);
-                var result = await bus.InvokeAsync<Result<ProcessImageResponse>>(query, cancellationToken);
-
-                if (result.IsFailure)
-                {
-                    throw new Exception("Image processing failed.");
-                }
-
-                return TypedResults.Ok(result.Value);
-            });
-            
             app.MapGet("/{id:guid}", async Task<Results<Ok<ImagePostDto>, NotFound>> (Guid id, IMessageBus bus, CancellationToken cancellationToken) =>
                 {
                     var query = new GetImagePostQuery(id);
@@ -106,6 +94,28 @@ public static class ImageEndpoints
                 .WithDescription("Retrieves the image post with the specified ID.")
                 .Produces<ImagePostDto>()
                 .Produces(StatusCodes.Status404NotFound);
+
+            app.MapPut("/{id:guid}/upload-complete", async Task<Results<Ok, NotFound, ProblemHttpResult>> (
+                Guid id,
+                IMessageBus bus,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new ImageUploadedCommand(id);
+                var result = await bus.InvokeAsync<Result>(command, cancellationToken);
+
+                if (result.IsSuccess)
+                {
+                    return TypedResults.Ok();
+                }
+
+                return result.ToUnprocessableEntityProblem();
+            }).WithName("MarkImageUploadComplete")
+            .WithSummary("Mark image upload as complete")
+            .WithDescription("Marks the image upload as complete and triggers image processing.")
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem();
             
             app.MapPost("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>>(
                 Guid id,

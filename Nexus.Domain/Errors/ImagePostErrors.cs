@@ -3,12 +3,17 @@ using Nexus.Domain.Entities;
 
 namespace Nexus.Domain.Errors;
 
-public class ImagePostErrors
+public static class ImagePostErrors
 {
     public static readonly Error NotFound = new(
         "ImagePost.NotFound",
         ErrorType.NotFound,
         "The specified image post was not found.");
+    
+    public static readonly Error NotCreator = new(
+        "ImagePost.NotCreator",
+        ErrorType.Forbidden,
+        "The user is not the creator of the image post and cannot perform this action.");
     
     public static readonly Error TitleEmpty = new(
         "ImagePost.Title.Empty",
@@ -34,6 +39,11 @@ public class ImagePostErrors
         "ImagePost.Tags.AtLeastOneRequired",
         ErrorType.BusinessRule,
         "At least one tag is required for the image post.");
+    
+    public static readonly Error InvalidStatusTransition = new(
+        "ImagePost.InvalidStatusTransition",
+        ErrorType.BusinessRule,
+        "The requested status transition for the image post is invalid.");
 }
 
 

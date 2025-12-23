@@ -34,8 +34,8 @@ public class ImageService(IStorageService storageService, IOptions<ImageOptions>
         return storageService.SaveObjectAsync(_options.ThumbnailBucketName, key, data, cancellationToken);
     }
 
-    public string GenerateImageUploadUrl(Guid imageId, int expirationMinutes = 15)
+    public string GenerateImageUploadUrl(Guid imageId, string contentType, int expirationMinutes = 15)
     {
-        return storageService.GeneratePresignedUploadUrl(_options.OriginalImageBucketName, imageId.ToString(), expirationMinutes);
+        return storageService.GeneratePresignedUploadUrl(_options.OriginalImageBucketName, imageId.ToString(), contentType, expirationMinutes);
     }
 }

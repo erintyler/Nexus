@@ -26,6 +26,7 @@ using Serilog;
 using Wolverine;
 using Wolverine.FluentValidation;
 using Wolverine.Marten;
+using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,11 +41,16 @@ builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
 builder.UseWolverine(o =>
 {
     o.Discovery.IncludeAssembly(typeof(CreateImagePostCommandHandler).Assembly);
-    o.Durability.Mode = DurabilityMode.MediatorOnly;
     
     o.Policies.AutoApplyTransactions();
     o.Policies.AddMiddleware(typeof(MartenUserMiddleware));
     o.UseFluentValidation();
+    
+    o.UseRabbitMqUsingNamedConnection("rabbitmq")
+        .AutoProvision();
+
+    o.PublishMessage<ProcessImageCommand>()
+        .ToRabbitQueue("image-processing");
 
     o.Services.CritterStackDefaults(c =>
     {

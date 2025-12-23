@@ -19,13 +19,15 @@ var awsResources = builder.AddAWSCloudFormationTemplate("aws-stack", "cloudforma
 
 builder.UseLocalStack(localstack);
 
-var rabbitmq = builder.AddRabbitMQ("rabbitmq");
+var rabbitmq = builder.AddRabbitMQ("rabbitmq")
+    .WithManagementPlugin();
 
 var apiService = builder.AddProject<Projects.Nexus_Api>("nexus-api")
     .WithReference(postgres)
     .WithReference(awsResources)
     .WithReference(rabbitmq)
-    .WaitFor(postgres);
+    .WaitFor(postgres)
+    .WaitFor(rabbitmq);
 
 if (args.Contains("db-patch"))
 {

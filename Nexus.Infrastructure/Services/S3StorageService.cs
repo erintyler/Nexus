@@ -29,14 +29,15 @@ public class S3StorageService(IAmazonS3 s3Client, ILogger<S3StorageService> logg
         }
     }
 
-    public string GeneratePresignedUploadUrl(string bucketName, string key, int expirationMinutes = 60)
+    public string GeneratePresignedUploadUrl(string bucketName, string key, string contentType, int expirationMinutes = 60)
     {
         var request = new GetPreSignedUrlRequest
         {
             BucketName = bucketName,
             Key = key,
             Verb = HttpVerb.PUT,
-            Expires = DateTime.UtcNow.AddMinutes(expirationMinutes)
+            Expires = DateTime.UtcNow.AddMinutes(expirationMinutes),
+            ContentType = contentType
         };
 
         return s3Client.GetPreSignedURL(request);

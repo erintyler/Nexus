@@ -10,6 +10,7 @@ public class CreateImagePostCommandHandler
 {
     public static async Task<(Result<CreateImagePostResponse>, IStartStream?)> HandleAsync(
         CreateImagePostCommand request,
+        IImageService imageService,
         IUserContextService userContextService,
         ITagMigrationService tagMigrationService,
         CancellationToken ct)
@@ -33,7 +34,8 @@ public class CreateImagePostCommandHandler
         
         // Start the event stream with the created event
         var stream = MartenOps.StartStream<ImagePost>(createEventResult.Value);
-        var response = new CreateImagePostResponse(stream.StreamId, request.Title, DateTime.UtcNow);
+        var uploadUrl = imageService.GenerateImageUploadUrl(stream.StreamId, request.ContentType);
+        var response = new CreateImagePostResponse(stream.StreamId, request.Title, uploadUrl, DateTime.UtcNow);
         
         return (response, stream);
     }
