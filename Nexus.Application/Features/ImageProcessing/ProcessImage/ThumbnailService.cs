@@ -6,8 +6,8 @@ namespace Nexus.Application.Features.ImageProcessing.ProcessImage;
 
 public class ThumbnailService : IThumbnailService
 {
-    public const int ThumbnailWidth = 200;
-    public const int ThumbnailHeight = 200;
+    public const int ThumbnailWidth = 500;
+    public const int ThumbnailHeight = 500;
     
     public Result<byte[]> CreateThumbnail(Stream inputImageStream)
     {

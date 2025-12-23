@@ -13,14 +13,18 @@ public class ProcessImageCommandHandler
         IThumbnailService thumbnailService,
         CancellationToken cancellationToken)
     {
-        var originalImage = await imageService.GetOriginalImageStreamAsync(request.ImageId, cancellationToken);
+        await using var originalImage = await imageService.GetOriginalImageStreamAsync(request.ImageId, cancellationToken);
         
         if (originalImage is null)
         {
             return ImageProcessingErrors.NotFound;
         }
         
-        var webpResult = imageConversionService.ConvertToWebP(originalImage);
+        using var imageStream = new MemoryStream();
+        await originalImage.CopyToAsync(imageStream, cancellationToken);
+        imageStream.Position = 0;
+        
+        var webpResult = imageConversionService.ConvertToWebP(imageStream);
         
         if (webpResult.IsFailure)
         {
@@ -28,8 +32,8 @@ public class ProcessImageCommandHandler
         }
         
         // Reset stream position before creating thumbnail
-        originalImage.Position = 0;
-        var thumbnailResult = thumbnailService.CreateThumbnail(originalImage);
+        using var thumbnailStream = new MemoryStream(webpResult.Value);
+        var thumbnailResult = thumbnailService.CreateThumbnail(thumbnailStream);
         
         if (thumbnailResult.IsFailure)
         {

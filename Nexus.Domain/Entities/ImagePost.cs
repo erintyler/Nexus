@@ -1,5 +1,6 @@
 using Nexus.Domain.Abstractions;
 using Nexus.Domain.Common;
+using Nexus.Domain.Enums;
 using Nexus.Domain.Errors;
 using Nexus.Domain.Events.Comments;
 using Nexus.Domain.Events.ImagePosts;
@@ -29,6 +30,7 @@ public sealed class ImagePost : BaseEntity, ITaggable
     public Guid Id { get; private set; }
     public string Title { get; private set; } = null!;
     public string CreatedBy { get; private set; } = null!;
+    public UploadStatus Status { get; private set; }
     
     // Marten event sourcing metadata
     public DateTimeOffset CreatedAt { get; private set; }
@@ -211,6 +213,7 @@ public sealed class ImagePost : BaseEntity, ITaggable
     {
         Title = @event.Title;
         CreatedBy = @event.UserId.ToString();
+        Status = @event.Status;
         
         // Reconstruct Tag value objects from primitive TagData stored in the event
         foreach (var tagData in @event.Tags)

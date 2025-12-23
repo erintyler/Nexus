@@ -14,21 +14,17 @@ var localstack = builder.AddLocalStack(awsConfig: awsConfig, configureContainer:
     container.LogLevel = LocalStackLogLevel.Debug;
 });
 
-var awsStack = builder.AddAWSCDKStack("aws-stack")
-    .WithReference(localstack)
+var awsResources = builder.AddAWSCloudFormationTemplate("aws-stack", "cloudformation-stack.yaml")
     .WithReference(awsConfig);
-
-var originalImageBucket = awsStack.AddS3Bucket(builder.Configuration["OriginalImageBucketName"] ?? "nexus-original-images");
-var processedImageBucket = awsStack.AddS3Bucket(builder.Configuration["ProcessedImageBucketName"] ?? "nexus-processed-images");
-var thumbnailBucket = awsStack.AddS3Bucket(builder.Configuration["ThumbnailBucketName"] ?? "nexus-thumbnails");
 
 builder.UseLocalStack(localstack);
 
+var rabbitmq = builder.AddRabbitMQ("rabbitmq");
+
 var apiService = builder.AddProject<Projects.Nexus_Api>("nexus-api")
     .WithReference(postgres)
-    .WithReference(originalImageBucket)
-    .WithReference(processedImageBucket)
-    .WithReference(thumbnailBucket)
+    .WithReference(awsResources)
+    .WithReference(rabbitmq)
     .WaitFor(postgres);
 
 if (args.Contains("db-patch"))

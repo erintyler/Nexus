@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Nexus Image Storage Infrastructure'
+
+Parameters:
+  OriginalImageBucketName:
+    Type: String
+    Default: nexus-original-images
+    Description: Name of the bucket for original images
+  
+  ProcessedImageBucketName:
+    Type: String
+    Default: nexus-processed-images
+    Description: Name of the bucket for processed images
+  
+  ThumbnailBucketName:
+    Type: String
+    Default: nexus-thumbnails
+    Description: Name of the bucket for thumbnails
+
+Resources:
+  OriginalImageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref OriginalImageBucketName
+
+  ProcessedImageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref ProcessedImageBucketName
+
+  ThumbnailBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref ThumbnailBucketName
+
+Outputs:
+  OriginalImageBucketName:
+    Description: Name of the original image bucket
+    Value: !Ref OriginalImageBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-OriginalImageBucket'
+  
+  OriginalImageBucketArn:
+    Description: ARN of the original image bucket
+    Value: !GetAtt OriginalImageBucket.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-OriginalImageBucketArn'
+
+  ProcessedImageBucketName:
+    Description: Name of the processed image bucket
+    Value: !Ref ProcessedImageBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-ProcessedImageBucket'
+  
+  ProcessedImageBucketArn:
+    Description: ARN of the processed image bucket
+    Value: !GetAtt ProcessedImageBucket.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ProcessedImageBucketArn'
+
+  ThumbnailBucketName:
+    Description: Name of the thumbnail bucket
+    Value: !Ref ThumbnailBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-ThumbnailBucket'
+  
+  ThumbnailBucketArn:
+    Description: ARN of the thumbnail bucket
+    Value: !GetAtt ThumbnailBucket.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ThumbnailBucketArn'
+
