@@ -1,7 +1,9 @@
 <Solution>
   <Folder Name="/Tests/">
+    <Project Path="Nexus.Api.IntegrationTests/Nexus.Api.IntegrationTests.csproj" />
     <Project Path="Nexus.Application.UnitTests/Nexus.Application.UnitTests.csproj" />
     <Project Path="Nexus.Architecture.Tests/Nexus.Architecture.Tests.csproj" />
+    <Project Path="Nexus.ImageProcessor.IntegrationTests/Nexus.ImageProcessor.IntegrationTests.csproj" />
     <Project Path="Nexus.IntegrationTests.Utilities/Nexus.IntegrationTests.Utilities.csproj" />
     <Project Path="Nexus.Migrations.IntegrationTests/Nexus.Migrations.IntegrationTests.csproj" />
   </Folder>
