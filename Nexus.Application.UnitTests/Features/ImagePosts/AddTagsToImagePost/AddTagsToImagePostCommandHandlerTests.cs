@@ -60,6 +60,52 @@ public class AddTagsToImagePostCommandHandlerTests
                 e.TagValue == expectedTag.Value);
         }
     }
+    
+    [Fact]
+    public async Task HandleAsync_ShouldHandleTagMigrationsCorrectly()
+    {
+        // Arrange
+        var imagePost = new ImagePost();
+        var command = _fixture.Build<AddTagsToImagePostCommand>()
+            .With(x => x.Tags, _fixture.CreateTagDtoList()
+                .ToList())
+            .Create();
+        
+        var migratedTagData = command.Tags
+            .Select(t => new TagData(t.Type, _fixture.CreateString(30)))
+            .ToList();
+        
+        _mockTagMigrationService
+            .Setup(s => s.ResolveMigrationsAsync(
+                It.IsAny<IReadOnlyList<TagData>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(migratedTagData);
+        
+        // Act
+        var (result, events) = await AddTagsToImagePostCommandHandler.HandleAsync(
+            command,
+            imagePost,
+            _mockTagMigrationService.Object,
+            TestContext.Current.CancellationToken);
+        
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.NotEmpty(events);
+        _mockTagMigrationService.Verify(s => s.ResolveMigrationsAsync(
+            It.Is<IReadOnlyList<TagData>>(tags => tags.SequenceEqual(
+                command.Tags.Select(t => new TagData(t.Type, t.Value)))),
+            It.IsAny<CancellationToken>()), Times.Once);
+        
+        var tagAddedEvents = events.OfType<TagAddedDomainEvent>().ToList();
+        Assert.Equal(migratedTagData.Count, tagAddedEvents.Count);
+        
+        foreach (var migratedTag in migratedTagData)
+        {
+            Assert.Contains(tagAddedEvents, e => 
+                e.TagType == migratedTag.Type && 
+                e.TagValue == migratedTag.Value);
+        }
+    }
 
     [Fact]
     public async Task HandleAsync_ShouldNotCreateEvents_ForDuplicateTags()
