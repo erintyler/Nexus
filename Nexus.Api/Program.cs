@@ -35,7 +35,7 @@ builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
 {
     o.ConfigureTracing(c =>
     {
-        c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark"));
+        c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark") && !f.CommandText.Contains("wolverine_control_queue"));
     });
 });
 
