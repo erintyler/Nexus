@@ -8,6 +8,18 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql" Version="13.1.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.1" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />
+      <ProjectReference Include="..\Nexus.Domain\Nexus.Domain.csproj" />
+      <ProjectReference Include="..\Nexus.Infrastructure\Nexus.Infrastructure.csproj" />
+      <ProjectReference Include="..\Nexus.ServiceDefaults\Nexus.ServiceDefaults.csproj" />
     </ItemGroup>
 </Project>

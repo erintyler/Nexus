@@ -1,5 +1,6 @@
 using Marten;
 using Nexus.Application.Common.Models;
+using Nexus.Application.Common.Services;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Domain.Common;
 using Nexus.Domain.Errors;
@@ -10,7 +11,10 @@ namespace Nexus.Application.Features.ImagePosts.GetImageById;
 
 public static class GetImagePostQueryHandler
 {
-    public static async Task<Result<ImagePostDto>> HandleAsync(GetImagePostQuery request, IQuerySession session, [ReadAggregate] ImagePostReadModel? imagePost)
+    public static async Task<Result<ImagePostDto>> HandleAsync(
+        GetImagePostQuery request, 
+        IImageService imageService,
+        [ReadAggregate] ImagePostReadModel? imagePost)
     {
         if (imagePost is null)
         {
@@ -24,7 +28,7 @@ public static class GetImagePostQueryHandler
         return new ImagePostDto(
             imagePost.Title,
             tags,
-            "n/a",
+            imageService.GetProcessedImageUrl(imagePost.Id),
             imagePost.CreatedAt,
             imagePost.LastModified,
             imagePost.CreatedBy,

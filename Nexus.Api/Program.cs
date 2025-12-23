@@ -38,6 +38,7 @@ builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
         c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark"));
     });
 });
+
 builder.UseWolverine(o =>
 {
     o.Discovery.IncludeAssembly(typeof(CreateImagePostCommandHandler).Assembly);

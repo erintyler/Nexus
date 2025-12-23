@@ -14,7 +14,7 @@ public class ProcessImageCommandHandler
         IImageConversionService imageConversionService, 
         IThumbnailService thumbnailService,
         ILogger<ProcessImageCommandHandler> logger,
-        [ReadAggregate] ImagePost imagePost,
+        [WriteAggregate] ImagePost imagePost,
         CancellationToken cancellationToken)
     {
         await using var originalImage = await imageService.GetOriginalImageStreamAsync(request.Id, cancellationToken);
@@ -43,11 +43,25 @@ public class ProcessImageCommandHandler
             var allErrors = failures.SelectMany(f => f.Errors).ToList();
             
             logger.LogError("Image processing failed for ImageId: {ImageId} with errors: {@Errors}", request.Id, allErrors);
-            return [imagePost.MarkAsFailed()];
+            var markAsFailedResult = imagePost.MarkAsFailed();
+            
+            if (markAsFailedResult.IsFailure)
+            {
+                logger.LogError("Failed to mark ImagePost as failed for ImageId: {ImageId} with errors: {@Errors}", request.Id, markAsFailedResult.Errors);
+            }
+            
+            return [markAsFailedResult.Value];
         }
         
         logger.LogInformation("Image processing completed successfully for ImageId: {ImageId}", request.Id);
-        return [imagePost.MarkAsCompleted()];
+        var markAsCompletedResult = imagePost.MarkAsCompleted();
+        
+        if (markAsCompletedResult.IsFailure)
+        {
+            logger.LogError("Failed to mark ImagePost as completed for ImageId: {ImageId} with errors: {@Errors}", request.Id, markAsCompletedResult.Errors);
+        }
+        
+        return [markAsCompletedResult.Value];
     }
     
     private static async Task<Result> CreateAndStoreWebPAsync(

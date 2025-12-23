@@ -29,6 +29,13 @@ var apiService = builder.AddProject<Projects.Nexus_Api>("nexus-api")
     .WaitFor(postgres)
     .WaitFor(rabbitmq);
 
+builder.AddProject<Projects.Nexus_ImageProcessor>("nexus-imageprocessor")
+    .WithReference(postgres)
+    .WithReference(awsResources)
+    .WithReference(rabbitmq)
+    .WaitFor(postgres)
+    .WaitFor(rabbitmq);
+
 if (args.Contains("db-patch"))
 {
     var fileName = args[2];
