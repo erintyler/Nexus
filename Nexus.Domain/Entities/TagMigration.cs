@@ -21,7 +21,10 @@ public sealed class TagMigration : BaseEntity
     public TagData TargetTag { get; init; } = null!;
     
     public string CreatedBy { get; init; } = null!;
-    public DateTimeOffset CreatedAt { get; init; }
+    
+    public DateTimeOffset CreatedAt { get; private set; }
+    public DateTimeOffset LastModified { get; private set; }
+    public string LastModifiedBy { get; private set; } = null!;
     
     /// <summary>
     /// Factory method to create a new TagMigration document with validation.
@@ -50,8 +53,7 @@ public sealed class TagMigration : BaseEntity
             Id = Guid.NewGuid(),
             SourceTag = source,
             TargetTag = target,
-            CreatedBy = userId.ToString(),
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedBy = userId.ToString()
         };
     }
     

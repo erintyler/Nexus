@@ -13,4 +13,9 @@ public static class TagMigrationErrors
         "TagMigration.AlreadyExists",
         ErrorType.BusinessRule,
         "A tag migration for the specified source tag already exists.");
+    
+    public static readonly Error NoResults = new(
+        "TagMigration.NoResults",
+        ErrorType.NotFound,
+        "No tag migrations found matching the specified criteria.");
 }

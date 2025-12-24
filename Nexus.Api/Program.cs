@@ -99,7 +99,13 @@ else
             // Configure TagMigration document with index on source tag for fast lookups
             o.Schema.For<TagMigration>()
                 .Index(x => x.SourceTag.Type)
-                .Index(x => x.SourceTag.Value);
+                .Index(x => x.SourceTag.Value)
+                .Metadata(m =>
+                {
+                    m.CreatedAt.MapTo(x => x.CreatedAt);
+                    m.LastModified.MapTo(x => x.LastModified);
+                    m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+                });
 
             o.Schema.For<ImagePostReadModel>().Metadata(m =>
             {

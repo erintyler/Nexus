@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nexus.Api.Extensions;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Pagination;
+using Nexus.Application.Features.Tags.GetTagMigrations;
 using Nexus.Application.Features.Tags.GetTags;
 using Nexus.Application.Features.Tags.MigrateTag;
 using Nexus.Domain.Common;
@@ -22,6 +23,7 @@ public static class TagEndpoints
                 
             tags.MapSearchTagsEndpoint();
             tags.MapMigrateTagEndpoint();
+            tags.MapGetTagMigrationsEndpoint();
         
             return tags;
         }
@@ -79,6 +81,39 @@ public static class TagEndpoints
             .WithDescription("Migrates all occurrences of a source tag to a target tag across all image posts. This is a batch operation that processes posts efficiently in batches.")
             .Produces<MigrateTagResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem();
+        }
+        
+        public void MapGetTagMigrationsEndpoint()
+        {
+            app.MapGet("/migrations", async Task<Results<Ok<PagedResult<TagMigrationDto>>, NotFound>> (
+                IMessageBus bus,
+                [FromQuery] TagDto? sourceTag = null,
+                [FromQuery] TagDto? targetTag = null,
+                int pageNumber = PaginationConstants.DefaultPageNumber,
+                int pageSize = PaginationConstants.DefaultPageSize,
+                CancellationToken cancellationToken = default) =>
+            {
+                var query = new GetTagMigrationsQuery(sourceTag, targetTag)
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+
+                var result = await bus.InvokeAsync<Result<PagedResult<TagMigrationDto>>>(query, cancellationToken);
+
+                if (result.IsSuccess)
+                {
+                    return TypedResults.Ok(result.Value);
+                }
+
+                return TypedResults.NotFound();
+            })
+            .WithName("GetTagMigrations")
+            .WithSummary("Get tag migrations")
+            .WithDescription("Retrieves a paginated list of tag migrations with optional filtering by source and target tags.")
+            .Produces<PagedResult<TagMigrationDto>>()
+            .Produces(StatusCodes.Status404NotFound)
             .ProducesValidationProblem();
         }
     }
