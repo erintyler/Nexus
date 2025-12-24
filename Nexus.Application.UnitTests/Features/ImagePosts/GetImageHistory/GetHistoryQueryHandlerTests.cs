@@ -19,7 +19,7 @@ public class GetHistoryQueryHandlerTests
     private readonly Mock<IQueryEventStore> _mockQueryEventStore = new();
     private readonly Mock<ILogger<GetHistoryQueryHandler>> _mockLogger = new();
     private readonly Fixture _fixture = new();
-    private readonly CancellationToken _cancellationToken = CancellationToken.None;
+    private readonly CancellationToken _cancellationToken = TestContext.Current.CancellationToken;
 
     public GetHistoryQueryHandlerTests()
     {
