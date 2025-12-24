@@ -7,6 +7,7 @@
     <Project Path="Nexus.ImageProcessor.IntegrationTests/Nexus.ImageProcessor.IntegrationTests.csproj" />
     <Project Path="Nexus.IntegrationTests.Utilities/Nexus.IntegrationTests.Utilities.csproj" />
     <Project Path="Nexus.Migrations.IntegrationTests/Nexus.Migrations.IntegrationTests.csproj" />
+    <Project Path="Nexus.UnitTests.Utilities/Nexus.UnitTests.Utilities.csproj" />
   </Folder>
   <Project Path="Nexus.Api/Nexus.Api.csproj" />
   <Project Path="Nexus.AppHost/Nexus.AppHost.csproj" />

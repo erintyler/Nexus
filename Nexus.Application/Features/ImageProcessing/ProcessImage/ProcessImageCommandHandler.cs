@@ -48,6 +48,7 @@ public class ProcessImageCommandHandler
             if (markAsFailedResult.IsFailure)
             {
                 logger.LogError("Failed to mark ImagePost as failed for ImageId: {ImageId} with errors: {@Errors}", request.Id, markAsFailedResult.Errors);
+                return [];
             }
             
             return [markAsFailedResult.Value];
@@ -59,6 +60,7 @@ public class ProcessImageCommandHandler
         if (markAsCompletedResult.IsFailure)
         {
             logger.LogError("Failed to mark ImagePost as completed for ImageId: {ImageId} with errors: {@Errors}", request.Id, markAsCompletedResult.Errors);
+            return [];
         }
         
         return [markAsCompletedResult.Value];

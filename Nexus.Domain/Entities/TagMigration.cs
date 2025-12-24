@@ -14,7 +14,7 @@ namespace Nexus.Domain.Entities;
 public sealed class TagMigration : BaseEntity
 {
     [JsonConstructor]
-    private TagMigration() { } // For Marten
+    internal TagMigration() { } // For Marten
     
     public Guid Id { get; init; }
     public TagData SourceTag { get; init; } = null!;

@@ -29,12 +29,17 @@
       <ProjectReference Include="..\Nexus.Api\Nexus.Api.csproj" />
       <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />
       <ProjectReference Include="..\Nexus.Domain\Nexus.Domain.csproj" />
+      <ProjectReference Include="..\Nexus.UnitTests.Utilities\Nexus.UnitTests.Utilities.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Update="xunit.runner.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\ImagePosts\ImageUploaded\" />
     </ItemGroup>
 
 </Project>

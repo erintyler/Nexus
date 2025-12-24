@@ -30,6 +30,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Nexus.Domain\Nexus.Domain.csproj" />
+      <ProjectReference Include="..\Nexus.UnitTests.Utilities\Nexus.UnitTests.Utilities.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,17 +1,17 @@
-using Marten;
 using Microsoft.Extensions.Logging;
-using Nexus.Application.Common.Models;
+using Nexus.Application.Common.Abstractions;
 using Nexus.Application.Common.Services;
-using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Errors;
-using Nexus.Domain.Events.Tags;
 using Nexus.Domain.Primitives;
 
 namespace Nexus.Application.Features.Tags.MigrateTag;
 
-public class MigrateTagCommandHandler(IDocumentSession session, IUserContextService userContextService, ILogger<MigrateTagCommandHandler> logger)
+public class MigrateTagCommandHandler(
+    ITagMigrationRepository repository,
+    IUserContextService userContextService,
+    ILogger<MigrateTagCommandHandler> logger)
 {
     private const int BatchSize = 500;
 
@@ -58,10 +58,9 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
     private async Task<Result> CheckForExistingMigrationAsync(MigrateTagCommand request, CancellationToken ct)
     {
-        var existingMigration = await session
-            .Query<TagMigration>()
-            .Where(m => m.SourceTag.Type == request.Source.Type && m.SourceTag.Value == request.Source.Value)
-            .FirstOrDefaultAsync(ct);
+        var existingMigration = await repository.GetMigrationBySourceAsync(
+            new TagData(request.Source.Type, request.Source.Value),
+            ct);
 
         if (existingMigration is not null)
         {
@@ -90,8 +89,7 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
         var migration = migrationResult.Value;
         
-        session.Store(migration);
-        await session.SaveChangesAsync(ct);
+        await repository.CreateMigrationAsync(migration, ct);
         
         logger.LogInformation(
             "Tag migration document created: Id={MigrationId}, Source={Source}, Target={Target}",
@@ -104,12 +102,11 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
     private async Task<int> UpdateUpstreamMigrationsAsync(MigrateTagCommand request, CancellationToken ct)
     {
-        var upstreamMigrations = await session
-            .Query<TagMigration>()
-            .Where(m => m.TargetTag.Type == request.Source.Type && m.TargetTag.Value == request.Source.Value)
-            .ToListAsync(ct);
+        var upstreamMigrations = await repository.GetUpstreamMigrationsAsync(
+            new TagData(request.Source.Type, request.Source.Value),
+            ct);
 
-        if (!upstreamMigrations.Any())
+        if (upstreamMigrations.Count == 0)
         {
             return 0;
         }
@@ -119,6 +116,8 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
             upstreamMigrations.Count);
 
         var upstreamMigrationsUpdated = 0;
+        var migrationsToDelete = new List<TagMigration>();
+        var migrationsToCreate = new List<TagMigration>();
 
         foreach (var upstreamMigration in upstreamMigrations)
         {
@@ -137,8 +136,8 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
                 continue;
             }
 
-            session.Delete(upstreamMigration);
-            session.Store(updatedMigrationResult.Value);
+            migrationsToDelete.Add(upstreamMigration);
+            migrationsToCreate.Add(updatedMigrationResult.Value);
             upstreamMigrationsUpdated++;
             
             logger.LogInformation(
@@ -149,7 +148,7 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
                 updatedMigrationResult.Value.TargetTag);
         }
 
-        await session.SaveChangesAsync(ct);
+        await repository.UpdateMigrationsAsync(migrationsToDelete, migrationsToCreate, ct);
         
         logger.LogInformation(
             "Successfully updated {Count} upstream migrations",
@@ -164,12 +163,9 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
         MigrateTagCommand request,
         CancellationToken ct)
     {
-        var affectedPosts = session
-            .Query<ImagePostReadModel>()
-            .Where(p => p.Tags.Any(t => 
-                t.Type == request.Source.Type && 
-                t.Value == request.Source.Value))
-            .ToAsyncEnumerable(ct);
+        var affectedPosts = repository.GetPostsWithTagAsync(
+            new TagData(request.Source.Type, request.Source.Value),
+            ct);
 
         var totalProcessed = 0;
 
@@ -181,7 +177,7 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
         {
             var postIds = batch.Select(p => p.Id).ToList();
             
-            await AppendTagMigrationEvents(postIds, migrationEvent, ct);
+            await repository.AppendMigrationEventsBatchAsync(postIds, migrationEvent, ct);
                 
             totalProcessed += postIds.Count;
             
@@ -192,21 +188,6 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
         }
 
         return totalProcessed;
-    }
-
-    private async Task AppendTagMigrationEvents(
-        List<Guid> postIds,
-        TagMigratedDomainEvent domainEvent,
-        CancellationToken ct)
-    {
-        foreach (var postId in postIds)
-        {
-            // Append migration event to each affected ImagePost aggregate
-            session.Events.Append(postId, domainEvent);
-        }
-
-        // Commit the batch transaction
-        await session.SaveChangesAsync(ct);
     }
 }
 

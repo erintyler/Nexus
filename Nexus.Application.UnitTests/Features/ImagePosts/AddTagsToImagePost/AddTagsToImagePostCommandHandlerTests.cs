@@ -3,7 +3,7 @@ using Moq;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Services;
 using Nexus.Application.Features.ImagePosts.AddTagsToImagePost;
-using Nexus.Application.UnitTests.Extensions;
+using Nexus.UnitTests.Utilities.Extensions;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Errors;
 using Nexus.Domain.Events.Tags;

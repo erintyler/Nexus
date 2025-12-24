@@ -6,7 +6,7 @@ using Nexus.Domain.Events.Comments;
 using Nexus.Domain.Events.ImagePosts;
 using Nexus.Domain.Events.Tags;
 using Nexus.Domain.Primitives;
-using Nexus.Domain.UnitTests.Extensions;
+using Nexus.UnitTests.Utilities.Extensions;
 
 namespace Nexus.Domain.UnitTests.Entities;
 
@@ -530,8 +530,7 @@ public class ImagePostTests
     {
         // Arrange
         var userId = _fixture.Create<Guid>();
-        var imagePost = CreateImagePostWithTags(1, userId);
-        imagePost.Apply(new StatusChangedDomainEvent(imagePost.Id, UploadStatus.Processing, userId));
+        var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing, userId);
 
         // Act
         var result = imagePost.MarkAsProcessing(userId);
@@ -546,8 +545,7 @@ public class ImagePostTests
     {
         // Arrange
         var userId = _fixture.Create<Guid>();
-        var imagePost = CreateImagePostWithTags(1, userId);
-        imagePost.Apply(new StatusChangedDomainEvent(imagePost.Id, UploadStatus.Processing, userId));
+        var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing, userId);
 
         // Act
         var result = imagePost.MarkAsCompleted();
@@ -561,7 +559,7 @@ public class ImagePostTests
     public void MarkAsCompleted_ShouldReturnFailure_WhenStatusIsNotProcessing()
     {
         // Arrange
-        var imagePost = CreateImagePostWithTags(1);
+        var imagePost = _fixture.CreateImagePost();
 
         // Act
         var result = imagePost.MarkAsCompleted();
@@ -576,8 +574,7 @@ public class ImagePostTests
     {
         // Arrange
         var userId = _fixture.Create<Guid>();
-        var imagePost = CreateImagePostWithTags(1, userId);
-        imagePost.Apply(new StatusChangedDomainEvent(imagePost.Id, UploadStatus.Processing, userId));
+        var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing, userId);
 
         // Act
         var result = imagePost.MarkAsFailed();
@@ -591,7 +588,7 @@ public class ImagePostTests
     public void MarkAsFailed_ShouldReturnFailure_WhenStatusIsNotProcessing()
     {
         // Arrange
-        var imagePost = CreateImagePostWithTags(1);
+        var imagePost = _fixture.CreateImagePost();
 
         // Act
         var result = imagePost.MarkAsFailed();
@@ -776,24 +773,17 @@ public class ImagePostTests
     private ImagePost CreateImagePostWithTags(int tagCount, Guid? userId = null)
     {
         var tags = _fixture.CreateTagDataList(tagCount);
-        return CreateImagePostWithTags(tags, userId);
+        return _fixture.CreateImagePost(userId, tags: tags);
     }
 
     private ImagePost CreateImagePostWithTags(IEnumerable<TagData> tags, Guid? userId = null)
     {
-        var imagePost = new ImagePost();
-        var createdEvent = new ImagePostCreatedDomainEvent(
-            userId ?? _fixture.Create<Guid>(),
-            _fixture.CreateString(50),
-            tags.ToList());
-        
-        imagePost.Apply(createdEvent);
-        return imagePost;
+        return _fixture.CreateImagePost(userId, tags: tags.ToList());
     }
 
     private ImagePost CreateImagePostWithComment(Guid userId, out Guid commentId)
     {
-        var imagePost = CreateImagePostWithTags(1);
+        var imagePost = _fixture.CreateImagePost();
         commentId = _fixture.Create<Guid>();
         var content = _fixture.CreateString(100);
         var commentEvent = new CommentCreatedDomainEvent(commentId, userId, content);

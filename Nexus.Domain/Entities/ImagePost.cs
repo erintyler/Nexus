@@ -25,9 +25,9 @@ public sealed class ImagePost : BaseEntity, ITaggable
     private readonly HashSet<Tag> _tags = [];
     
     internal ImagePost() { }
+    internal ImagePost(Guid id) : base(id) { }
     
     // Properties with private setters for encapsulation
-    public Guid Id { get; private set; }
     public string Title { get; private set; } = null!;
     public string CreatedBy { get; private set; } = null!;
     public UploadStatus Status { get; private set; }
