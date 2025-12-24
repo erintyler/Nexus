@@ -13,6 +13,8 @@
   <Project Path="Nexus.AppHost/Nexus.AppHost.csproj" />
   <Project Path="Nexus.Application/Nexus.Application.csproj" />
   <Project Path="Nexus.Domain/Nexus.Domain.csproj" />
+  <Project Path="Nexus.Frontend/Nexus.Frontend.Client/Nexus.Frontend.Client.csproj" />
+  <Project Path="Nexus.Frontend/Nexus.Frontend/Nexus.Frontend.csproj" />
   <Project Path="Nexus.ImageProcessor/Nexus.ImageProcessor.csproj" />
   <Project Path="Nexus.Infrastructure/Nexus.Infrastructure.csproj" />
   <Project Path="Nexus.Migrations/Nexus.Migrations.csproj" />

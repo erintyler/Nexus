@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Nexus.Api\Nexus.Api.csproj" />
+      <ProjectReference Include="..\Nexus.Frontend\Nexus.Frontend\Nexus.Frontend.csproj" />
       <ProjectReference Include="..\Nexus.ImageProcessor\Nexus.ImageProcessor.csproj" />
     </ItemGroup>
 

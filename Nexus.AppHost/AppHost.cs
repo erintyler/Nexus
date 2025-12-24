@@ -36,6 +36,8 @@ builder.AddProject<Projects.Nexus_ImageProcessor>("nexus-imageprocessor")
     .WaitFor(postgres)
     .WaitFor(rabbitmq);
 
+builder.AddProject<Projects.Nexus_Frontend>("nexus-frontend");
+
 if (args.Contains("db-patch"))
 {
     var fileName = args[2];
