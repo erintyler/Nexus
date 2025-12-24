@@ -9,6 +9,7 @@ using Nexus.Application.Features.ImagePosts.GetImageById;
 using Nexus.Application.Features.ImagePosts.GetImageHistory;
 using Nexus.Application.Features.ImagePosts.GetImagesByTags;
 using Nexus.Application.Features.ImagePosts.ImageUploaded;
+using Nexus.Application.Features.ImagePosts.RemoveTagsToImagePost;
 using Nexus.Application.Features.ImageProcessing.ProcessImage;
 using Nexus.Domain.Common;
 using Wolverine;
@@ -140,6 +141,29 @@ public static class ImageEndpoints
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
             
+            app.MapDelete("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>>(
+                Guid id,
+                [FromBody] IReadOnlyList<TagDto> tags,
+                IMessageBus bus,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new RemoveTagsFromImagePostCommand(id, tags);
+                var result = await bus.InvokeAsync<Result>(command, cancellationToken);
+
+                if (result.IsSuccess)
+                {
+                    return TypedResults.Ok();
+                }
+                
+                return result.ToUnprocessableEntityProblem();
+            }).WithName("RemoveTagsFromImage")
+            .WithSummary("Remove tags from image post")
+            .WithDescription("Removes tags from the specified image post.")
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem();
+            
             app.MapGet("/{id:guid}/history", async Task<Results<Ok<PagedResult<HistoryDto>>, NotFound>> (
                 Guid id,
                 DateTimeOffset? dateFrom,
@@ -171,6 +195,4 @@ public static class ImageEndpoints
             .ProducesValidationProblem();
         }
     }
-    
-    
 }
