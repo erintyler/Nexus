@@ -5,6 +5,7 @@ using Nexus.Application.Common.Services;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
+using Nexus.Domain.Errors;
 using Nexus.Domain.Events.Tags;
 using Nexus.Domain.Primitives;
 
@@ -18,7 +19,64 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
     {
         var userId = userContextService.GetUserId();
         
-        // Step 1: Create and store the TagMigration document
+        // Step 1: Check for existing migration
+        var existingMigrationCheck = await CheckForExistingMigrationAsync(request, ct);
+        if (existingMigrationCheck.IsFailure)
+        {
+            return Result.Failure<MigrateTagResponse>(existingMigrationCheck.Errors);
+        }
+        
+        // Step 2: Create and store the new migration document
+        var migrationResult = await CreateAndStoreMigrationAsync(userId, request, ct);
+        if (migrationResult.IsFailure)
+        {
+            return Result.Failure<MigrateTagResponse>(migrationResult.Errors);
+        }
+        
+        var migration = migrationResult.Value;
+        
+        // Step 3: Update upstream migrations that point to the source tag
+        var upstreamMigrationsUpdated = await UpdateUpstreamMigrationsAsync(request, ct);
+        
+        // Step 4: Migrate all posts with the source tag
+        var totalPostsMigrated = await MigratePostsAsync(migration, userId, request, ct);
+        
+        logger.LogInformation(
+            "Tag migration completed successfully. Total posts migrated: {Total}, Upstream migrations updated: {UpstreamCount}",
+            totalPostsMigrated,
+            upstreamMigrationsUpdated);
+            
+        var response = new MigrateTagResponse(
+            Success: true,
+            Message: "Tag migration completed successfully",
+            PostsMigrated: totalPostsMigrated,
+            UpstreamMigrationsUpdated: upstreamMigrationsUpdated
+        );
+        
+        return Result.Success(response);
+    }
+
+    private async Task<Result> CheckForExistingMigrationAsync(MigrateTagCommand request, CancellationToken ct)
+    {
+        var existingMigration = await session
+            .Query<TagMigration>()
+            .Where(m => m.SourceTag.Type == request.Source.Type && m.SourceTag.Value == request.Source.Value)
+            .FirstOrDefaultAsync(ct);
+
+        if (existingMigration is not null)
+        {
+            logger.LogWarning("Tag migration already exists for source tag: {@SourceTag}", request.Source);
+            return TagMigrationErrors.AlreadyExists;
+        }
+        
+        return Result.Success();
+    }
+
+    private async Task<Result<TagMigration>> CreateAndStoreMigrationAsync(
+        Guid userId, 
+        MigrateTagCommand request, 
+        CancellationToken ct)
+    {
         var migrationResult = TagMigration.Create(
             userId: userId,
             source: new TagData(request.Source.Type, request.Source.Value),
@@ -26,11 +84,12 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
         );
 
         if (migrationResult.IsFailure)
-            return Result.Failure<MigrateTagResponse>(migrationResult.Errors);
+        {
+            return Result.Failure<TagMigration>(migrationResult.Errors);
+        }
 
         var migration = migrationResult.Value;
         
-        // Store the migration document for future lookups
         session.Store(migration);
         await session.SaveChangesAsync(ct);
         
@@ -39,8 +98,72 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
             migration.Id,
             $"{migration.SourceTag.Type}:{migration.SourceTag.Value}",
             $"{migration.TargetTag.Type}:{migration.TargetTag.Value}");
+        
+        return Result.Success(migration);
+    }
 
-        // Step 2: Query all posts that have the source tag
+    private async Task<int> UpdateUpstreamMigrationsAsync(MigrateTagCommand request, CancellationToken ct)
+    {
+        var upstreamMigrations = await session
+            .Query<TagMigration>()
+            .Where(m => m.TargetTag.Type == request.Source.Type && m.TargetTag.Value == request.Source.Value)
+            .ToListAsync(ct);
+
+        if (!upstreamMigrations.Any())
+        {
+            return 0;
+        }
+
+        logger.LogInformation(
+            "Found {Count} upstream migrations pointing to source tag. Updating them to point to new target.",
+            upstreamMigrations.Count);
+
+        var upstreamMigrationsUpdated = 0;
+
+        foreach (var upstreamMigration in upstreamMigrations)
+        {
+            var updatedMigrationResult = TagMigration.Create(
+                userId: Guid.Parse(upstreamMigration.CreatedBy),
+                source: upstreamMigration.SourceTag,
+                target: new TagData(request.Target.Type, request.Target.Value)
+            );
+
+            if (updatedMigrationResult.IsFailure)
+            {
+                logger.LogError(
+                    "Failed to update upstream migration {MigrationId}: {Errors}",
+                    upstreamMigration.Id,
+                    string.Join(", ", updatedMigrationResult.Errors.Select(e => e.Description)));
+                continue;
+            }
+
+            session.Delete(upstreamMigration);
+            session.Store(updatedMigrationResult.Value);
+            upstreamMigrationsUpdated++;
+            
+            logger.LogInformation(
+                "Updated migration: {@OldSource}→{@OldTarget} is now {@NewSource}→{@NewTarget}",
+                upstreamMigration.SourceTag,
+                upstreamMigration.TargetTag,
+                updatedMigrationResult.Value.SourceTag,
+                updatedMigrationResult.Value.TargetTag);
+        }
+
+        await session.SaveChangesAsync(ct);
+        
+        logger.LogInformation(
+            "Successfully updated {Count} upstream migrations",
+            upstreamMigrationsUpdated);
+
+        return upstreamMigrationsUpdated;
+    }
+
+    private async Task<int> MigratePostsAsync(
+        TagMigration migration,
+        Guid userId,
+        MigrateTagCommand request,
+        CancellationToken ct)
+    {
         var affectedPosts = session
             .Query<ImagePostReadModel>()
             .Where(p => p.Tags.Any(t => 
@@ -50,12 +173,10 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
 
         var totalProcessed = 0;
 
-        logger.LogInformation("Tag migration started: Source={@Source}, Target={Target}", request.Source, request.Target);
+        logger.LogInformation("Tag migration started: Source={@Source}, Target={@Target}", request.Source, request.Target);
 
-        // Step 3: Create the migration event for bulk updates
         var migrationEvent = migration.CreateMigrationEvent(userId);
 
-        // Step 4: Process in batches using Chunk
         await foreach (var batch in affectedPosts.Chunk(BatchSize).WithCancellation(ct))
         {
             var postIds = batch.Select(p => p.Id).ToList();
@@ -70,17 +191,7 @@ public class MigrateTagCommandHandler(IDocumentSession session, IUserContextServ
                 totalProcessed);
         }
 
-        logger.LogInformation(
-            "Tag migration completed successfully. Total posts migrated: {Total}",
-            totalProcessed);
-            
-        var response = new MigrateTagResponse(
-            Success: true,
-            Message: "Tag migration completed successfully",
-            PostsMigrated: totalProcessed
-        );
-        
-        return Result.Success(response);
+        return totalProcessed;
     }
 
     private async Task AppendTagMigrationEvents(
