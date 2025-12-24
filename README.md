@@ -8,17 +8,17 @@ Nexus is structured as a modular monolith following Clean Architecture with clea
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Presentation                          │
-│                    (Nexus.Api, AppHost)                      │
+│                        Presentation                         │
+│                    (Nexus.Api, AppHost)                     │
 ├─────────────────────────────────────────────────────────────┤
-│                        Application                           │
-│              (Commands, Queries, Handlers)                   │
+│                        Application                          │
+│              (Commands, Queries, Handlers)                  │
 ├─────────────────────────────────────────────────────────────┤
-│                          Domain                              │
-│         (Entities, Events, Value Objects, Rules)             │
+│                          Domain                             │
+│         (Entities, Events, Value Objects, Rules)            │
 ├─────────────────────────────────────────────────────────────┤
-│                      Infrastructure                          │
-│              (Repositories, External Services)               │
+│                      Infrastructure                         │
+│              (Repositories, External Services)              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
