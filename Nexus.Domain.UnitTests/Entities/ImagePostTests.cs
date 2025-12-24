@@ -135,9 +135,9 @@ public class ImagePostTests
     }
 
     [Theory]
-    [InlineData(1)]
+    [InlineData(ImagePost.MinTitleLength)]
     [InlineData(50)]
-    [InlineData(200)]
+    [InlineData(ImagePost.MaxTitleLength)]
     public void Create_ShouldReturnSuccess_WhenTitleLengthIsValid(int length)
     {
         // Arrange

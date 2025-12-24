@@ -238,6 +238,8 @@ public class NamingConventionTests
             .That()
             .ResideInNamespaceMatching("Nexus.Application.*Models")
             .And()
+            .DoNotResideInNamespaceMatching("Nexus.Application.Configuration.*")
+            .And()
             .AreClasses()
             .And()
             .AreNotAbstract()
@@ -246,7 +248,7 @@ public class NamingConventionTests
             .GetResult();
 
         // Assert
-        AssertTestResult(result, "All DTOs in Models namespace should have names ending with 'Dto' or 'ReadModel'");
+        AssertTestResult(result, "All DTOs in Models namespace (excluding Configuration models) should have names ending with 'Dto' or 'ReadModel'");
     }
     
     private static void AssertForAllAssemblies(

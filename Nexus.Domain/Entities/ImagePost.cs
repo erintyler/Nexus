@@ -18,7 +18,7 @@ namespace Nexus.Domain.Entities;
 /// </summary>
 public sealed class ImagePost : BaseEntity, ITaggable
 {
-    public const int MinTitleLength = 1;
+    public const int MinTitleLength = 5;
     public const int MaxTitleLength = 200;
     
     private readonly List<Comment> _comments = [];
