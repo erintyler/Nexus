@@ -1,11 +1,10 @@
-using Marten;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Services;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Domain.Common;
+using Nexus.Domain.Enums;
 using Nexus.Domain.Errors;
 using Wolverine.Marten;
-using Wolverine.Persistence;
 
 namespace Nexus.Application.Features.ImagePosts.GetImageById;
 
@@ -16,7 +15,7 @@ public static class GetImagePostQueryHandler
         IImageService imageService,
         [ReadAggregate] ImagePostReadModel? imagePost)
     {
-        if (imagePost is null)
+        if (imagePost?.Status is not UploadStatus.Completed)
         {
             return ImagePostErrors.NotFound;
         }

@@ -27,19 +27,36 @@ public class TagMigrationService(IDocumentSession session, ILogger<TagMigrationS
         IReadOnlyList<TagData> tags, 
         CancellationToken ct = default)
     {
-        var resolved = new List<TagData>();
+        if (tags.Count == 0)
+            return tags;
         
+        var tagTypes = tags.Select(t => t.Type).ToArray();
+        var tagValues = tags.Select(t => t.Value).ToArray();
+        
+        var migrations = await session.Query<TagMigration>()
+            .Where(m => m.SourceTag.Type.In(tagTypes) && m.SourceTag.Value.In(tagValues))
+            .ToListAsync(ct);
+
+        // Create lookup dictionary for O(1) access
+        var migrationLookup = migrations.ToDictionary(
+            m => new TagData(m.SourceTag.Type, m.SourceTag.Value),
+            m => new TagData(m.TargetTag.Type, m.TargetTag.Value));
+
+        var resolved = new List<TagData>(tags.Count);
+
         foreach (var tag in tags)
         {
-            var target = await GetTargetTagAsync(tag, ct);
-            resolved.Add(target ?? tag);
-
-            if (target is not null)
+            if (migrationLookup.TryGetValue(tag, out var target))
             {
+                resolved.Add(target);
                 logger.LogInformation("Tag resolved: Source: {@SourceTag}, Resolved: {@ResolvedTag}", tag, target);
             }
+            else
+            {
+                resolved.Add(tag);
+            }
         }
-        
+
         return resolved;
     }
 }
