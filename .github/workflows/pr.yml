@@ -66,6 +66,8 @@ jobs:
     name: Architecture Tests
     runs-on: ubuntu-slim
     needs: build
+    # Cancel all parallel jobs if this fails
+    continue-on-error: false
     
     steps:
       - name: Checkout code
@@ -94,6 +96,8 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-slim
     needs: build
+    # Cancel all parallel jobs if this fails
+    continue-on-error: false
     
     steps:
       - name: Checkout code
@@ -135,6 +139,8 @@ jobs:
     name: Integration Tests
     runs-on: ubuntu-slim
     needs: build
+    # Cancel all parallel jobs if this fails
+    continue-on-error: false
     
     steps:
       - name: Checkout code
@@ -169,6 +175,8 @@ jobs:
     name: CodeQL Security Analysis
     runs-on: ubuntu-slim
     needs: build
+    # Cancel all parallel jobs if this fails
+    continue-on-error: false
     permissions:
       actions: read
       contents: read
