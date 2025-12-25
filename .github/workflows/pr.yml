@@ -141,6 +141,12 @@ jobs:
             --no-restore \
             --no-build \
             --configuration Release
+          
+      - name: List Scripts folder in Migration Tests output (glob for anything matching)
+        if: matrix.test-group == 'integration'
+        run: |
+          echo "Contents of Scripts folder:"
+          ls -la ./Nexus.Migrations.IntegrationTests/bin/Release/net10/Scripts || echo "Scripts folder not found."
       
       - name: Run Migration Tests
         if: matrix.test-group == 'integration'
