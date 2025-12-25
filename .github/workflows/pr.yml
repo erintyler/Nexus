@@ -19,34 +19,37 @@ jobs:
   # Job 1: Code Quality Checks
   code-quality:
     name: Formatting Checks
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
+
       - name: Run dotnet format check
-        run: dotnet format Nexus.slnx --verify-no-changes --verbosity normal
+        run: dotnet format Nexus.slnx --verify-no-changes --verbosity diagnostic
 
   # Job 2: Build & Compile
   build:
     name: Build Solution
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     needs: code-quality
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -57,133 +60,80 @@ jobs:
       
       - name: Build solution
         run: dotnet build Nexus.slnx --no-restore --configuration Release
-      
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            **/bin/Release/**
-            **/obj/Release/**
-          retention-days: 1
 
-  # Job 3: Architecture Tests
-  architecture-tests:
-    name: Architecture Tests
-    runs-on: ubuntu-slim
+  # Job 3: All Tests (Matrix Strategy with Fail-Fast)
+  tests:
+    name: Tests - ${{ matrix.test-group }}
+    runs-on: ubuntu-latest
     needs: build
-    continue-on-error: false
+    strategy:
+      fail-fast: true
+      matrix:
+        test-group:
+          - architecture
+          - unit
+          - integration
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
       
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
       
       - name: Run Architecture Tests
+        if: matrix.test-group == 'architecture'
         run: |
-          dotnet test Nexus.slnx \
+          dotnet test \
             --project Nexus.Architecture.Tests \
             --no-restore \
-            --no-build \
-            --configuration Release
-
-  # Job 4: Unit Tests
-  unit-tests:
-    name: Unit Tests
-    runs-on: ubuntu-slim
-    needs: build
-    continue-on-error: false
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+            --configuration Release \
+            --logger "console;verbosity=detailed"
       
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-      
-      - name: Run Domain Unit Tests
+      - name: Run All Unit Tests
+        if: matrix.test-group == 'unit'
         run: |
           dotnet test \
             --project Nexus.Domain.UnitTests \
             --no-restore \
-            --no-build \
             --configuration Release
-      
-      - name: Run Application Unit Tests
-        run: |
           dotnet test \
             --project Nexus.Application.UnitTests \
             --no-restore \
-            --no-build \
             --configuration Release
-      
-      - name: Run Frontend Unit Tests
-        run: |
           dotnet test \
             --project Nexus.Frontend.UnitTests \
             --no-restore \
-            --no-build \
             --configuration Release
-
-  # Job 5: Integration Tests
-  integration-tests:
-    name: Integration Tests
-    runs-on: ubuntu-slim
-    needs: build
-    continue-on-error: false
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
       
       - name: Run API Integration Tests
+        if: matrix.test-group == 'integration'
         run: |
           dotnet test \
             --project Nexus.Api.IntegrationTests \
             --no-restore \
-            --no-build \
             --configuration Release
       
       - name: Run Migration Tests
+        if: matrix.test-group == 'integration'
         run: |
           dotnet test \
             --project Nexus.Migrations.IntegrationTests \
             --no-restore \
-            --no-build \
             --configuration Release
 
-  # Job 6: CodeQL Security Analysis
+  # Job 4: CodeQL Security Analysis
   codeql:
     name: CodeQL Security Analysis
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     needs: build
-    continue-on-error: false
     permissions:
       actions: read
       contents: read
@@ -191,10 +141,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -206,8 +156,11 @@ jobs:
           languages: csharp
           config-file: ./.github/codeql/codeql-config.yml
       
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
+
+      - name: Build solution
+        run: dotnet build Nexus.slnx --no-restore --configuration Release
       
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
@@ -215,11 +168,11 @@ jobs:
           category: "/language:csharp"
           upload: true
 
-  # Job 7: PR Summary & Status Check
+  # Job 5: PR Summary & Status Check
   pr-check-summary:
     name: PR Check Summary
-    runs-on: ubuntu-slim
-    needs: [code-quality, build, architecture-tests, unit-tests, integration-tests, codeql]
+    runs-on: ubuntu-latest
+    needs: [code-quality, build, tests, codeql]
     if: always()
     
     steps:
@@ -231,18 +184,14 @@ jobs:
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| Code Quality | ${{ needs.code-quality.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Architecture Tests | ${{ needs.architecture-tests.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Unit Tests | ${{ needs.unit-tests.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Integration Tests | ${{ needs.integration-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests (All Groups) | ${{ needs.tests.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| CodeQL Security | ${{ needs.codeql.result }} |" >> $GITHUB_STEP_SUMMARY
       
       - name: Verify all checks passed
         if: |
           needs.code-quality.result != 'success' ||
           needs.build.result != 'success' ||
-          needs.architecture-tests.result != 'success' ||
-          needs.unit-tests.result != 'success' ||
-          needs.integration-tests.result != 'success' ||
+          needs.tests.result != 'success' ||
           needs.codeql.result != 'success'
         run: |
           echo "❌ One or more required checks failed"
