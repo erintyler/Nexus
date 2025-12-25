@@ -20,11 +20,11 @@ public static class TagEndpoints
             var tags = app.MapGroup("/tags")
                 .WithTags("Tags")
                 .WithDescription("Endpoints for managing tags.");
-                
+
             tags.MapSearchTagsEndpoint();
             tags.MapMigrateTagEndpoint();
             tags.MapGetTagMigrationsEndpoint();
-        
+
             return tags;
         }
 
@@ -63,8 +63,8 @@ public static class TagEndpoints
         public void MapMigrateTagEndpoint()
         {
             app.MapPost("/migrate", async Task<Results<Ok<MigrateTagResponse>, ProblemHttpResult>> (
-                [FromBody] MigrateTagCommand command, 
-                IMessageBus bus, 
+                [FromBody] MigrateTagCommand command,
+                IMessageBus bus,
                 CancellationToken cancellationToken) =>
             {
                 var result = await bus.InvokeAsync<Result<MigrateTagResponse>>(command, cancellationToken);
@@ -72,8 +72,8 @@ public static class TagEndpoints
                 if (result.IsSuccess)
                 {
                     return TypedResults.Ok(result.Value);
-                } 
-                    
+                }
+
                 return result.ToUnprocessableEntityProblem();
             })
             .WithName("MigrateTag")
@@ -83,7 +83,7 @@ public static class TagEndpoints
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
         }
-        
+
         public void MapGetTagMigrationsEndpoint()
         {
             app.MapGet("/migrations", async Task<Results<Ok<PagedResult<TagMigrationDto>>, NotFound>> (

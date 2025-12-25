@@ -10,7 +10,7 @@ public abstract class BaseEntity : IEquatable<BaseEntity>
     protected BaseEntity()
     {
     }
-    
+
     public Guid Id { get; }
 
     public bool Equals(BaseEntity? other)
@@ -19,7 +19,7 @@ public abstract class BaseEntity : IEquatable<BaseEntity>
         {
             return false;
         }
-        
+
         return ReferenceEquals(this, other) || Id.Equals(other.Id);
     }
 
@@ -34,7 +34,7 @@ public abstract class BaseEntity : IEquatable<BaseEntity>
         {
             return true;
         }
-        
+
         return obj.GetType() == GetType() && Equals((BaseEntity)obj);
     }
 

@@ -8,8 +8,8 @@ namespace Nexus.Api.Middleware;
 public class BadRequestExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
-        HttpContext httpContext, 
-        Exception exception, 
+        HttpContext httpContext,
+        Exception exception,
         CancellationToken cancellationToken)
     {
         if (exception is not BadHttpRequestException badHttpRequestException)
@@ -29,11 +29,11 @@ public class BadRequestExceptionHandler : IExceptionHandler
             Detail = friendlyMessage,
             Status = StatusCodes.Status400BadRequest
         };
-        
+
         httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
         httpContext.Response.ContentType = "application/problem+json";
         await JsonSerializer.SerializeAsync(httpContext.Response.Body, problemDetails, cancellationToken: cancellationToken);
-        
+
         return true;
     }
 }

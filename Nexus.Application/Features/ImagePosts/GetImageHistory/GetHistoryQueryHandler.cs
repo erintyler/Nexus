@@ -14,16 +14,16 @@ namespace Nexus.Application.Features.ImagePosts.GetImageHistory;
 public class GetHistoryQueryHandler
 {
     public static async Task<Result<PagedResult<HistoryDto>>> HandleAsync(
-        GetHistoryQuery request, 
+        GetHistoryQuery request,
         IQuerySession querySession,
         ILogger<GetHistoryQueryHandler> logger,
         CancellationToken cancellationToken)
     {
         var events = await querySession.Events.FetchStreamAsync(
-            request.Id, 
-            timestamp: request.DateTo, 
+            request.Id,
+            timestamp: request.DateTo,
             token: cancellationToken);
-        
+
         events = events
             .Where(e => request.DateFrom == null || e.Timestamp >= request.DateFrom)
             .ToList();
@@ -31,7 +31,7 @@ public class GetHistoryQueryHandler
         var nexusEvents = events
             .OfType<IEvent<INexusEvent>>()
             .ToList();
-        
+
         var count = nexusEvents.Count;
         if (count == 0)
         {

@@ -6,7 +6,7 @@ namespace Nexus.Application.Common.Services;
 public class ImageService(IStorageService storageService, IOptions<ImageOptions> options) : IImageService
 {
     private readonly ImageOptions _options = options.Value;
-    
+
     public Task<Stream?> GetOriginalImageStreamAsync(Guid imageId, CancellationToken cancellationToken = default)
     {
         return storageService.GetObjectStreamAsync(_options.OriginalImageBucketName, imageId.ToString(), cancellationToken);

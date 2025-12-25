@@ -8,12 +8,12 @@ public static class ImageProcessingErrors
         "ImageProcessing.DecodeFailed",
         ErrorType.Failure,
         "Failed to decode the image.");
-    
+
     public static readonly Error EncodeFailed = new(
         "ImageProcessing.DecodeFailed",
         ErrorType.Failure,
         "Failed to decode the image.");
-    
+
     public static readonly Error NotFound = new(
         "ImageProcessing.NotFound",
         ErrorType.NotFound,

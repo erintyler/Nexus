@@ -10,7 +10,7 @@ public class UserContextService(IHttpContextAccessor httpContextAccessor) : IUse
         var userId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return string.IsNullOrEmpty(userId) ? Guid.Empty.ToString() : userId;
     }
-    
+
     public Guid GetUserId()
     {
         var userId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

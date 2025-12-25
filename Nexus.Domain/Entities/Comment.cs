@@ -8,20 +8,20 @@ namespace Nexus.Domain.Entities;
 public sealed class Comment : BaseEntity
 {
     public const int MaxContentLength = 2000;
-    
+
     internal Comment(Guid id, Guid userId, string content)
     {
         Id = id;
         UserId = userId;
         Content = content;
     }
-    
+
     private Comment() { }
-    
+
     public Guid Id { get; internal set; }
     public Guid UserId { get; internal set; }
     public string Content { get; internal set; } = null!;
-    
+
     public static Result<Comment> Create(Guid id, Guid userId, string content)
     {
         if (userId == Guid.Empty)
@@ -41,7 +41,7 @@ public sealed class Comment : BaseEntity
 
         return new Comment(id, userId, content);
     }
-    
+
     internal Result<CommentUpdatedDomainEvent> UpdateContent(Guid userId, string newContent)
     {
         if (userId != UserId)

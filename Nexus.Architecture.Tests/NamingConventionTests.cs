@@ -56,11 +56,11 @@ public class NamingConventionTests
             // Assert
             foreach (var abstractClass in abstractClasses)
             {
-                var hasValidName = abstractClass.Name.StartsWith("Base") || 
+                var hasValidName = abstractClass.Name.StartsWith("Base") ||
                                   abstractClass.Name.StartsWith("Abstract") ||
                                   abstractClass.Name.EndsWith("Base");
-                
-                Assert.True(hasValidName, 
+
+                Assert.True(hasValidName,
                     $"Abstract class '{abstractClass.Name}' in {assembly.GetName().Name} should start with 'Base' or 'Abstract', or end with 'Base'");
             }
         }
@@ -97,8 +97,8 @@ public class NamingConventionTests
             {
                 var hasValidName = !enumType.Name.EndsWith("s") ||
                                    enumType.Name.EndsWith("Status");
-                
-                Assert.True(hasValidName, 
+
+                Assert.True(hasValidName,
                     $"Enum '{enumType.FullName}' should have a singular name (not plural)");
             }
         }
@@ -124,7 +124,7 @@ public class NamingConventionTests
             // Assert
             foreach (var extensionClass in extensionClasses)
             {
-                Assert.True(extensionClass.Name.EndsWith("Extensions"), 
+                Assert.True(extensionClass.Name.EndsWith("Extensions"),
                     $"Extension class '{extensionClass.Name}' in {assembly.GetName().Name} should have name ending with 'Extensions'");
             }
         }
@@ -140,8 +140,8 @@ public class NamingConventionTests
                 .That()
                 .AreClasses()
                 .GetTypes()
-                .Where(t => t.ReflectionType.GetFields(BindingFlags.Public | 
-                                       BindingFlags.Static | 
+                .Where(t => t.ReflectionType.GetFields(BindingFlags.Public |
+                                       BindingFlags.Static |
                                        BindingFlags.FlattenHierarchy)
                            .Count(f => f.IsLiteral && !f.IsInitOnly) > 3) // More than 3 constants
                 .ToList();
@@ -149,11 +149,11 @@ public class NamingConventionTests
             // Assert
             foreach (var classWithConstants in classesWithManyConstants)
             {
-                var hasValidName = classWithConstants.Name.Contains("Constant") || 
+                var hasValidName = classWithConstants.Name.Contains("Constant") ||
                                   classWithConstants.Name.Contains("Config") ||
                                   classWithConstants.Name.Contains("Settings");
-                
-                Assert.True(hasValidName, 
+
+                Assert.True(hasValidName,
                     $"Class '{classWithConstants.Name}' in {assembly.GetName().Name} contains many constants and should have 'Constant', 'Config', or 'Settings' in its name");
             }
         }
@@ -250,7 +250,7 @@ public class NamingConventionTests
         // Assert
         AssertTestResult(result, "All DTOs in Models namespace (excluding Configuration models) should have names ending with 'Dto' or 'ReadModel'");
     }
-    
+
     private static void AssertForAllAssemblies(
         Assembly[] assemblies,
         Func<Assembly, TestResult> testFunc,
@@ -266,10 +266,10 @@ public class NamingConventionTests
     private static void AssertTestResult(TestResult result, string message)
     {
         var failingTypes = result.FailingTypes?.Select(t => t.Name).ToList() ?? new List<string>();
-        var failingTypesMessage = failingTypes.Any() 
-            ? $" Failing types: {string.Join(", ", failingTypes)}" 
+        var failingTypesMessage = failingTypes.Any()
+            ? $" Failing types: {string.Join(", ", failingTypes)}"
             : string.Empty;
-        
+
         Assert.True(result.IsSuccessful, $"{message}.{failingTypesMessage}");
     }
 }

@@ -75,7 +75,7 @@ public class MigrateTagCommandHandlerTests
         Assert.Equal("Tag migration completed successfully", result.Value.Message);
 
         _mockRepository.Verify(r => r.CreateMigrationAsync(
-            It.Is<TagMigration>(m => 
+            It.Is<TagMigration>(m =>
                 m.SourceTag.Type == command.Source.Type &&
                 m.SourceTag.Value == command.Source.Value &&
                 m.TargetTag.Type == command.Target.Type &&
@@ -177,8 +177,8 @@ public class MigrateTagCommandHandlerTests
 
         _mockRepository.Verify(r => r.UpdateMigrationsAsync(
             It.Is<List<TagMigration>>(list => list.Count == 2),
-            It.Is<List<TagMigration>>(list => list.Count == 2 && 
-                list.All(m => m.TargetTag.Type == command.Target.Type && 
+            It.Is<List<TagMigration>>(list => list.Count == 2 &&
+                list.All(m => m.TargetTag.Type == command.Target.Type &&
                             m.TargetTag.Value == command.Target.Value)),
             It.IsAny<CancellationToken>()), Times.Once);
     }

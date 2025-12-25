@@ -9,7 +9,7 @@ public abstract class BasePaginationRequestValidator<T> : AbstractValidator<T> w
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(PaginationConstants.DefaultPageNumber)
             .WithMessage($"Page number must be greater than {PaginationConstants.DefaultPageNumber}.");
-        
+
         RuleFor(x => x.PageSize)
             .InclusiveBetween(PaginationConstants.MinPageSize, PaginationConstants.MaxPageSize)
             .WithMessage($"Page size must be between {PaginationConstants.MinPageSize} and {PaginationConstants.MaxPageSize}.");

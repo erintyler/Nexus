@@ -19,9 +19,9 @@ public class S3StorageService(IAmazonS3 s3Client, ILogger<S3StorageService> logg
         try
         {
             var response = await s3Client.GetObjectAsync(request, cancellationToken);
-        
+
             return response.HttpStatusCode is not HttpStatusCode.OK ? null : response.ResponseStream;
-        } 
+        }
         catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
             logger.LogWarning("Object not found in S3 bucket. Bucket: {BucketName}, Key: {Key}", bucketName, key);

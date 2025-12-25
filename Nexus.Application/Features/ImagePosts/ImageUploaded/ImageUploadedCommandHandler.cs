@@ -10,18 +10,18 @@ namespace Nexus.Application.Features.ImagePosts.ImageUploaded;
 public class ImageUploadedCommandHandler
 {
     public (Result, Events, OutgoingMessages) Handle(
-        ImageUploadedCommand command, 
+        ImageUploadedCommand command,
         IUserContextService userContextService,
         [WriteAggregate] ImagePost imagePost)
     {
         var userId = userContextService.GetUserId();
         var markAsProcessingResult = imagePost.MarkAsProcessing(userId);
-        
+
         if (markAsProcessingResult.IsFailure)
         {
             return (Result.Failure(markAsProcessingResult.Errors), [], []);
         }
-        
+
         var processImageCommand = new ProcessImageCommand(command.Id);
         return (Result.Success(), [markAsProcessingResult.Value], [processImageCommand]);
     }

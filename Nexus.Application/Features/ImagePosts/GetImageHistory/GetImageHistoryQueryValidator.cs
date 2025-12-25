@@ -16,12 +16,12 @@ public class GetImageHistoryQueryValidator : BasePaginationRequestValidator<GetH
             .LessThanOrEqualTo(x => x.DateTo)
             .When(x => x.DateFrom.HasValue && x.DateTo.HasValue)
             .WithMessage("DateFrom must be less than or equal to DateTo.");
-        
+
         RuleFor(x => x.DateFrom)
             .LessThanOrEqualTo(DateTimeOffset.UtcNow)
             .When(x => x.DateFrom.HasValue)
             .WithMessage("DateFrom cannot be in the future.");
-        
+
         RuleFor(x => x.DateTo)
             .LessThanOrEqualTo(DateTimeOffset.UtcNow)
             .When(x => x.DateTo.HasValue)

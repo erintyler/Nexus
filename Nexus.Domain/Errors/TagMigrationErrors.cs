@@ -8,12 +8,12 @@ public static class TagMigrationErrors
         "TagMigration.UserId.Empty",
         ErrorType.BusinessRule,
         "User ID cannot be empty.");
-    
+
     public static readonly Error AlreadyExists = new(
         "TagMigration.AlreadyExists",
         ErrorType.BusinessRule,
         "A tag migration for the specified source tag already exists.");
-    
+
     public static readonly Error NoResults = new(
         "TagMigration.NoResults",
         ErrorType.NotFound,

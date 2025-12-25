@@ -42,7 +42,7 @@ if (args.Contains("db-patch"))
 {
     var fileName = args[2];
     var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
-    
+
     apiService.WithArgs("db-patch", $"../Nexus.Migrations/Scripts/{timestamp}_{fileName}.sql", "-d", "postgresql://localhost/");
 }
 else

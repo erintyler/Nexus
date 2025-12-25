@@ -25,7 +25,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -64,13 +64,13 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         _mockImageService.Verify(s => s.GetOriginalImageStreamAsync(imageId, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageConversionService.Verify(s => s.ConvertToWebP(It.IsAny<Stream>()), Times.Once);
         _mockThumbnailService.Verify(s => s.CreateThumbnail(It.IsAny<Stream>()), Times.Once);
         _mockImageService.Verify(s => s.SaveProcessedImageAsync(imageId, webpData, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageService.Verify(s => s.SaveThumbnailAsync(imageId, thumbnailData, It.IsAny<CancellationToken>()), Times.Once);
-        
+
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Information,
@@ -106,11 +106,11 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         _mockImageService.Verify(s => s.GetOriginalImageStreamAsync(imageId, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageConversionService.Verify(s => s.ConvertToWebP(It.IsAny<Stream>()), Times.Never);
         _mockThumbnailService.Verify(s => s.CreateThumbnail(It.IsAny<Stream>()), Times.Never);
-        
+
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Error,
@@ -128,7 +128,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var conversionError = ImageProcessingErrors.EncodeFailed;
@@ -163,13 +163,13 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         _mockImageService.Verify(s => s.GetOriginalImageStreamAsync(imageId, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageConversionService.Verify(s => s.ConvertToWebP(It.IsAny<Stream>()), Times.Once);
         _mockThumbnailService.Verify(s => s.CreateThumbnail(It.IsAny<Stream>()), Times.Once);
         _mockImageService.Verify(s => s.SaveProcessedImageAsync(It.IsAny<Guid>(), It.IsAny<byte[]>(), It.IsAny<CancellationToken>()), Times.Never);
         _mockImageService.Verify(s => s.SaveThumbnailAsync(imageId, thumbnailData, It.IsAny<CancellationToken>()), Times.Once);
-        
+
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Error,
@@ -187,7 +187,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -222,13 +222,13 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         _mockImageService.Verify(s => s.GetOriginalImageStreamAsync(imageId, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageConversionService.Verify(s => s.ConvertToWebP(It.IsAny<Stream>()), Times.Once);
         _mockThumbnailService.Verify(s => s.CreateThumbnail(It.IsAny<Stream>()), Times.Once);
         _mockImageService.Verify(s => s.SaveProcessedImageAsync(imageId, webpData, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageService.Verify(s => s.SaveThumbnailAsync(It.IsAny<Guid>(), It.IsAny<byte[]>(), It.IsAny<CancellationToken>()), Times.Never);
-        
+
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Error,
@@ -246,7 +246,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var conversionError = ImageProcessingErrors.EncodeFailed;
@@ -277,13 +277,13 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         _mockImageService.Verify(s => s.GetOriginalImageStreamAsync(imageId, It.IsAny<CancellationToken>()), Times.Once);
         _mockImageConversionService.Verify(s => s.ConvertToWebP(It.IsAny<Stream>()), Times.Once);
         _mockThumbnailService.Verify(s => s.CreateThumbnail(It.IsAny<Stream>()), Times.Once);
         _mockImageService.Verify(s => s.SaveProcessedImageAsync(It.IsAny<Guid>(), It.IsAny<byte[]>(), It.IsAny<CancellationToken>()), Times.Never);
         _mockImageService.Verify(s => s.SaveThumbnailAsync(It.IsAny<Guid>(), It.IsAny<byte[]>(), It.IsAny<CancellationToken>()), Times.Never);
-        
+
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Error,
@@ -301,7 +301,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -340,7 +340,7 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         _mockImageConversionService.Verify(s => s.ConvertToWebP(It.IsAny<Stream>()), Times.Once);
         _mockThumbnailService.Verify(s => s.CreateThumbnail(It.IsAny<Stream>()), Times.Once);
     }
@@ -352,7 +352,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var expectedImageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(expectedImageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -415,7 +415,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -454,7 +454,7 @@ public class ProcessImageCommandHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        
+
         // Verify the original stream was disposed by attempting to read from it
         Assert.Throws<ObjectDisposedException>(() => originalImageStream.ReadByte());
     }
@@ -466,7 +466,7 @@ public class ProcessImageCommandHandlerTests
         var imageId = Guid.NewGuid();
         var command = new ProcessImageCommand(imageId);
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Processing);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -504,7 +504,7 @@ public class ProcessImageCommandHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        
+
         _mockLogger.Verify(
             x => x.Log(
                 LogLevel.Information,
@@ -523,7 +523,7 @@ public class ProcessImageCommandHandlerTests
         var command = new ProcessImageCommand(imageId);
         // Create ImagePost with Completed status, so MarkAsFailed will fail
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Completed);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var conversionError = ImageProcessingErrors.EncodeFailed;
@@ -552,7 +552,7 @@ public class ProcessImageCommandHandlerTests
 
         // Assert
         Assert.Empty(result);
-        
+
         // Verify that error was logged for image processing failed
         _mockLogger.Verify(
             x => x.Log(
@@ -562,7 +562,7 @@ public class ProcessImageCommandHandlerTests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
-        
+
         // Verify that error was logged when MarkAsFailed itself failed
         _mockLogger.Verify(
             x => x.Log(
@@ -582,7 +582,7 @@ public class ProcessImageCommandHandlerTests
         var command = new ProcessImageCommand(imageId);
         // Create ImagePost with Completed status, so MarkAsCompleted will fail
         var imagePost = _fixture.CreateImagePostWithStatus(UploadStatus.Completed);
-        
+
         var imageData = _fixture.CreateMany<byte>(1024).ToArray();
         var originalImageStream = new MemoryStream(imageData);
         var webpData = _fixture.CreateMany<byte>(512).ToArray();
@@ -620,7 +620,7 @@ public class ProcessImageCommandHandlerTests
 
         // Assert
         Assert.Empty(result);
-        
+
         // Verify that success was logged for image processing
         _mockLogger.Verify(
             x => x.Log(
@@ -630,7 +630,7 @@ public class ProcessImageCommandHandlerTests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
-        
+
         // Verify that error was logged when MarkAsCompleted itself failed
         _mockLogger.Verify(
             x => x.Log(

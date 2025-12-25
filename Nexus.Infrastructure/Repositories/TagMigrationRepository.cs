@@ -27,7 +27,7 @@ public class TagMigrationRepository(IDocumentSession session) : ITagMigrationRep
             .Query<TagMigration>()
             .Where(m => m.TargetTag.Type == targetTag.Type && m.TargetTag.Value == targetTag.Value)
             .ToListAsync(ct);
-        
+
         return results.ToList();
     }
 

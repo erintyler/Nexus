@@ -32,7 +32,7 @@ public class CreateImagePostCommandHandlerTests
         // Arrange
         var userId = Guid.NewGuid();
         var uploadUrl = "https://example.com/upload/image.jpg";
-        
+
         _mockUserContextService
             .Setup(s => s.GetUserId())
             .Returns(userId);
@@ -68,7 +68,7 @@ public class CreateImagePostCommandHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(stream);
-        
+
         var response = result.Value;
         Assert.NotEqual(Guid.Empty, response.Id);
         Assert.Equal(command.Title, response.Title);
@@ -88,7 +88,7 @@ public class CreateImagePostCommandHandlerTests
         // Arrange
         var userId = Guid.NewGuid();
         var uploadUrl = "https://example.com/upload/image.jpg";
-        
+
         _mockUserContextService
             .Setup(s => s.GetUserId())
             .Returns(userId);
@@ -130,7 +130,7 @@ public class CreateImagePostCommandHandlerTests
         Assert.NotNull(stream);
 
         _mockTagMigrationService.Verify(s => s.ResolveMigrationsAsync(
-            It.Is<IReadOnlyList<TagData>>(tags => 
+            It.Is<IReadOnlyList<TagData>>(tags =>
                 tags.Count == 3 &&
                 tags[0].Value == command.Tags[0].Value &&
                 tags[1].Value == command.Tags[1].Value &&
@@ -318,7 +318,7 @@ public class CreateImagePostCommandHandlerTests
         var userId = Guid.NewGuid();
         var contentType = "image/webp";
         var uploadUrl = "https://s3.amazonaws.com/bucket/upload-url";
-        
+
         _mockUserContextService
             .Setup(s => s.GetUserId())
             .Returns(userId);
@@ -364,7 +364,7 @@ public class CreateImagePostCommandHandlerTests
     {
         // Arrange
         var expectedUserId = Guid.NewGuid();
-        
+
         _mockUserContextService
             .Setup(s => s.GetUserId())
             .Returns(expectedUserId);
@@ -400,7 +400,7 @@ public class CreateImagePostCommandHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         _mockUserContextService.Verify(s => s.GetUserId(), Times.Once);
-        
+
         // The stream should have the event with the correct userId
         Assert.NotNull(stream);
     }
@@ -410,7 +410,7 @@ public class CreateImagePostCommandHandlerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        
+
         _mockUserContextService
             .Setup(s => s.GetUserId())
             .Returns(userId);
@@ -446,7 +446,7 @@ public class CreateImagePostCommandHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(stream);
-        
+
         _mockTagMigrationService.Verify(s => s.ResolveMigrationsAsync(
             It.Is<IReadOnlyList<TagData>>(tags => tags.Count == 5),
             It.IsAny<CancellationToken>()), Times.Once);

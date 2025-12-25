@@ -12,7 +12,7 @@ public static class EnumerableExtensions
                 .Skip(paginationRequest.Skip)
                 .Take(paginationRequest.PageSize);
         }
-        
+
         public PagedResult<T> ToPagedResult(PaginationRequest paginationRequest, int totalCount)
         {
             var validPaginationRequest = paginationRequest.WithValidPageNumber(totalCount);

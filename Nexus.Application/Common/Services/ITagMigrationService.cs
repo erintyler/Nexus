@@ -16,7 +16,7 @@ public interface ITagMigrationService
     /// <param name="ct">Cancellation token</param>
     /// <returns>The target tag if migration exists, null otherwise</returns>
     Task<TagData?> GetTargetTagAsync(TagData sourceTag, CancellationToken ct = default);
-    
+
     /// <summary>
     /// Resolves migrations for a list of tags.
     /// For each tag, if a migration exists, replaces it with the target tag.
