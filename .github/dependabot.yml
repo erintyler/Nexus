@@ -4,30 +4,54 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "09:00"
     open-pull-requests-limit: 10
     groups:
+      # .NET Aspire orchestration stack (critical, grouped together)
       aspire:
         patterns:
           - "Aspire.*"
-      microsoft:
+      
+      # Wolverine + Marten messaging & database stack (tightly coupled)
+      wolverine-marten:
         patterns:
-          - "Microsoft.*"
+          - "WolverineFx.*"
+          - "Marten*"
+          - "Npgsql*"
+          - "AspNetCore.HealthChecks.NpgSql"
+      
+      # AWS infrastructure (S3, LocalStack)
+      aws:
+        patterns:
+          - "AWSSDK.*"
+          - "LocalStack.*"
+      
+      # Logging & observability
+      observability:
+        patterns:
+          - "Serilog*"
+          - "OpenTelemetry.*"
+      
+      # Image processing
+      image-processing:
+        patterns:
+          - "SkiaSharp*"
+      
+      # Testing framework & tools
       testing:
         patterns:
           - "xunit*"
-          - "FluentAssertions*"
-          - "Moq*"
-          - "NSubstitute*"
           - "Testcontainers*"
-      wolverine:
+          - "Microsoft.NET.Test.Sdk"
+          - "NetArchTest.*"
+      
+      # Microsoft core packages (ASP.NET, Extensions, etc.)
+      microsoft:
         patterns:
-          - "WolverineFx.*"
-      marten:
-        patterns:
-          - "Marten*"
+          - "Microsoft.*"
+        exclude-patterns:
+          - "Microsoft.NET.Test.Sdk"
     labels:
       - "dependencies"
       - "dotnet"
@@ -41,9 +65,12 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "09:00"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
     labels:
       - "dependencies"
       - "github-actions"
@@ -56,9 +83,12 @@ updates:
   - package-ecosystem: "docker"
     directory: "/Nexus.Api"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "09:00"
+    groups:
+      docker:
+        patterns:
+          - "*"
     labels:
       - "dependencies"
       - "docker"
@@ -70,9 +100,12 @@ updates:
   - package-ecosystem: "docker"
     directory: "/Nexus.ImageProcessor"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "09:00"
+    groups:
+      docker:
+        patterns:
+          - "*"
     labels:
       - "dependencies"
       - "docker"
