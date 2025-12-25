@@ -1,0 +1,52 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Nexus.Api.Configuration.Models;
+using Nexus.Application.Common.Contracts;
+using Nexus.Application.Common.Models;
+using Nexus.Application.Common.Services;
+
+namespace Nexus.Api.Services;
+
+
+public class JwtTokenService(IOptions<JwtSettings> jwtSettings) : IJwtTokenService
+{
+    private readonly JwtSettings _settings = jwtSettings.Value;
+
+    public JwtTokenResult GenerateToken(DiscordUser user)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.Email, user.Email ?? string.Empty),
+            new("discord_id", user.Id),
+            new("discord_username", user.Username),
+            new("discord_discriminator", user.Discriminator ?? "0"),
+            new("discord_avatar", user.Avatar ?? string.Empty)
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: _settings.Issuer,
+            audience: _settings.Audience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials
+        );
+
+        var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+        
+        var claimsDictionary = claims.ToDictionary(
+            c => c.Type,
+            c => c.Value
+        );
+
+        return new JwtTokenResult(jwtToken, claimsDictionary);
+    }
+}
+

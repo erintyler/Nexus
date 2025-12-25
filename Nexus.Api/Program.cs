@@ -6,6 +6,7 @@ using JasperFx.Events.Projections;
 using Marten;
 using Marten.Services;
 using Microsoft.AspNetCore.Authentication;
+using Nexus.Api.Configuration.Models;
 using Nexus.Api.Endpoints;
 using Nexus.Api.Extensions;
 using Nexus.Api.Middleware;
@@ -145,6 +146,8 @@ builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddAuthentication("Test") // Set default scheme name
     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
 builder.Services.AddAuthorization();
@@ -173,6 +176,7 @@ var api = app.MapGroup("/api");
 api.MapImageEndpoints();
 api.MapTagEndpoints();
 api.MapCollectionEndpoints();
+api.MapAuthEndpoints();
 
 
 await app.RunJasperFxCommands(args);

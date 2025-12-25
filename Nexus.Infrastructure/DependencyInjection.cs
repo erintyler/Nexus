@@ -24,7 +24,10 @@ public static class DependencyInjection
 
         // Register repositories
         services.AddScoped<ITagMigrationRepository, TagMigrationRepository>();
-
+        
+        // Register auth services
+        services.AddHttpClient<IDiscordApiService, DiscordApiService>();
+        
         return services;
     }
 }
