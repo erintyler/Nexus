@@ -12,6 +12,9 @@ updates:
       aspire:
         patterns:
           - "Aspire.*"
+        update-types:
+          - "minor"
+          - "patch"
       
       # Wolverine + Marten messaging & database stack (tightly coupled)
       wolverine-marten:
@@ -20,23 +23,35 @@ updates:
           - "Marten*"
           - "Npgsql*"
           - "AspNetCore.HealthChecks.NpgSql"
+        update-types:
+          - "minor"
+          - "patch"
       
       # AWS infrastructure (S3, LocalStack)
       aws:
         patterns:
           - "AWSSDK.*"
           - "LocalStack.*"
+        update-types:
+          - "minor"
+          - "patch"
       
       # Logging & observability
       observability:
         patterns:
           - "Serilog*"
           - "OpenTelemetry.*"
+        update-types:
+          - "minor"
+          - "patch"
       
       # Image processing
       image-processing:
         patterns:
           - "SkiaSharp*"
+        update-types:
+          - "minor"
+          - "patch"
       
       # Testing framework & tools
       testing:
@@ -45,6 +60,9 @@ updates:
           - "Testcontainers*"
           - "Microsoft.NET.Test.Sdk"
           - "NetArchTest.*"
+        update-types:
+          - "minor"
+          - "patch"
       
       # Microsoft core packages (ASP.NET, Extensions, etc.)
       microsoft:
@@ -52,6 +70,9 @@ updates:
           - "Microsoft.*"
         exclude-patterns:
           - "Microsoft.NET.Test.Sdk"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "dotnet"
@@ -71,6 +92,9 @@ updates:
       github-actions:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "github-actions"
@@ -89,6 +113,9 @@ updates:
       docker:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "docker"
@@ -106,6 +133,9 @@ updates:
       docker:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "docker"
