@@ -94,6 +94,8 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
       
       - name: Download build artifacts
         uses: actions/download-artifact@v5
@@ -104,6 +106,9 @@ jobs:
         run: |
           find . -type f -path "*/bin/Release/*/Nexus.*Tests" -exec chmod +x {} \;
           find . -type f -path "*/bin/Release/*/*.dll" -exec chmod +x {} \;
+      
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
       
       - name: Run Architecture Tests
         if: matrix.test-group == 'architecture'
@@ -174,7 +179,7 @@ jobs:
           config-file: ./.github/codeql/codeql-config.yml
       
       - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
+        uses: github/codeql-action/init@v5
 
       - name: Build solution
         run: dotnet build Nexus.slnx --no-restore --configuration Release
@@ -186,7 +191,7 @@ jobs:
           upload: true
 
   # Job 5: PR Summary & Status Check
-  pr-check-summary:
+        uses: github/codeql-action/analyze@v5
     name: PR Check Summary
     runs-on: ubuntu-latest
     needs: [code-quality, build, tests, codeql]
