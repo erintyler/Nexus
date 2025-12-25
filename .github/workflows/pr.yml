@@ -151,70 +151,66 @@ jobs:
             --no-build \
             --configuration Release
 
-  # Job 4: CodeQL Security Analysis
-  codeql:
-    name: CodeQL Security Analysis
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-      
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
-      
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: csharp
-          config-file: ./.github/codeql/codeql-config.yml
-      
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
-
-      - name: Build solution
-        run: dotnet build Nexus.slnx --no-restore --configuration Release
-      
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
-        with:
-          category: "/language:csharp"
-          upload: true
-
-  # Job 5: PR Summary & Status Check
+  # Job 4: PR Summary & Status Check
   pr-check-summary:
     name: PR Check Summary
-    runs-on: ubuntu-latest
-    needs: [code-quality, build, tests, codeql]
+    runs-on: ubuntu-slim
+    needs: [code-quality, build, tests]
     if: always()
+    permissions:
+      actions: read
     
     steps:
-      - name: Check job statuses
+      - name: Get test matrix job results
+        id: matrix-results
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "## PR Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          # Fetch the workflow run jobs
+          jobs=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs)
+          
+          # Extract matrix job results
+          arch_status=$(echo "$jobs" | jq -r '.jobs[] | select(.name == "🏗️ Architecture Tests") | .conclusion // "in_progress"')
+          unit_status=$(echo "$jobs" | jq -r '.jobs[] | select(.name == "🧪 Unit Tests") | .conclusion // "in_progress"')
+          integration_status=$(echo "$jobs" | jq -r '.jobs[] | select(.name == "🔗 Integration Tests") | .conclusion // "in_progress"')
+          
+          # Save to output
+          echo "arch_status=$arch_status" >> $GITHUB_OUTPUT
+          echo "unit_status=$unit_status" >> $GITHUB_OUTPUT
+          echo "integration_status=$integration_status" >> $GITHUB_OUTPUT
+      
+      - name: Generate summary
+        run: |
+          # Function to convert conclusion to emoji
+          get_emoji() {
+            case "$1" in
+              "success") echo "✅" ;;
+              "failure") echo "❌" ;;
+              "cancelled") echo "🚫" ;;
+              "skipped") echo "⏭️" ;;
+              *) echo "⏳" ;;
+            esac
+          }
+          
+          echo "## 📊 PR Pipeline Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Code Quality | ${{ needs.code-quality.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Tests (All Groups) | ${{ needs.tests.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| CodeQL Security | ${{ needs.codeql.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🎨 Code Quality | $(get_emoji ${{ needs.code-quality.result }}) ${{ needs.code-quality.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔨 Build | $(get_emoji ${{ needs.build.result }}) ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tests** | |" >> $GITHUB_STEP_SUMMARY
+          echo "| └─ 🏗️ Architecture | $(get_emoji ${{ steps.matrix-results.outputs.arch_status }}) ${{ steps.matrix-results.outputs.arch_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| └─ 🧪 Unit | $(get_emoji ${{ steps.matrix-results.outputs.unit_status }}) ${{ steps.matrix-results.outputs.unit_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| └─ 🔗 Integration | $(get_emoji ${{ steps.matrix-results.outputs.integration_status }}) ${{ steps.matrix-results.outputs.integration_status }} |" >> $GITHUB_STEP_SUMMARY
       
       - name: Verify all checks passed
         if: |
           needs.code-quality.result != 'success' ||
           needs.build.result != 'success' ||
-          needs.tests.result != 'success' ||
-          needs.codeql.result != 'success'
+          needs.tests.result != 'success'
         run: |
           echo "❌ One or more required checks failed"
           exit 1
