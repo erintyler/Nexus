@@ -18,7 +18,7 @@ env:
 jobs:
   # Job 1: Code Quality Checks
   code-quality:
-    name: Code Quality
+    name: Formatting Checks
     runs-on: ubuntu-slim
     
     steps:
@@ -32,11 +32,8 @@ jobs:
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
-      
       - name: Run dotnet format check
-        run: dotnet format Nexus.slnx --verify-no-changes --verbosity diagnostic
+        run: dotnet format Nexus.slnx --verify-no-changes --verbosity normal
 
   # Job 2: Build & Compile
   build:
@@ -60,13 +57,21 @@ jobs:
       
       - name: Build solution
         run: dotnet build Nexus.slnx --no-restore --configuration Release
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            **/bin/Release/**
+            **/obj/Release/**
+          retention-days: 1
 
   # Job 3: Architecture Tests
   architecture-tests:
     name: Architecture Tests
     runs-on: ubuntu-slim
     needs: build
-    # Cancel all parallel jobs if this fails
     continue-on-error: false
     
     steps:
@@ -77,26 +82,25 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
       
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
       
       - name: Run Architecture Tests
         run: |
           dotnet test Nexus.slnx \
             --project Nexus.Architecture.Tests \
             --no-restore \
-            --configuration Release \
-            --logger "console;verbosity=detailed"
+            --no-build \
+            --configuration Release
 
   # Job 4: Unit Tests
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-slim
     needs: build
-    # Cancel all parallel jobs if this fails
     continue-on-error: false
     
     steps:
@@ -107,31 +111,34 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
       
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
       
       - name: Run Domain Unit Tests
         run: |
-          dotnet test Nexus.slnx \
+          dotnet test \
             --project Nexus.Domain.UnitTests \
             --no-restore \
+            --no-build \
             --configuration Release
       
       - name: Run Application Unit Tests
         run: |
-          dotnet test Nexus.slnx \
+          dotnet test \
             --project Nexus.Application.UnitTests \
             --no-restore \
+            --no-build \
             --configuration Release
       
       - name: Run Frontend Unit Tests
         run: |
-          dotnet test Nexus.slnx \
+          dotnet test \
             --project Nexus.Frontend.UnitTests \
             --no-restore \
+            --no-build \
             --configuration Release
 
   # Job 5: Integration Tests
@@ -139,7 +146,6 @@ jobs:
     name: Integration Tests
     runs-on: ubuntu-slim
     needs: build
-    # Cancel all parallel jobs if this fails
     continue-on-error: false
     
     steps:
@@ -150,24 +156,26 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
       
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
       
       - name: Run API Integration Tests
         run: |
-          dotnet test Nexus.slnx \
+          dotnet test \
             --project Nexus.Api.IntegrationTests \
             --no-restore \
+            --no-build \
             --configuration Release
       
       - name: Run Migration Tests
         run: |
-          dotnet test Nexus.slnx \
+          dotnet test \
             --project Nexus.Migrations.IntegrationTests \
             --no-restore \
+            --no-build \
             --configuration Release
 
   # Job 6: CodeQL Security Analysis
@@ -175,7 +183,6 @@ jobs:
     name: CodeQL Security Analysis
     runs-on: ubuntu-slim
     needs: build
-    # Cancel all parallel jobs if this fails
     continue-on-error: false
     permissions:
       actions: read
@@ -199,11 +206,8 @@ jobs:
           languages: csharp
           config-file: ./.github/codeql/codeql-config.yml
       
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
-      
-      - name: Build solution
-        run: dotnet build Nexus.slnx --no-restore --configuration Release
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
       
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
