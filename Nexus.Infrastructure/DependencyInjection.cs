@@ -15,16 +15,16 @@ public static class DependencyInjection
     {
         services.AddLocalStack(configuration);
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        
+
         // Register AWS S3 client
         services.AddAwsService<IAmazonS3>(useServiceUrl: true);
-        
+
         // Register S3 service
         services.AddSingleton<IStorageService, S3StorageService>();
-        
+
         // Register repositories
         services.AddScoped<ITagMigrationRepository, TagMigrationRepository>();
-        
+
         return services;
     }
 }

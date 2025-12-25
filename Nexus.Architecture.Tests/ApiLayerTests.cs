@@ -32,7 +32,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"API endpoints should not directly reference domain entities (use DTOs instead). Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -52,7 +52,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All endpoint classes should have names ending with 'Endpoints'. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -70,7 +70,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All middleware classes should reside in Middleware namespace. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -90,7 +90,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All exception handler classes should have names ending with 'ExceptionHandler'. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -108,7 +108,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"API should use minimal API endpoints, not controllers. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -126,7 +126,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All extension classes should reside in Extensions namespace. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -144,7 +144,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All service interfaces should start with 'I'. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -162,7 +162,7 @@ public class ApiLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"API endpoints should not contain business logic (use Application layer instead). Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 }

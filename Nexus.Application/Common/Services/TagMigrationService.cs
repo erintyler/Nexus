@@ -18,21 +18,21 @@ public class TagMigrationService(IDocumentSession session, ILogger<TagMigrationS
             .Where(m => m.SourceTag.Type == sourceTag.Type && m.SourceTag.Value == sourceTag.Value)
             .FirstOrDefaultAsync(ct);
 
-        return migration is not null 
-            ? new TagData(migration.TargetTag.Type, migration.TargetTag.Value) 
+        return migration is not null
+            ? new TagData(migration.TargetTag.Type, migration.TargetTag.Value)
             : null;
     }
 
     public async Task<IReadOnlyList<TagData>> ResolveMigrationsAsync(
-        IReadOnlyList<TagData> tags, 
+        IReadOnlyList<TagData> tags,
         CancellationToken ct = default)
     {
         if (tags.Count == 0)
             return tags;
-        
+
         var tagTypes = tags.Select(t => t.Type).ToArray();
         var tagValues = tags.Select(t => t.Value).ToArray();
-        
+
         var migrations = await session.Query<TagMigration>()
             .Where(m => m.SourceTag.Type.In(tagTypes) && m.SourceTag.Value.In(tagValues))
             .ToListAsync(ct);

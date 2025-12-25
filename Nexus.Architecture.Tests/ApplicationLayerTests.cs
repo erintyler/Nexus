@@ -40,7 +40,7 @@ public class ApplicationLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"Application layer should not depend on infrastructure-specific libraries. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -71,8 +71,8 @@ public class ApplicationLayerTests
             var expectedInterfaceName = $"I{implementation.Name}";
             var hasInterface = implementation.ReflectionType.GetInterfaces()
                 .Any(i => i.Name == expectedInterfaceName && serviceInterfaces.Any(si => si.FullName == i.FullName));
-            
-            Assert.True(hasInterface, 
+
+            Assert.True(hasInterface,
                 $"Service implementation '{implementation.Name}' should have a corresponding interface 'I{implementation.Name}' in the same namespace");
         }
     }

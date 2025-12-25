@@ -32,9 +32,9 @@ builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
 builder.UseWolverine(o =>
 {
     o.Discovery.IncludeAssembly(typeof(CreateImagePostCommandHandler).Assembly);
-    
+
     o.Policies.AutoApplyTransactions();
-    
+
     o.UseRabbitMqUsingNamedConnection("rabbitmq")
         .AutoProvision();
 

@@ -25,9 +25,9 @@ public static class ImageEndpoints
             var images = app.MapGroup("/images")
                 .WithTags("Images")
                 .WithDescription("Endpoints for managing images.");
-                
+
             images.MapCreateImageEndpoint();
-        
+
             return images;
         }
 
@@ -40,8 +40,8 @@ public static class ImageEndpoints
                 if (result.IsSuccess)
                 {
                     return TypedResults.CreatedAtRoute(result.Value, "GetImageById", new { id = result.Value.Id });
-                } 
-                    
+                }
+
                 return result.ToUnprocessableEntityProblem();
             }).WithName("CreateImage")
             .WithSummary("Create new image")
@@ -49,7 +49,7 @@ public static class ImageEndpoints
             .Produces<CreateImagePostResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
-            
+
             app.MapGet("/search", async Task<Results<Ok<PagedResult<ImagePostDto>>, NotFound>> (
                 [FromQuery] TagDto[] tags,
                 IMessageBus bus,
@@ -77,7 +77,7 @@ public static class ImageEndpoints
                 .Produces<PagedResult<ImagePostDto>>()
                 .Produces(StatusCodes.Status404NotFound)
                 .ProducesValidationProblem();
-            
+
             app.MapGet("/{id:guid}", async Task<Results<Ok<ImagePostDto>, NotFound>> (Guid id, IMessageBus bus, CancellationToken cancellationToken) =>
                 {
                     var query = new GetImagePostQuery(id);
@@ -86,8 +86,8 @@ public static class ImageEndpoints
                     if (result.IsSuccess)
                     {
                         return TypedResults.Ok(result.Value);
-                    } 
-                    
+                    }
+
                     return TypedResults.NotFound();
                 })
                 .WithName("GetImageById")
@@ -117,8 +117,8 @@ public static class ImageEndpoints
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
-            
-            app.MapPost("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>>(
+
+            app.MapPost("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>> (
                 Guid id,
                 [FromBody] IReadOnlyList<TagDto> tags,
                 IMessageBus bus,
@@ -131,7 +131,7 @@ public static class ImageEndpoints
                 {
                     return TypedResults.Ok();
                 }
-                
+
                 return result.ToUnprocessableEntityProblem();
             }).WithName("AddTagsToImage")
             .WithSummary("Add tags to image post")
@@ -140,8 +140,8 @@ public static class ImageEndpoints
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
-            
-            app.MapDelete("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>>(
+
+            app.MapDelete("/{id:guid}/tags", async Task<Results<Ok, NotFound, ProblemHttpResult>> (
                 Guid id,
                 [FromBody] IReadOnlyList<TagDto> tags,
                 IMessageBus bus,
@@ -154,7 +154,7 @@ public static class ImageEndpoints
                 {
                     return TypedResults.Ok();
                 }
-                
+
                 return result.ToUnprocessableEntityProblem();
             }).WithName("RemoveTagsFromImage")
             .WithSummary("Remove tags from image post")
@@ -163,7 +163,7 @@ public static class ImageEndpoints
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem();
-            
+
             app.MapGet("/{id:guid}/history", async Task<Results<Ok<PagedResult<HistoryDto>>, NotFound>> (
                 Guid id,
                 DateTimeOffset? dateFrom,
@@ -178,14 +178,14 @@ public static class ImageEndpoints
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 };
-                
+
                 var result = await bus.InvokeAsync<Result<PagedResult<HistoryDto>>>(query, cancellationToken);
 
                 if (result.IsSuccess)
                 {
                     return TypedResults.Ok(result.Value);
-                } 
-                
+                }
+
                 return TypedResults.NotFound();
             }).WithName("GetImageHistory")
             .WithSummary("Get image history")

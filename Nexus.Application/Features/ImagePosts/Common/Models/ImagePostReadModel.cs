@@ -17,17 +17,17 @@ public class ImagePostReadModel
         Tags = [];
         Comments = [];
     }
-    
+
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string CreatedBy { get; set; }
     public UploadStatus Status { get; set; }
     public string? Url { get; set; }
-    
+
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset LastModified { get; set; }
     public string LastModifiedBy { get; set; }
-    
+
     public List<TagReadModel> Tags { get; set; }
     public List<CommentReadModel> Comments { get; set; }
 }
@@ -41,13 +41,13 @@ public class TagReadModel
     {
         Value = string.Empty;
     }
-    
+
     public TagReadModel(string value, TagType type)
     {
         Value = value;
         Type = type;
     }
-    
+
     public string Value { get; set; }
     public TagType Type { get; set; }
 }
@@ -61,14 +61,14 @@ public class CommentReadModel
     {
         Content = string.Empty;
     }
-    
+
     public CommentReadModel(Guid id, Guid userId, string content)
     {
         Id = id;
         UserId = userId;
         Content = content;
     }
-    
+
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public string Content { get; set; }

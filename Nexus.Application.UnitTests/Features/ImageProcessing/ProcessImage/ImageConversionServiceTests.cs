@@ -22,12 +22,12 @@ public class ImageConversionServiceTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.NotEmpty(result.Value);
-        
+
         // Verify it's a valid WebP image
         using var verifyStream = new MemoryStream(result.Value);
         using var verifyBitmap = SKBitmap.Decode(verifyStream);
         Assert.NotNull(verifyBitmap);
-        
+
         // Verify dimensions are preserved
         Assert.Equal(800, verifyBitmap.Width);
         Assert.Equal(600, verifyBitmap.Height);
@@ -46,7 +46,7 @@ public class ImageConversionServiceTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.NotEmpty(result.Value);
-        
+
         // Verify dimensions are preserved
         using var verifyStream = new MemoryStream(result.Value);
         using var verifyBitmap = SKBitmap.Decode(verifyStream);
@@ -108,7 +108,7 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         // Verify the output is WebP format
         using var outputStream = new MemoryStream(result.Value);
         using var codec = SKCodec.Create(outputStream);
@@ -127,7 +127,7 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         // Verify the output is WebP format
         using var outputStream = new MemoryStream(result.Value);
         using var codec = SKCodec.Create(outputStream);
@@ -148,10 +148,10 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
-        
+
         Assert.NotNull(outputBitmap);
         Assert.Equal(originalWidth, outputBitmap.Width);
         Assert.Equal(originalHeight, outputBitmap.Height);
@@ -171,10 +171,10 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
-        
+
         var outputAspectRatio = (double)outputBitmap.Width / outputBitmap.Height;
         Assert.Equal(originalAspectRatio, outputAspectRatio, 0.001);
     }
@@ -194,10 +194,10 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
-        
+
         var outputAspectRatio = (double)outputBitmap.Width / outputBitmap.Height;
         Assert.Equal(originalAspectRatio, outputAspectRatio, 0.001);
     }
@@ -214,10 +214,10 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
-        
+
         Assert.Equal(dimension, outputBitmap.Width);
         Assert.Equal(dimension, outputBitmap.Height);
     }
@@ -234,7 +234,7 @@ public class ImageConversionServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        
+
         // Verify dimensions are preserved
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
@@ -254,7 +254,7 @@ public class ImageConversionServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        
+
         // Verify dimensions are preserved
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
@@ -275,7 +275,7 @@ public class ImageConversionServiceTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.NotEmpty(result.Value);
-        
+
         // Verify it's still WebP
         using var outputStream = new MemoryStream(result.Value);
         using var codec = SKCodec.Create(outputStream);
@@ -295,10 +295,10 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
-        
+
         Assert.Equal(width, outputBitmap.Width);
         Assert.Equal(height, outputBitmap.Height);
     }
@@ -316,10 +316,10 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
-        
+
         Assert.Equal(width, outputBitmap.Width);
         Assert.Equal(height, outputBitmap.Height);
     }
@@ -335,7 +335,7 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         // WebP at 85% quality should typically be smaller than JPEG for photographic content
         // Note: This might vary depending on the test image content
         Assert.True(result.Value.Length > 0, "WebP output should have content");
@@ -353,9 +353,9 @@ public class ImageConversionServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         // WebP should typically be much smaller than PNG
-        Assert.True(result.Value.Length < pngSize, 
+        Assert.True(result.Value.Length < pngSize,
             $"WebP size ({result.Value.Length}) should be smaller than PNG size ({pngSize})");
     }
 
@@ -378,7 +378,7 @@ public class ImageConversionServiceTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.NotEmpty(result.Value);
-        
+
         // Verify dimensions are preserved
         using var outputStream = new MemoryStream(result.Value);
         using var outputBitmap = SKBitmap.Decode(outputStream);
@@ -401,7 +401,7 @@ public class ImageConversionServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        
+
         // Verify output is WebP
         using var outputStream = new MemoryStream(result.Value);
         using var codec = SKCodec.Create(outputStream);

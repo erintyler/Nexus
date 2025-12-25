@@ -10,7 +10,7 @@ public interface IStorageService
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A stream containing the object data</returns>
     Task<Stream?> GetObjectStreamAsync(string bucketName, string key, CancellationToken cancellationToken = default);
-    
+
     /// <summary>
     /// Generates a presigned URL for uploading an object to S3
     /// </summary>
@@ -20,7 +20,7 @@ public interface IStorageService
     /// <param name="expirationMinutes">How long the URL should remain valid (in minutes)</param>
     /// <returns>A presigned URL that can be used to upload an object</returns>
     string GeneratePresignedUploadUrl(string bucketName, string key, string contentType, int expirationMinutes = 60);
-    
+
     /// <summary>
     /// Saves an object to the specified S3 bucket
     /// </summary>

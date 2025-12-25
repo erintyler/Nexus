@@ -18,41 +18,41 @@ public class MigrateTagCommandHandler(
     public async Task<Result<MigrateTagResponse>> HandleAsync(MigrateTagCommand request, CancellationToken ct)
     {
         var userId = userContextService.GetUserId();
-        
+
         // Step 1: Check for existing migration
         var existingMigrationCheck = await CheckForExistingMigrationAsync(request, ct);
         if (existingMigrationCheck.IsFailure)
         {
             return Result.Failure<MigrateTagResponse>(existingMigrationCheck.Errors);
         }
-        
+
         // Step 2: Create and store the new migration document
         var migrationResult = await CreateAndStoreMigrationAsync(userId, request, ct);
         if (migrationResult.IsFailure)
         {
             return Result.Failure<MigrateTagResponse>(migrationResult.Errors);
         }
-        
+
         var migration = migrationResult.Value;
-        
+
         // Step 3: Update upstream migrations that point to the source tag
         var upstreamMigrationsUpdated = await UpdateUpstreamMigrationsAsync(request, ct);
-        
+
         // Step 4: Migrate all posts with the source tag
         var totalPostsMigrated = await MigratePostsAsync(migration, userId, request, ct);
-        
+
         logger.LogInformation(
             "Tag migration completed successfully. Total posts migrated: {Total}, Upstream migrations updated: {UpstreamCount}",
             totalPostsMigrated,
             upstreamMigrationsUpdated);
-            
+
         var response = new MigrateTagResponse(
             Success: true,
             Message: "Tag migration completed successfully",
             PostsMigrated: totalPostsMigrated,
             UpstreamMigrationsUpdated: upstreamMigrationsUpdated
         );
-        
+
         return Result.Success(response);
     }
 
@@ -67,13 +67,13 @@ public class MigrateTagCommandHandler(
             logger.LogWarning("Tag migration already exists for source tag: {@SourceTag}", request.Source);
             return TagMigrationErrors.AlreadyExists;
         }
-        
+
         return Result.Success();
     }
 
     private async Task<Result<TagMigration>> CreateAndStoreMigrationAsync(
-        Guid userId, 
-        MigrateTagCommand request, 
+        Guid userId,
+        MigrateTagCommand request,
         CancellationToken ct)
     {
         var migrationResult = TagMigration.Create(
@@ -88,15 +88,15 @@ public class MigrateTagCommandHandler(
         }
 
         var migration = migrationResult.Value;
-        
+
         await repository.CreateMigrationAsync(migration, ct);
-        
+
         logger.LogInformation(
             "Tag migration document created: Id={MigrationId}, Source={Source}, Target={Target}",
             migration.Id,
             $"{migration.SourceTag.Type}:{migration.SourceTag.Value}",
             $"{migration.TargetTag.Type}:{migration.TargetTag.Value}");
-        
+
         return Result.Success(migration);
     }
 
@@ -139,7 +139,7 @@ public class MigrateTagCommandHandler(
             migrationsToDelete.Add(upstreamMigration);
             migrationsToCreate.Add(updatedMigrationResult.Value);
             upstreamMigrationsUpdated++;
-            
+
             logger.LogInformation(
                 "Updated migration: {@OldSource}→{@OldTarget} is now {@NewSource}→{@NewTarget}",
                 upstreamMigration.SourceTag,
@@ -149,7 +149,7 @@ public class MigrateTagCommandHandler(
         }
 
         await repository.UpdateMigrationsAsync(migrationsToDelete, migrationsToCreate, ct);
-        
+
         logger.LogInformation(
             "Successfully updated {Count} upstream migrations",
             upstreamMigrationsUpdated);
@@ -176,14 +176,14 @@ public class MigrateTagCommandHandler(
         await foreach (var batch in affectedPosts.Chunk(BatchSize).WithCancellation(ct))
         {
             var postIds = batch.Select(p => p.Id).ToList();
-            
+
             await repository.AppendMigrationEventsBatchAsync(postIds, migrationEvent, ct);
-                
+
             totalProcessed += postIds.Count;
-            
+
             logger.LogInformation(
                 "Tag migration progress: Processed {Count} posts in batch, total: {Total}",
-                postIds.Count, 
+                postIds.Count,
                 totalProcessed);
         }
 

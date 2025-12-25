@@ -9,7 +9,7 @@ public static class CommentErrors
         "Comment.NotFound",
         ErrorType.NotFound,
         "The specified comment was not found.");
-    
+
     public static readonly Error UserIdEmpty = new(
         "Comment.UserId.Empty",
         ErrorType.BusinessRule,
@@ -24,7 +24,7 @@ public static class CommentErrors
         "Comment.Content.TooLong",
         ErrorType.BusinessRule,
         $"The content of the comment cannot exceed {Comment.MaxContentLength} characters.");
-    
+
     public static readonly Error NotAuthor = new(
         "Comment.NotAuthor",
         ErrorType.Forbidden,

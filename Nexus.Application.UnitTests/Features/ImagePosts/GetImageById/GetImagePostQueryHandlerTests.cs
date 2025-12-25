@@ -54,7 +54,7 @@ public class GetImagePostQueryHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         var dto = result.Value;
         Assert.Equal(imagePost.Title, dto.Title);
         Assert.Equal(processedImageUrl, dto.Url);
@@ -63,7 +63,7 @@ public class GetImagePostQueryHandlerTests
         Assert.Equal(userId, dto.CreatedBy);
         Assert.Equal(userId, dto.LastUpdatedBy);
         Assert.Equal(3, dto.Tags.Count);
-        
+
         Assert.Single(dto.Tags, t => t.Type == TagType.Artist);
         Assert.Single(dto.Tags, t => t.Type == TagType.Character);
         Assert.Single(dto.Tags, t => t.Type == TagType.General);
@@ -88,7 +88,7 @@ public class GetImagePostQueryHandlerTests
         Assert.True(result.IsFailure);
         Assert.Single(result.Errors);
         Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-        
+
         _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
     }
 
@@ -124,7 +124,7 @@ public class GetImagePostQueryHandlerTests
         Assert.True(result.IsFailure);
         Assert.Single(result.Errors);
         Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-        
+
         _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
     }
 
@@ -160,7 +160,7 @@ public class GetImagePostQueryHandlerTests
         Assert.True(result.IsFailure);
         Assert.Single(result.Errors);
         Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-        
+
         _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
     }
 
@@ -196,7 +196,7 @@ public class GetImagePostQueryHandlerTests
         Assert.True(result.IsFailure);
         Assert.Single(result.Errors);
         Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-        
+
         _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
     }
 
@@ -206,7 +206,7 @@ public class GetImagePostQueryHandlerTests
         // Arrange
         var imagePostId = Guid.NewGuid();
         var processedImageUrl = _fixture.Create<string>();
-        
+
         var imagePost = new ImagePostReadModel
         {
             Id = imagePostId,
@@ -233,7 +233,7 @@ public class GetImagePostQueryHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         var dto = result.Value;
         Assert.Empty(dto.Tags);
     }
@@ -244,7 +244,7 @@ public class GetImagePostQueryHandlerTests
         // Arrange
         var imagePostId = Guid.NewGuid();
         var processedImageUrl = _fixture.Create<string>();
-        
+
         var imagePost = new ImagePostReadModel
         {
             Id = imagePostId,
@@ -278,10 +278,10 @@ public class GetImagePostQueryHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         var dto = result.Value;
         Assert.Equal(5, dto.Tags.Count);
-        
+
         Assert.Single(dto.Tags, t => t.Type == TagType.Artist);
         Assert.Single(dto.Tags, t => t.Type == TagType.Series);
         Assert.Single(dto.Tags, t => t.Type == TagType.Character);
@@ -298,7 +298,7 @@ public class GetImagePostQueryHandlerTests
         var firstTag = _fixture.Create<string>();
         var secondTag = _fixture.Create<string>();
         var thirdTag = _fixture.Create<string>();
-        
+
         var imagePost = new ImagePostReadModel
         {
             Id = imagePostId,
@@ -330,16 +330,16 @@ public class GetImagePostQueryHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         var dto = result.Value;
         Assert.Equal(3, dto.Tags.Count);
-        
+
         Assert.Equal(TagType.General, dto.Tags[0].Type);
         Assert.Equal(firstTag, dto.Tags[0].Value);
-        
+
         Assert.Equal(TagType.Artist, dto.Tags[1].Type);
         Assert.Equal(secondTag, dto.Tags[1].Value);
-        
+
         Assert.Equal(TagType.Character, dto.Tags[2].Type);
         Assert.Equal(thirdTag, dto.Tags[2].Value);
     }
@@ -350,7 +350,7 @@ public class GetImagePostQueryHandlerTests
         // Arrange
         var imagePostId = Guid.NewGuid();
         var processedImageUrl = _fixture.Create<string>();
-        
+
         var imagePost = new ImagePostReadModel
         {
             Id = imagePostId,
@@ -381,7 +381,7 @@ public class GetImagePostQueryHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.Equal(processedImageUrl, result.Value.Url);
-        
+
         _mockImageService.Verify(s => s.GetProcessedImageUrl(imagePostId), Times.Once);
     }
 
@@ -393,7 +393,7 @@ public class GetImagePostQueryHandlerTests
         var processedImageUrl = _fixture.Create<string>();
         var creator = _fixture.Create<string>();
         var modifier = _fixture.Create<string>();
-        
+
         var imagePost = new ImagePostReadModel
         {
             Id = imagePostId,
@@ -423,7 +423,7 @@ public class GetImagePostQueryHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         var dto = result.Value;
         Assert.Equal(creator, dto.CreatedBy);
         Assert.Equal(modifier, dto.LastUpdatedBy);

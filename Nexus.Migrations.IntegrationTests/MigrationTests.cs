@@ -25,7 +25,7 @@ public class MigrationTests : IClassFixture<PostgresContainerFixture>
     public MigrationTests(PostgresContainerFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
-        
+
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddLogging(b => b.AddXUnit(output));
         serviceCollection.AddNpgsqlDataSource(_fixture.ConnectionString);
@@ -34,7 +34,7 @@ public class MigrationTests : IClassFixture<PostgresContainerFixture>
             o.WithConnectionString(_fixture.ConnectionString);
             o.WithSqlFilesDirectory("Scripts");
         }).UsePostgreSQL();
-        
+
         // TODO: Reuse Marten configuration from API project
         serviceCollection.AddMarten(o =>
             {
@@ -64,7 +64,7 @@ public class MigrationTests : IClassFixture<PostgresContainerFixture>
             .UseNpgsqlDataSource()
             .IntegrateWithWolverine()
             .AddAsyncDaemon(DaemonMode.HotCold);
-        
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
         _documentStore = serviceProvider.GetRequiredService<IDocumentStore>();
         _grateMigrator = serviceProvider.GetRequiredService<IGrateMigrator>();

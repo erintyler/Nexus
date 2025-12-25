@@ -22,12 +22,12 @@ public class ThumbnailServiceTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.NotEmpty(result.Value);
-        
+
         // Verify it's a valid WebP thumbnail
         using var verifyStream = new MemoryStream(result.Value);
         using var verifyBitmap = SKBitmap.Decode(verifyStream);
         Assert.NotNull(verifyBitmap);
-        
+
         // Verify it's actually resized
         Assert.True(verifyBitmap.Width <= ThumbnailService.ThumbnailWidth);
         Assert.True(verifyBitmap.Height <= ThumbnailService.ThumbnailHeight);
@@ -102,7 +102,7 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         // Verify the output is WebP format
         using var outputStream = new MemoryStream(result.Value);
         using var codec = SKCodec.Create(outputStream);
@@ -122,13 +122,13 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
-        
+
         Assert.NotNull(thumbnailBitmap);
         Assert.Equal(ThumbnailService.ThumbnailWidth, thumbnailBitmap.Width);
-        
+
         var thumbnailAspectRatio = (double)thumbnailBitmap.Width / thumbnailBitmap.Height;
         Assert.Equal(originalAspectRatio, thumbnailAspectRatio, 0.01);
     }
@@ -145,13 +145,13 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
-        
+
         Assert.NotNull(thumbnailBitmap);
         Assert.Equal(ThumbnailService.ThumbnailHeight, thumbnailBitmap.Height);
-        
+
         var thumbnailAspectRatio = (double)thumbnailBitmap.Width / thumbnailBitmap.Height;
         Assert.Equal(originalAspectRatio, thumbnailAspectRatio, 0.01);
     }
@@ -167,10 +167,10 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
-        
+
         Assert.NotNull(thumbnailBitmap);
         Assert.Equal(ThumbnailService.ThumbnailHeight, thumbnailBitmap.Width);
         Assert.Equal(ThumbnailService.ThumbnailHeight, thumbnailBitmap.Height);
@@ -188,7 +188,7 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.True(result.Value.Length < originalSize, 
+        Assert.True(result.Value.Length < originalSize,
             $"Thumbnail size ({result.Value.Length}) should be smaller than original size ({originalSize})");
     }
 
@@ -204,7 +204,7 @@ public class ThumbnailServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        
+
         // Verify the thumbnail respects maximum dimensions
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
@@ -224,7 +224,7 @@ public class ThumbnailServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        
+
         // Even small images should be resized to fit thumbnail dimensions
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
@@ -243,10 +243,10 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
-        
+
         Assert.NotNull(thumbnailBitmap);
         var thumbnailAspectRatio = (double)thumbnailBitmap.Width / thumbnailBitmap.Height;
         Assert.Equal(originalAspectRatio, thumbnailAspectRatio, 0.05);
@@ -264,10 +264,10 @@ public class ThumbnailServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);
-        
+
         Assert.NotNull(thumbnailBitmap);
         var thumbnailAspectRatio = (double)thumbnailBitmap.Width / thumbnailBitmap.Height;
         Assert.Equal(originalAspectRatio, thumbnailAspectRatio, 0.05);
@@ -306,7 +306,7 @@ public class ThumbnailServiceTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.NotEmpty(result.Value);
-        
+
         // Verify thumbnail is within limits
         using var thumbnailStream = new MemoryStream(result.Value);
         using var thumbnailBitmap = SKBitmap.Decode(thumbnailStream);

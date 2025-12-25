@@ -10,14 +10,14 @@ public sealed class Tag : BaseValueObject
 {
     public const int MinLength = 3;
     public const int MaxLength = 30;
-    
+
     [JsonConstructor]
     internal Tag(TagType type, string value)
     {
         Value = value;
         Type = type;
     }
-    
+
     public string Value { get; }
     public TagType Type { get; }
 
@@ -45,7 +45,7 @@ public sealed class Tag : BaseValueObject
 
         return new Tag(type, value);
     }
-    
+
     public override IEnumerable<object> GetAtomicValues()
     {
         yield return Value;

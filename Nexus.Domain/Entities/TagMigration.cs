@@ -15,17 +15,17 @@ public sealed class TagMigration : BaseEntity
 {
     [JsonConstructor]
     internal TagMigration() { } // For Marten
-    
+
     public Guid Id { get; init; }
     public TagData SourceTag { get; init; } = null!;
     public TagData TargetTag { get; init; } = null!;
-    
+
     public string CreatedBy { get; init; } = null!;
-    
+
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset LastModified { get; private set; }
     public string LastModifiedBy { get; private set; } = null!;
-    
+
     /// <summary>
     /// Factory method to create a new TagMigration document with validation.
     /// </summary>
@@ -35,19 +35,19 @@ public sealed class TagMigration : BaseEntity
         {
             return TagMigrationErrors.UserIdEmpty;
         }
-        
+
         var sourceTagResult = Tag.Create(source.Type, source.Value);
         if (sourceTagResult.IsFailure)
         {
             return Result.Failure<TagMigration>(sourceTagResult.Errors);
         }
-        
+
         var targetTagResult = Tag.Create(target.Type, target.Value);
         if (targetTagResult.IsFailure)
         {
             return Result.Failure<TagMigration>(targetTagResult.Errors);
         }
-        
+
         return new TagMigration
         {
             Id = Guid.NewGuid(),
@@ -56,7 +56,7 @@ public sealed class TagMigration : BaseEntity
             CreatedBy = userId.ToString()
         };
     }
-    
+
     /// <summary>
     /// Factory method to create the TagMigratedDomainEvent for bulk migration.
     /// This event will be applied to ImagePost aggregates.

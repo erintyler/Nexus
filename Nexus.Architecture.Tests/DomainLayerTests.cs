@@ -69,7 +69,7 @@ public class DomainLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"Domain layer should only depend on System namespaces and itself. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -89,7 +89,7 @@ public class DomainLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All entities should inherit from Entity base class. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -109,7 +109,7 @@ public class DomainLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All value objects should inherit from ValueObject base class. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -149,7 +149,7 @@ public class DomainLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All domain events should be immutable (records or classes with readonly properties). Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -189,7 +189,7 @@ public class DomainLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All entities should be sealed to prevent inheritance. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 
@@ -209,7 +209,7 @@ public class DomainLayerTests
             .GetResult();
 
         // Assert
-        Assert.True(result.IsSuccessful, 
+        Assert.True(result.IsSuccessful,
             $"All value objects should be sealed to prevent inheritance. Failing types: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}");
     }
 }

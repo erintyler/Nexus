@@ -12,10 +12,10 @@ public class TagCountProjection : MultiStreamProjection<TagCount, string>
         Identities<ImagePostCreatedDomainEvent>(x => x.Tags.
             Select(tag => TagCount.GetId(tag.Type, tag.Value))
             .ToList());
-        
+
         Identity<TagAddedDomainEvent>(x => TagCount.GetId(x.TagType, x.TagValue));
         Identity<TagRemovedDomainEvent>(x => TagCount.GetId(x.TagType, x.TagValue));
-        
+
         DeleteEvent<TagRemovedDomainEvent>((tagCount, _) => tagCount.Count == 0);
     }
 
@@ -23,12 +23,12 @@ public class TagCountProjection : MultiStreamProjection<TagCount, string>
     {
         current.Count += 1;
     }
-    
+
     public void Apply(TagAddedDomainEvent @event, TagCount current)
     {
         current.Count += 1;
     }
-    
+
     public void Apply(TagRemovedDomainEvent @event, TagCount current)
     {
         current.Count = Math.Max(0, current.Count - 1);

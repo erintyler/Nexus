@@ -67,7 +67,7 @@ public class GetHistoryQueryHandlerTests
         Assert.Equal(5, result.Value.Items.Count);
         Assert.Equal(1, result.Value.PageNumber);
         Assert.Equal(1, result.Value.TotalPages);
-        
+
         // Verify events are ordered by timestamp descending
         var timestamps = result.Value.Items.Select(h => h.Timestamp).ToList();
         Assert.True(timestamps.SequenceEqual(timestamps.OrderByDescending(t => t)));
@@ -305,7 +305,7 @@ public class GetHistoryQueryHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.Single(result.Value.Items);
-        
+
         var historyItem = result.Value.Items[0];
         Assert.Equal(eventName, historyItem.Action);
         Assert.Equal(description, historyItem.Description);
@@ -344,9 +344,9 @@ public class GetHistoryQueryHandlerTests
         for (int i = 0; i < count; i++)
         {
             events.Add(CreateTestEvent(
-                streamId, 
-                $"Event {i + 1}", 
-                baseTime.AddMinutes(-i), 
+                streamId,
+                $"Event {i + 1}",
+                baseTime.AddMinutes(-i),
                 $"user{i % 3}"));
         }
 
@@ -354,9 +354,9 @@ public class GetHistoryQueryHandlerTests
     }
 
     private IEvent CreateTestEvent(
-        Guid streamId, 
-        string eventName, 
-        DateTimeOffset timestamp, 
+        Guid streamId,
+        string eventName,
+        DateTimeOffset timestamp,
         string? userName,
         string? description = null)
     {

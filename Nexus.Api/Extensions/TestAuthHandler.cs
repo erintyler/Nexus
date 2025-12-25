@@ -14,12 +14,12 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         // Define dummy claims for your fake user
-        var claims = new[] { 
+        var claims = new[] {
             new Claim(ClaimTypes.Name, "Test User"),
             new Claim(ClaimTypes.Role, "Admin"),
-            new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), 
+            new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
         };
-        
+
         var identity = new ClaimsIdentity(claims, "Test");
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, "Test");

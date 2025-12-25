@@ -22,73 +22,73 @@ public class ImagePostProjection : SingleStreamProjection<ImagePostReadModel, Gu
             .Select(t => new TagReadModel(t.Value, t.Type))
             .ToList();
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, CommentCreatedDomainEvent @event)
     {
         readModel.Comments.Add(new CommentReadModel(@event.Id, @event.UserId, @event.Content));
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, CommentUpdatedDomainEvent @event)
     {
         var comment = readModel.Comments.First(c => c.Id == @event.Id);
         comment.Content = @event.Content;
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, CommentDeletedDomainEvent @event)
     {
         var comment = readModel.Comments.First(c => c.Id == @event.Id);
         readModel.Comments.Remove(comment);
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, TagAddedDomainEvent @event)
     {
         // Idempotent: only add if tag doesn't already exist
-        var tagExists = readModel.Tags.Any(t => 
-            t.Type == @event.TagType && 
+        var tagExists = readModel.Tags.Any(t =>
+            t.Type == @event.TagType &&
             t.Value == @event.TagValue);
-        
+
         if (!tagExists)
         {
             readModel.Tags.Add(new TagReadModel(@event.TagValue, @event.TagType));
         }
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, TagRemovedDomainEvent @event)
     {
         // Idempotent: only remove if tag exists
-        var tag = readModel.Tags.FirstOrDefault(t => 
-            t.Type == @event.TagType && 
+        var tag = readModel.Tags.FirstOrDefault(t =>
+            t.Type == @event.TagType &&
             t.Value == @event.TagValue);
-        
+
         if (tag is not null)
         {
             readModel.Tags.Remove(tag);
         }
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, TagMigratedDomainEvent @event)
     {
         // Remove source tag if it exists
-        var sourceTag = readModel.Tags.FirstOrDefault(t => 
-            t.Type == @event.Source.Type && 
+        var sourceTag = readModel.Tags.FirstOrDefault(t =>
+            t.Type == @event.Source.Type &&
             t.Value == @event.Source.Value);
-        
+
         if (sourceTag is not null)
         {
             readModel.Tags.Remove(sourceTag);
         }
-        
+
         // Add target tag only if it doesn't already exist (idempotent)
-        var targetTagExists = readModel.Tags.Any(t => 
-            t.Type == @event.Target.Type && 
+        var targetTagExists = readModel.Tags.Any(t =>
+            t.Type == @event.Target.Type &&
             t.Value == @event.Target.Value);
-        
+
         if (!targetTagExists)
         {
             readModel.Tags.Add(new TagReadModel(@event.Target.Value, @event.Target.Type));
         }
     }
-    
+
     public static void Apply(ImagePostReadModel readModel, StatusChangedDomainEvent @event)
     {
         readModel.Status = @event.UploadStatus;

@@ -1,0 +1,220 @@
+name: Pull Request CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel in-progress runs when a new commit is pushed to the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  # Job 1: Code Quality Checks
+  code-quality:
+    name: Formatting Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+      
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
+
+      - name: Run dotnet format check
+        run: dotnet format Nexus.slnx --verify-no-changes --verbosity diagnostic
+
+  # Job 2: Build & Compile
+  build:
+    name: Build Solution
+    runs-on: ubuntu-latest
+    needs: code-quality
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+      
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
+      
+      - name: Build solution
+        run: dotnet build Nexus.slnx --no-restore --configuration Release
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: build-output
+          path: |
+            **/bin/Release/
+            **/obj/Release/
+          retention-days: 1
+
+  # Job 3: All Tests (Matrix Strategy with Fail-Fast)
+  tests:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - test-group: architecture
+            name: "🏗️ Architecture Tests"
+          - test-group: unit
+            name: "🧪 Unit Tests"
+          - test-group: integration
+            name: "🔗 Integration Tests"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: build-output
+      
+      - name: Restore execute permissions
+        run: |
+          find . -type f -path "*/bin/Release/*/Nexus.*Tests" -exec chmod +x {} \;
+          find . -type f -path "*/bin/Release/*/*.dll" -exec chmod +x {} \;
+      
+      - name: Restore dependencies
+        run: dotnet restore Nexus.slnx
+      
+      - name: Run Architecture Tests
+        if: matrix.test-group == 'architecture'
+        run: |
+          dotnet test \
+            --project Nexus.Architecture.Tests \
+            --no-restore \
+            --no-build \
+            --configuration Release
+      
+      - name: Run All Unit Tests
+        if: matrix.test-group == 'unit'
+        run: |
+          dotnet test \
+            --project Nexus.Domain.UnitTests \
+            --no-restore \
+            --no-build \
+            --configuration Release
+          dotnet test \
+            --project Nexus.Application.UnitTests \
+            --no-restore \
+            --no-build \
+            --configuration Release
+      
+      - name: Run API Integration Tests
+        if: matrix.test-group == 'integration'
+        run: |
+          dotnet test \
+            --project Nexus.Api.IntegrationTests \
+            --no-restore \
+            --no-build \
+            --configuration Release
+      
+      - name: Run Migration Tests
+        if: matrix.test-group == 'integration'
+        run: |
+          dotnet test \
+            --project Nexus.Migrations.IntegrationTests \
+            --no-restore \
+            --no-build \
+            --configuration Release
+
+  # Job 4: PR Summary & Status Check
+  pr-check-summary:
+    name: PR Check Summary
+    runs-on: ubuntu-slim
+    needs: [code-quality, build, tests]
+    if: always()
+    permissions:
+      actions: read
+    
+    steps:
+      - name: Get test matrix job results
+        id: matrix-results
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Fetch the workflow run jobs
+          jobs=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs)
+          
+          # Extract matrix job results
+          arch_status=$(echo "$jobs" | jq -r '.jobs[] | select(.name == "🏗️ Architecture Tests") | .conclusion // "in_progress"')
+          unit_status=$(echo "$jobs" | jq -r '.jobs[] | select(.name == "🧪 Unit Tests") | .conclusion // "in_progress"')
+          integration_status=$(echo "$jobs" | jq -r '.jobs[] | select(.name == "🔗 Integration Tests") | .conclusion // "in_progress"')
+          
+          # Save to output
+          echo "arch_status=$arch_status" >> $GITHUB_OUTPUT
+          echo "unit_status=$unit_status" >> $GITHUB_OUTPUT
+          echo "integration_status=$integration_status" >> $GITHUB_OUTPUT
+      
+      - name: Generate summary
+        run: |
+          # Function to convert conclusion to emoji
+          get_emoji() {
+            case "$1" in
+              "success") echo "✅" ;;
+              "failure") echo "❌" ;;
+              "cancelled") echo "🚫" ;;
+              "skipped") echo "⏭️" ;;
+              *) echo "⏳" ;;
+            esac
+          }
+          
+          echo "## 📊 PR Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🎨 Code Quality | $(get_emoji ${{ needs.code-quality.result }}) ${{ needs.code-quality.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔨 Build | $(get_emoji ${{ needs.build.result }}) ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tests** | |" >> $GITHUB_STEP_SUMMARY
+          echo "| └─ 🏗️ Architecture | $(get_emoji ${{ steps.matrix-results.outputs.arch_status }}) ${{ steps.matrix-results.outputs.arch_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| └─ 🧪 Unit | $(get_emoji ${{ steps.matrix-results.outputs.unit_status }}) ${{ steps.matrix-results.outputs.unit_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| └─ 🔗 Integration | $(get_emoji ${{ steps.matrix-results.outputs.integration_status }}) ${{ steps.matrix-results.outputs.integration_status }} |" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Verify all checks passed
+        if: |
+          needs.code-quality.result != 'success' ||
+          needs.build.result != 'success' ||
+          needs.tests.result != 'success'
+        run: |
+          echo "❌ One or more required checks failed"
+          exit 1
+      
+      - name: Success
+        run: echo "✅ All PR checks passed successfully!"
+

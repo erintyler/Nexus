@@ -739,7 +739,7 @@ public class ImagePostTests
         // Add second comment to verify only the target is removed
         var secondCommentId = _fixture.Create<Guid>();
         imagePost.Apply(new CommentCreatedDomainEvent(secondCommentId, userId, _fixture.CreateString(100)));
-        
+
         var @event = new CommentDeletedDomainEvent(commentId, userId);
 
         // Act
@@ -787,7 +787,7 @@ public class ImagePostTests
         commentId = _fixture.Create<Guid>();
         var content = _fixture.CreateString(100);
         var commentEvent = new CommentCreatedDomainEvent(commentId, userId, content);
-        
+
         imagePost.Apply(commentEvent);
         return imagePost;
     }

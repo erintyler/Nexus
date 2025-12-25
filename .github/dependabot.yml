@@ -1,0 +1,83 @@
+version: 2
+updates:
+  # .NET Dependencies
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    groups:
+      aspire:
+        patterns:
+          - "Aspire.*"
+      microsoft:
+        patterns:
+          - "Microsoft.*"
+      testing:
+        patterns:
+          - "xunit*"
+          - "FluentAssertions*"
+          - "Moq*"
+          - "NSubstitute*"
+          - "Testcontainers*"
+      wolverine:
+        patterns:
+          - "WolverineFx.*"
+      marten:
+        patterns:
+          - "Marten*"
+    labels:
+      - "dependencies"
+      - "dotnet"
+    reviewers:
+      - "saxolotl"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    reviewers:
+      - "saxolotl"
+    commit-message:
+      prefix: "ci"
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/Nexus.Api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "docker"
+    reviewers:
+      - "saxolotl"
+    commit-message:
+      prefix: "chore"
+
+  - package-ecosystem: "docker"
+    directory: "/Nexus.ImageProcessor"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "docker"
+    reviewers:
+      - "saxolotl"
+    commit-message:
+      prefix: "chore"
+

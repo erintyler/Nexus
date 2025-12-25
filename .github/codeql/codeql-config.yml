@@ -1,0 +1,21 @@
+name: "CodeQL Config"
+
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
+
+# Ignore test projects from certain security checks
+paths-ignore:
+  - '**/*.UnitTests/**'
+  - '**/*.IntegrationTests/**'
+  - '**/Tests/**'
+
+# Focus on production code
+paths:
+  - 'Nexus.Api/**'
+  - 'Nexus.Application/**'
+  - 'Nexus.Domain/**'
+  - 'Nexus.Infrastructure/**'
+  - 'Nexus.ImageProcessor/**'
+  - 'Nexus.Frontend/**'
+
