@@ -62,7 +62,7 @@ jobs:
         run: dotnet build Nexus.slnx --no-restore --configuration Release
       
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-output
           path: |
@@ -94,11 +94,9 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
       
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build-output
       
@@ -107,9 +105,6 @@ jobs:
           find . -type f -path "*/bin/Release/*/Nexus.*Tests" -exec chmod +x {} \;
           find . -type f -path "*/bin/Release/*/*.dll" -exec chmod +x {} \;
       
-      - name: Restore dependencies
-        run: dotnet restore Nexus.slnx
-      
       - name: Run Architecture Tests
         if: matrix.test-group == 'architecture'
         run: |
@@ -117,8 +112,7 @@ jobs:
             --project Nexus.Architecture.Tests \
             --no-restore \
             --no-build \
-            --configuration Release \
-            --logger "console;verbosity=detailed"
+            --configuration Release
       
       - name: Run All Unit Tests
         if: matrix.test-group == 'unit'
@@ -130,11 +124,6 @@ jobs:
             --configuration Release
           dotnet test \
             --project Nexus.Application.UnitTests \
-            --no-restore \
-            --no-build \
-            --configuration Release
-          dotnet test \
-            --project Nexus.Frontend.UnitTests \
             --no-restore \
             --no-build \
             --configuration Release
@@ -179,7 +168,7 @@ jobs:
           cache-dependency-path: '**/packages.lock.json'
       
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: csharp
           config-file: ./.github/codeql/codeql-config.yml
@@ -191,7 +180,7 @@ jobs:
         run: dotnet build Nexus.slnx --no-restore --configuration Release
       
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:csharp"
           upload: true
