@@ -179,7 +179,7 @@ jobs:
           config-file: ./.github/codeql/codeql-config.yml
       
       - name: Restore dependencies
-        uses: github/codeql-action/init@v5
+        run: dotnet restore Nexus.slnx
 
       - name: Build solution
         run: dotnet build Nexus.slnx --no-restore --configuration Release
@@ -191,7 +191,7 @@ jobs:
           upload: true
 
   # Job 5: PR Summary & Status Check
-        uses: github/codeql-action/analyze@v5
+  pr-check-summary:
     name: PR Check Summary
     runs-on: ubuntu-latest
     needs: [code-quality, build, tests, codeql]
