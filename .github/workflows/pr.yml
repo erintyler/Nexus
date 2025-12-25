@@ -102,6 +102,11 @@ jobs:
         with:
           name: build-output
       
+      - name: Restore execute permissions
+        run: |
+          find . -type f -path "*/bin/Release/*/Nexus.*Tests" -exec chmod +x {} \;
+          find . -type f -path "*/bin/Release/*/*.dll" -exec chmod +x {} \;
+      
       - name: Restore dependencies
         run: dotnet restore Nexus.slnx
       
