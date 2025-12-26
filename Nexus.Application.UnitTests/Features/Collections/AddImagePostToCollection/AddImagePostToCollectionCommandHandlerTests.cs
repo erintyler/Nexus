@@ -37,7 +37,7 @@ public class AddImagePostToCollectionCommandHandlerTests
         var collectionId = _fixture.Create<Guid>();
         var imagePostId = _fixture.Create<Guid>();
         var collection = CreateCollection(collectionId);
-        
+
         // Add the image post first
         var addEvent = collection.AddImagePost(imagePostId).Value;
         collection.Apply(addEvent);

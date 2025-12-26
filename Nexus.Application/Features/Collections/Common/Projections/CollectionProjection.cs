@@ -21,7 +21,7 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
 
     public static async Task ApplyAsync(
         IDocumentOperations ops,
-        CollectionReadModel readModel, 
+        CollectionReadModel readModel,
         ImagePostAddedToCollectionDomainEvent @event)
     {
         readModel.ImagePostIds.Add(@event.ImagePostId);
@@ -40,7 +40,7 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
 
     public static async Task ApplyAsync(
         IDocumentOperations ops,
-        CollectionReadModel readModel, 
+        CollectionReadModel readModel,
         ImagePostRemovedFromCollectionDomainEvent @event)
     {
         readModel.ImagePostIds.Remove(@event.ImagePostId);

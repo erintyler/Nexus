@@ -144,7 +144,7 @@ public class CollectionTests
         // Arrange
         var collection = CreateCollection();
         var imagePostId = _fixture.Create<Guid>();
-        
+
         var addEvent = collection.AddImagePost(imagePostId).Value;
         collection.Apply(addEvent);
 
@@ -182,7 +182,7 @@ public class CollectionTests
         // Arrange
         var collection = CreateCollection();
         var imagePostId = _fixture.Create<Guid>();
-        
+
         var addEvent = collection.AddImagePost(imagePostId).Value;
         collection.Apply(addEvent);
 
@@ -216,10 +216,10 @@ public class CollectionTests
         // Arrange
         var collection = CreateCollection();
         var imagePostId = _fixture.Create<Guid>();
-        
+
         var addEvent = collection.AddImagePost(imagePostId).Value;
         collection.Apply(addEvent);
-        
+
         var removeEvent = collection.RemoveImagePost(imagePostId).Value;
 
         // Act
@@ -240,7 +240,7 @@ public class CollectionTests
         var createdEvent = Collection.Create(
             userId ?? _fixture.Create<Guid>(),
             title ?? _fixture.CreateString(50)).Value;
-        
+
         collection.Apply(createdEvent);
         return collection;
     }
