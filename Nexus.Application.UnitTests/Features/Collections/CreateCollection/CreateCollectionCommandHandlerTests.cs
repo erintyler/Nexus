@@ -17,14 +17,14 @@ public class CreateCollectionCommandHandlerTests
         // Setup default user context
         _mockUserContextService
             .Setup(s => s.GetUserId())
-            .Returns(Guid.NewGuid());
+            .Returns(_fixture.Create<Guid>());
     }
 
     [Fact]
     public void HandleAsync_ShouldCreateCollection_WhenCommandIsValid()
     {
         // Arrange
-        var userId = Guid.NewGuid();
+        var userId = _fixture.Create<Guid>();
 
         _mockUserContextService
             .Setup(s => s.GetUserId())

@@ -27,6 +27,6 @@ public class CollectionReadModel
     public DateTimeOffset LastModified { get; set; }
     public string LastModifiedBy { get; set; }
 
-    public List<Guid> ImagePostIds { get; set; }
+    public HashSet<Guid> ImagePostIds { get; set; }
     public HashSet<TagReadModel> AggregatedTags { get; set; }
 }

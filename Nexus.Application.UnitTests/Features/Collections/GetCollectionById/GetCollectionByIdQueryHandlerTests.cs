@@ -1,6 +1,4 @@
 using AutoFixture;
-using Marten;
-using Moq;
 using Nexus.Application.Features.Collections.GetCollectionById;
 using Nexus.Application.Features.Collections.Common.Models;
 using Nexus.Domain.Errors;
@@ -9,36 +7,28 @@ namespace Nexus.Application.UnitTests.Features.Collections.GetCollectionById;
 
 public class GetCollectionByIdQueryHandlerTests
 {
-    private readonly Mock<IDocumentSession> _mockSession = new();
     private readonly Fixture _fixture = new();
 
     [Fact]
-    public async Task HandleAsync_ShouldReturnCollection_WhenCollectionExists()
+    public void HandleAsync_ShouldReturnCollection_WhenCollectionExists()
     {
         // Arrange
-        var collectionId = Guid.NewGuid();
+        var collectionId = _fixture.Create<Guid>();
         var expectedCollection = new CollectionReadModel
         {
             Id = collectionId,
             Title = "Test Collection",
-            CreatedBy = Guid.NewGuid().ToString(),
-            ImagePostIds = [Guid.NewGuid(), Guid.NewGuid()],
+            CreatedBy = _fixture.Create<Guid>().ToString(),
+            ImagePostIds = [_fixture.Create<Guid>(), _fixture.Create<Guid>()],
             AggregatedTags = []
         };
-
-        _mockSession
-            .Setup(s => s.LoadAsync<CollectionReadModel>(
-                collectionId,
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(expectedCollection);
 
         var query = new GetCollectionByIdQuery(collectionId);
 
         // Act
-        var result = await GetCollectionByIdQueryHandler.HandleAsync(
+        var result = GetCollectionByIdQueryHandler.HandleAsync(
             query,
-            _mockSession.Object,
-            TestContext.Current.CancellationToken);
+            expectedCollection);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -46,38 +36,22 @@ public class GetCollectionByIdQueryHandlerTests
         Assert.Equal(collectionId, result.Value.Id);
         Assert.Equal(expectedCollection.Title, result.Value.Title);
         Assert.Equal(2, result.Value.ImagePostIds.Count);
-
-        _mockSession.Verify(s => s.LoadAsync<CollectionReadModel>(
-            collectionId,
-            It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldReturnFailure_WhenCollectionNotFound()
+    public void HandleAsync_ShouldReturnFailure_WhenCollectionNotFound()
     {
         // Arrange
-        var collectionId = Guid.NewGuid();
-
-        _mockSession
-            .Setup(s => s.LoadAsync<CollectionReadModel>(
-                collectionId,
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync((CollectionReadModel?)null);
-
+        var collectionId = _fixture.Create<Guid>();
         var query = new GetCollectionByIdQuery(collectionId);
 
         // Act
-        var result = await GetCollectionByIdQueryHandler.HandleAsync(
+        var result = GetCollectionByIdQueryHandler.HandleAsync(
             query,
-            _mockSession.Object,
-            TestContext.Current.CancellationToken);
+            null);
 
         // Assert
         Assert.True(result.IsFailure);
         Assert.Contains(CollectionErrors.NotFound, result.Errors);
-
-        _mockSession.Verify(s => s.LoadAsync<CollectionReadModel>(
-            collectionId,
-            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

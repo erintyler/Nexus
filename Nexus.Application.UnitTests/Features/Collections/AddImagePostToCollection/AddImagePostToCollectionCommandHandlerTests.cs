@@ -14,8 +14,8 @@ public class AddImagePostToCollectionCommandHandlerTests
     public void HandleAsync_ShouldAddImagePost_WhenCollectionIsValid()
     {
         // Arrange
-        var collectionId = Guid.NewGuid();
-        var imagePostId = Guid.NewGuid();
+        var collectionId = _fixture.Create<Guid>();
+        var imagePostId = _fixture.Create<Guid>();
         var collection = CreateCollection(collectionId);
 
         var command = new AddImagePostToCollectionCommand(collectionId, imagePostId);
@@ -34,8 +34,8 @@ public class AddImagePostToCollectionCommandHandlerTests
     public void HandleAsync_ShouldReturnFailure_WhenImagePostAlreadyExists()
     {
         // Arrange
-        var collectionId = Guid.NewGuid();
-        var imagePostId = Guid.NewGuid();
+        var collectionId = _fixture.Create<Guid>();
+        var imagePostId = _fixture.Create<Guid>();
         var collection = CreateCollection(collectionId);
         
         // Add the image post first
@@ -59,7 +59,7 @@ public class AddImagePostToCollectionCommandHandlerTests
     public void HandleAsync_ShouldReturnFailure_WhenImagePostIdIsEmpty()
     {
         // Arrange
-        var collectionId = Guid.NewGuid();
+        var collectionId = _fixture.Create<Guid>();
         var collection = CreateCollection(collectionId);
 
         var command = new AddImagePostToCollectionCommand(collectionId, Guid.Empty);
@@ -77,9 +77,9 @@ public class AddImagePostToCollectionCommandHandlerTests
 
     private Collection CreateCollection(Guid? id = null)
     {
-        var collectionId = id ?? Guid.NewGuid();
+        var collectionId = id ?? _fixture.Create<Guid>();
         var collection = new Collection(collectionId);
-        var createEvent = Collection.Create(Guid.NewGuid(), _fixture.CreateString(20)).Value;
+        var createEvent = Collection.Create(_fixture.Create<Guid>(), _fixture.CreateString(20)).Value;
         collection.Apply(createEvent);
         return collection;
     }
