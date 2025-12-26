@@ -19,15 +19,15 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         readModel.CreatedBy = @event.UserId.ToString();
     }
 
-    public static async Task ApplyAsync(
-        IDocumentOperations ops,
+    public async Task Apply(
+        IQuerySession session,
         CollectionReadModel readModel,
         ImagePostAddedToCollectionDomainEvent @event)
     {
         readModel.ImagePostIds.Add(@event.ImagePostId);
 
         // Query the image post to get its tags and aggregate them
-        var imagePost = await ops.LoadAsync<ImagePostReadModel>(@event.ImagePostId);
+        var imagePost = await session.LoadAsync<ImagePostReadModel>(@event.ImagePostId);
         if (imagePost != null)
         {
             // Add tags from the image post that aren't already in the collection
@@ -38,23 +38,23 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         }
     }
 
-    public static async Task ApplyAsync(
-        IDocumentOperations ops,
+    public async Task Apply(
+        IQuerySession session,
         CollectionReadModel readModel,
         ImagePostRemovedFromCollectionDomainEvent @event)
     {
         readModel.ImagePostIds.Remove(@event.ImagePostId);
 
         // Rebuild aggregated tags from remaining image posts
-        await RebuildAggregatedTagsAsync(ops, readModel);
+        await RebuildAggregatedTagsAsync(session, readModel);
     }
 
-    private static async Task RebuildAggregatedTagsAsync(IDocumentOperations ops, CollectionReadModel readModel)
+    private static async Task RebuildAggregatedTagsAsync(IQuerySession session, CollectionReadModel readModel)
     {
         readModel.AggregatedTags.Clear();
 
         // Load all image posts in the collection
-        var imagePosts = await ops.LoadManyAsync<ImagePostReadModel>(readModel.ImagePostIds);
+        var imagePosts = await session.LoadManyAsync<ImagePostReadModel>(readModel.ImagePostIds);
 
         // Aggregate all unique tags from the image posts
         var allTags = imagePosts

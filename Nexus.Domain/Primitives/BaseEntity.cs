@@ -11,7 +11,7 @@ public abstract class BaseEntity : IEquatable<BaseEntity>
     {
     }
 
-    public Guid Id { get; }
+    public Guid Id { get; internal set; }
 
     public bool Equals(BaseEntity? other)
     {

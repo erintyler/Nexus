@@ -9,16 +9,14 @@ public sealed class Comment : BaseEntity
 {
     public const int MaxContentLength = 2000;
 
-    internal Comment(Guid id, Guid userId, string content)
+    internal Comment(Guid id, Guid userId, string content) : base(id)
     {
-        Id = id;
         UserId = userId;
         Content = content;
     }
 
     private Comment() { }
 
-    public Guid Id { get; internal set; }
     public Guid UserId { get; internal set; }
     public string Content { get; internal set; } = null!;
 

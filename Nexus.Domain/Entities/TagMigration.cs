@@ -16,7 +16,13 @@ public sealed class TagMigration : BaseEntity
     [JsonConstructor]
     internal TagMigration() { } // For Marten
 
-    public Guid Id { get; init; }
+    internal TagMigration(Guid id, TagData sourceTag, TagData targetTag, string createdBy) : base(id)
+    {
+        SourceTag = sourceTag;
+        TargetTag = targetTag;
+        CreatedBy = createdBy;
+    }
+
     public TagData SourceTag { get; init; } = null!;
     public TagData TargetTag { get; init; } = null!;
 
@@ -48,13 +54,7 @@ public sealed class TagMigration : BaseEntity
             return Result.Failure<TagMigration>(targetTagResult.Errors);
         }
 
-        return new TagMigration
-        {
-            Id = Guid.NewGuid(),
-            SourceTag = source,
-            TargetTag = target,
-            CreatedBy = userId.ToString()
-        };
+        return new TagMigration(Guid.NewGuid(), source, target, userId.ToString());
     }
 
     /// <summary>
