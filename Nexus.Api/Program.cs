@@ -13,6 +13,8 @@ using Nexus.Api.Middleware.Wolverine;
 using Nexus.Api.Services;
 using Nexus.Application.Common.Services;
 using Nexus.Application.Configuration.Models;
+using Nexus.Application.Features.Collections.Common.Models;
+using Nexus.Application.Features.Collections.Common.Projections;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Application.Features.ImagePosts.Common.Projections;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
@@ -86,6 +88,7 @@ else
     builder.Services.AddMarten(o =>
         {
             o.Projections.Add<ImagePostProjection>(ProjectionLifecycle.Inline);
+            o.Projections.Add<CollectionProjection>(ProjectionLifecycle.Inline);
             o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
 
             o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
@@ -108,6 +111,13 @@ else
                 });
 
             o.Schema.For<ImagePostReadModel>().Metadata(m =>
+            {
+                m.CreatedAt.MapTo(x => x.CreatedAt);
+                m.LastModified.MapTo(x => x.LastModified);
+                m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+            });
+
+            o.Schema.For<CollectionReadModel>().Metadata(m =>
             {
                 m.CreatedAt.MapTo(x => x.CreatedAt);
                 m.LastModified.MapTo(x => x.LastModified);
@@ -162,6 +172,7 @@ var api = app.MapGroup("/api");
 
 api.MapImageEndpoints();
 api.MapTagEndpoints();
+api.MapCollectionEndpoints();
 
 
 await app.RunJasperFxCommands(args);

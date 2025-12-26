@@ -1,34 +1,32 @@
-using Nexus.Domain.Enums;
+using Nexus.Application.Features.ImagePosts.Common.Models;
 
-namespace Nexus.Application.Features.ImagePosts.Common.Models;
+namespace Nexus.Application.Features.Collections.Common.Models;
 
 /// <summary>
-/// Read model for ImagePost - optimized for queries and projections.
+/// Read model for Collection - optimized for queries and projections.
 /// This is a denormalized view that Marten uses for efficient querying.
+/// Aggregates tags from all child image posts.
 /// </summary>
-public class ImagePostReadModel
+public class CollectionReadModel
 {
     // Parameterless constructor for Marten
-    public ImagePostReadModel()
+    public CollectionReadModel()
     {
         Title = string.Empty;
         CreatedBy = string.Empty;
         LastModifiedBy = string.Empty;
-        Tags = [];
-        Comments = [];
+        ImagePostIds = [];
+        AggregatedTags = [];
     }
 
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string CreatedBy { get; set; }
-    public UploadStatus Status { get; set; }
-    public string? Url { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset LastModified { get; set; }
     public string LastModifiedBy { get; set; }
 
-    public List<TagReadModel> Tags { get; set; }
-    public List<CommentReadModel> Comments { get; set; }
+    public HashSet<Guid> ImagePostIds { get; set; }
+    public HashSet<TagReadModel> AggregatedTags { get; set; }
 }
-
