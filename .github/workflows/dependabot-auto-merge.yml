@@ -14,11 +14,13 @@ jobs:
     name: Auto-merge Dependabot PRs
     runs-on: ubuntu-slim
     if: github.actor == 'dependabot[bot]'
-    - name: Merge Dependabot PR
-      uses: fastify/github-action-merge-dependabot@v3
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        target: minor
-        merge-method: squash
-        approve-only: false
-        use-github-auto-merge: true
+    
+    steps:
+      - name: Merge Dependabot PR
+        uses: fastify/github-action-merge-dependabot@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          target: minor
+          merge-method: squash
+          approve-only: false
+          use-github-auto-merge: true
