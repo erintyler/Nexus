@@ -40,7 +40,7 @@ public class JwtTokenService(IOptions<JwtSettings> jwtSettings) : IJwtTokenServi
         );
 
         var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-        
+
         var claimsDictionary = claims.ToDictionary(
             c => c.Type,
             c => c.Value
