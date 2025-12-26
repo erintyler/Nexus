@@ -34,14 +34,23 @@ using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
+// Add service defaults only when not in test environment
+if (!builder.Environment.IsEnvironment("Test"))
 {
-    o.ConfigureTracing(c =>
+    builder.AddServiceDefaults();
+    builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
     {
-        c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark") && !f.CommandText.Contains("wolverine_control_queue"));
+        o.ConfigureTracing(c =>
+        {
+            c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark") && !f.CommandText.Contains("wolverine_control_queue"));
+        });
     });
-});
+}
+else
+{
+    // For tests, add NpgsqlDataSource with connection string from configuration
+    builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("postgres") ?? throw new InvalidOperationException("Postgres connection string not found"));
+}
 
 builder.UseWolverine(o =>
 {
@@ -51,16 +60,33 @@ builder.UseWolverine(o =>
     o.Policies.AddMiddleware(typeof(MartenUserMiddleware));
     o.UseFluentValidation();
 
-    o.UseRabbitMqUsingNamedConnection("rabbitmq")
-        .AutoProvision();
+    // Only configure RabbitMQ and agents in non-test environments
+    if (!builder.Environment.IsEnvironment("Test"))
+    {
+        o.UseRabbitMqUsingNamedConnection("rabbitmq")
+            .AutoProvision();
 
-    o.PublishMessage<ProcessImageCommand>()
-        .ToRabbitQueue("image-processing");
+        o.PublishMessage<ProcessImageCommand>()
+            .ToRabbitQueue("image-processing");
+    }
+    else
+    {
+        // Disable external transports for tests only
+        o.Services.DisableAllExternalWolverineTransports();
+    }
 
     o.Services.CritterStackDefaults(c =>
     {
-        c.Production.GeneratedCodeMode = TypeLoadMode.Static;
-        c.Production.ResourceAutoCreate = AutoCreate.None;
+        if (builder.Environment.IsEnvironment("Test"))
+        {
+            c.Production.GeneratedCodeMode = TypeLoadMode.Auto;
+            c.Production.ResourceAutoCreate = AutoCreate.CreateOrUpdate; // Allow schema creation in tests
+        }
+        else
+        {
+            c.Production.GeneratedCodeMode = TypeLoadMode.Static;
+            c.Production.ResourceAutoCreate = AutoCreate.None;
+        }
     });
 });
 
@@ -84,6 +110,60 @@ if (CodeGeneration.IsRunningGeneration())
         .AddMarten("Server=.;Database=Foo")
         .AddAsyncDaemon(DaemonMode.Disabled)
         .UseLightweightSessions();
+}
+else if (builder.Environment.IsEnvironment("Test"))
+{
+    // Test environment configuration
+    builder.Services.AddMarten(o =>
+        {
+            o.Projections.Add<ImagePostProjection>(ProjectionLifecycle.Inline);
+            o.Projections.Add<CollectionProjection>(ProjectionLifecycle.Inline);
+            o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Inline); // Inline for tests
+            o.Projections.Add<UserProjection>(ProjectionLifecycle.Inline);
+
+            o.Events.MetadataConfig.UserNameEnabled = true;
+            o.Policies.ForAllDocuments(x => { x.Metadata.CreatedAt.Enabled = true; });
+
+            o.Schema.For<TagCount>().Identity(x => x.Id);
+
+            // Configure TagMigration document with index on source tag for fast lookups
+            o.Schema.For<TagMigration>()
+                .Index(x => x.SourceTag.Type)
+                .Index(x => x.SourceTag.Value)
+                .Metadata(m =>
+                {
+                    m.CreatedAt.MapTo(x => x.CreatedAt);
+                    m.LastModified.MapTo(x => x.LastModified);
+                    m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+                });
+
+            // Configure User document with index on DiscordId for fast lookups
+            o.Schema.For<User>()
+                .Index(x => x.DiscordId)
+                .Metadata(m =>
+                {
+                    m.CreatedAt.MapTo(x => x.CreatedAt);
+                    m.LastModified.MapTo(x => x.LastModified);
+                    m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+                });
+
+            o.Schema.For<ImagePostReadModel>().Metadata(m =>
+            {
+                m.CreatedAt.MapTo(x => x.CreatedAt);
+                m.LastModified.MapTo(x => x.LastModified);
+                m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+            });
+
+            o.Schema.For<CollectionReadModel>().Metadata(m =>
+            {
+                m.CreatedAt.MapTo(x => x.CreatedAt);
+                m.LastModified.MapTo(x => x.LastModified);
+                m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+            });
+        })
+        .UseNpgsqlDataSource()
+        .IntegrateWithWolverine()
+        .AddAsyncDaemon(DaemonMode.Disabled); // Disabled for tests
 }
 else
 {
@@ -170,7 +250,12 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
-app.MapDefaultEndpoints();
+
+// Map default endpoints only when not in test environment
+if (!app.Environment.IsEnvironment("Test"))
+{
+    app.MapDefaultEndpoints();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -192,3 +277,6 @@ api.MapAuthEndpoints();
 
 
 await app.RunJasperFxCommands(args);
+
+// Make Program class accessible to integration tests
+public partial class Program { }
