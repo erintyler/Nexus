@@ -71,8 +71,7 @@ builder.UseWolverine(o =>
     }
     else
     {
-        // Disable message persistence and external transports for tests
-        o.Services.DisableAllWolverineMessagePersistence();
+        // Disable external transports for tests only
         o.Services.DisableAllExternalWolverineTransports();
     }
 
@@ -81,12 +80,13 @@ builder.UseWolverine(o =>
         if (builder.Environment.IsEnvironment("Test"))
         {
             c.Production.GeneratedCodeMode = TypeLoadMode.Auto;
+            c.Production.ResourceAutoCreate = AutoCreate.CreateOrUpdate; // Allow schema creation in tests
         }
         else
         {
             c.Production.GeneratedCodeMode = TypeLoadMode.Static;
+            c.Production.ResourceAutoCreate = AutoCreate.None;
         }
-        c.Production.ResourceAutoCreate = AutoCreate.None;
     });
 });
 
@@ -110,6 +110,60 @@ if (CodeGeneration.IsRunningGeneration())
         .AddMarten("Server=.;Database=Foo")
         .AddAsyncDaemon(DaemonMode.Disabled)
         .UseLightweightSessions();
+}
+else if (builder.Environment.IsEnvironment("Test"))
+{
+    // Test environment configuration
+    builder.Services.AddMarten(o =>
+        {
+            o.Projections.Add<ImagePostProjection>(ProjectionLifecycle.Inline);
+            o.Projections.Add<CollectionProjection>(ProjectionLifecycle.Inline);
+            o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Inline); // Inline for tests
+            o.Projections.Add<UserProjection>(ProjectionLifecycle.Inline);
+
+            o.Events.MetadataConfig.UserNameEnabled = true;
+            o.Policies.ForAllDocuments(x => { x.Metadata.CreatedAt.Enabled = true; });
+
+            o.Schema.For<TagCount>().Identity(x => x.Id);
+
+            // Configure TagMigration document with index on source tag for fast lookups
+            o.Schema.For<TagMigration>()
+                .Index(x => x.SourceTag.Type)
+                .Index(x => x.SourceTag.Value)
+                .Metadata(m =>
+                {
+                    m.CreatedAt.MapTo(x => x.CreatedAt);
+                    m.LastModified.MapTo(x => x.LastModified);
+                    m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+                });
+
+            // Configure User document with index on DiscordId for fast lookups
+            o.Schema.For<User>()
+                .Index(x => x.DiscordId)
+                .Metadata(m =>
+                {
+                    m.CreatedAt.MapTo(x => x.CreatedAt);
+                    m.LastModified.MapTo(x => x.LastModified);
+                    m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+                });
+
+            o.Schema.For<ImagePostReadModel>().Metadata(m =>
+            {
+                m.CreatedAt.MapTo(x => x.CreatedAt);
+                m.LastModified.MapTo(x => x.LastModified);
+                m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+            });
+
+            o.Schema.For<CollectionReadModel>().Metadata(m =>
+            {
+                m.CreatedAt.MapTo(x => x.CreatedAt);
+                m.LastModified.MapTo(x => x.LastModified);
+                m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+            });
+        })
+        .UseNpgsqlDataSource()
+        .IntegrateWithWolverine()
+        .AddAsyncDaemon(DaemonMode.Disabled); // Disabled for tests
 }
 else
 {

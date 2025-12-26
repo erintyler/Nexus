@@ -47,6 +47,11 @@ public sealed class AlbaWebAppFixture : IAsyncLifetime
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
         Environment.SetEnvironmentVariable("ConnectionStrings__postgres", _postgresFixture.ConnectionString);
         Environment.SetEnvironmentVariable("ConnectionStrings__rabbitmq", _rabbitMqContainer.GetConnectionString());
+        
+        // Set fake AWS credentials for tests to prevent AWS SDK from trying to resolve real credentials
+        Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "test");
+        Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "test");
+        Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
 
         // Build Alba host from Program.cs
         _host = await AlbaHost.For<Program>();

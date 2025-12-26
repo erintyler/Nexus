@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
+[Collection("AlbaWebApp")]
 public class ImageEndpointsTests : IClassFixture<AlbaWebAppFixture>
 {
     private readonly AlbaWebAppFixture _fixture;

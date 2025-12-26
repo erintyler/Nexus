@@ -9,6 +9,7 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
+[Collection("AlbaWebApp")]
 public class TagEndpointsTests : IClassFixture<AlbaWebAppFixture>
 {
     private readonly AlbaWebAppFixture _fixture;
