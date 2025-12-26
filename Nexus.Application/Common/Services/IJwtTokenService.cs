@@ -5,6 +5,6 @@ namespace Nexus.Application.Common.Services;
 
 public interface IJwtTokenService
 {
-    JwtTokenResult GenerateToken(DiscordUser user);
+    JwtTokenDto GenerateToken(DiscordUser user);
 }
 

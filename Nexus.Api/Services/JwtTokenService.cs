@@ -15,7 +15,7 @@ public class JwtTokenService(IOptions<JwtSettings> jwtSettings) : IJwtTokenServi
 {
     private readonly JwtSettings _settings = jwtSettings.Value;
 
-    public JwtTokenResult GenerateToken(DiscordUser user)
+    public JwtTokenDto GenerateToken(DiscordUser user)
     {
         var claims = new List<Claim>
         {
@@ -46,7 +46,7 @@ public class JwtTokenService(IOptions<JwtSettings> jwtSettings) : IJwtTokenServi
             c => c.Value
         );
 
-        return new JwtTokenResult(jwtToken, claimsDictionary);
+        return new JwtTokenDto(jwtToken, claimsDictionary);
     }
 }
 

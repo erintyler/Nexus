@@ -47,7 +47,7 @@ public class ExchangeTokenCommandHandlerTests
             ["discord_username"] = discordUser.Username
         };
 
-        var jwtTokenResult = new JwtTokenResult(jwtToken, claims);
+        var jwtTokenResult = new JwtTokenDto(jwtToken, claims);
 
         _mockDiscordApiService
             .Setup(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()))
@@ -140,7 +140,7 @@ public class ExchangeTokenCommandHandlerTests
             ["discord_avatar"] = discordUser.Avatar
         };
 
-        var jwtTokenResult = new JwtTokenResult(jwtToken, claims);
+        var jwtTokenResult = new JwtTokenDto(jwtToken, claims);
 
         _mockDiscordApiService
             .Setup(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()))
@@ -184,7 +184,7 @@ public class ExchangeTokenCommandHandlerTests
             ["discord_username"] = discordUser.Username
         };
 
-        var jwtTokenResult = new JwtTokenResult(jwtToken, claims);
+        var jwtTokenResult = new JwtTokenDto(jwtToken, claims);
 
         _mockDiscordApiService
             .Setup(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()))

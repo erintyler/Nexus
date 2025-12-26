@@ -1,6 +1,6 @@
 namespace Nexus.Application.Common.Models;
 
-public record JwtTokenResult(
+public record JwtTokenDto(
     string Token,
     Dictionary<string, string> Claims);
 
