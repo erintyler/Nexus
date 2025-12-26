@@ -32,7 +32,14 @@ public class ExchangeTokenCommandHandler(
         if (user == null)
         {
             // Create new user
-            userId = await userRepository.CreateAsync(discordUser.Id, discordUser.Username, ct);
+            var createUserResult = await userRepository.CreateAsync(discordUser.Id, discordUser.Username, ct);
+            
+            if (createUserResult.IsFailure)
+            {
+                return Result.Failure<ExchangeTokenResponse>(createUserResult.Errors);
+            }
+            
+            userId = createUserResult.Value;
             logger.LogInformation("Created new user {UserId} for Discord user {DiscordId}", userId, discordUser.Id);
         }
         else

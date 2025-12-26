@@ -6,6 +6,7 @@ using Nexus.Application.Common.Contracts;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Services;
 using Nexus.Application.Features.Auth.ExchangeToken;
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Errors;
 using Nexus.UnitTests.Utilities.Extensions;
@@ -119,7 +120,7 @@ public class ExchangeTokenCommandHandlerTests
 
         _mockUserRepository
             .Setup(s => s.CreateAsync(discordUser.Id, discordUser.Username, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(newUserId);
+            .ReturnsAsync(Result.Success(newUserId));
 
         _mockJwtTokenService
             .Setup(s => s.GenerateToken(newUserId))
@@ -219,7 +220,7 @@ public class ExchangeTokenCommandHandlerTests
 
         _mockUserRepository
             .Setup(s => s.CreateAsync(discordUser.Id, discordUser.Username, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(newUserId);
+            .ReturnsAsync(Result.Success(newUserId));
 
         _mockJwtTokenService
             .Setup(s => s.GenerateToken(newUserId))
@@ -237,5 +238,42 @@ public class ExchangeTokenCommandHandlerTests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
+    }
+
+    [Fact]
+    public async Task HandleAsync_ShouldReturnFailure_WhenUserCreationFails()
+    {
+        // Arrange
+        var command = new ExchangeTokenCommand(_fixture.Create<string>());
+        var discordUser = new DiscordUser
+        {
+            Id = _fixture.Create<string>(),
+            Username = _fixture.Create<string>(),
+            Email = _fixture.Create<string>()
+        };
+
+        _mockDiscordApiService
+            .Setup(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(discordUser);
+
+        _mockUserRepository
+            .Setup(s => s.GetByDiscordIdAsync(discordUser.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?)null);
+
+        _mockUserRepository
+            .Setup(s => s.CreateAsync(discordUser.Id, discordUser.Username, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Failure<Guid>(UserErrors.DiscordIdEmpty));
+
+        // Act
+        var result = await _handler.HandleAsync(command, TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(result.Errors, e => e.Code == UserErrors.DiscordIdEmpty.Code);
+
+        _mockDiscordApiService.Verify(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()), Times.Once);
+        _mockUserRepository.Verify(s => s.GetByDiscordIdAsync(discordUser.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _mockUserRepository.Verify(s => s.CreateAsync(discordUser.Id, discordUser.Username, It.IsAny<CancellationToken>()), Times.Once);
+        _mockJwtTokenService.Verify(s => s.GenerateToken(It.IsAny<Guid>()), Times.Never);
     }
 }

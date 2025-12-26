@@ -1,3 +1,4 @@
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 
 namespace Nexus.Application.Common.Abstractions;
@@ -21,5 +22,5 @@ public interface IUserRepository
     /// <summary>
     /// Create a new user from events.
     /// </summary>
-    Task<Guid> CreateAsync(string discordId, string discordUsername, CancellationToken ct);
+    Task<Result<Guid>> CreateAsync(string discordId, string discordUsername, CancellationToken ct);
 }
