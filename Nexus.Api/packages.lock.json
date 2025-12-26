@@ -34,9 +34,9 @@
       },
       "Scalar.AspNetCore": {
         "type": "Direct",
-        "requested": "[2.11.9, )",
-        "resolved": "2.11.9",
-        "contentHash": "Sqb8lhDTXk5eq3qxUFFlKyhskQh1tF4VlglwB6CPROkMnJjgW0ElJKCBdR16X/zYrokpYOvqHLAZ8jKETQKrpQ=="
+        "requested": "[2.11.10, )",
+        "resolved": "2.11.10",
+        "contentHash": "tkiZTK3pxiniTl9sVz5WY2bn8Y+vaFu9yo2Qrs4guMXoBB3wTbKwXIwFvcZnpantGeYxSk9/+UZ5BQ6eFG69Dw=="
       },
       "Serilog.AspNetCore": {
         "type": "Direct",
@@ -106,8 +106,8 @@
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.15.2",
-        "contentHash": "eoRF05aEQbKJhUatPRFuYIjNB+QI/xtQVU76tR5mEZxcNMwU0/8bvIZUAeADewJQ+AH27OQIbvGoYn144H4DzQ==",
+        "resolved": "4.0.16",
+        "contentHash": "CsaZOVNBza63UgX8DD4cA1gPrzEBcnuCk+a9AnKTAsevtU4YCrt0y19G34lidh/xRKLeTpNh0c7VgH6TR9cUdg==",
         "dependencies": {
           "AWSSDK.Core": "[4.0.3.6, 5.0.0)"
         }
@@ -845,7 +845,7 @@
         "type": "Project",
         "dependencies": {
           "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.17, )",
-          "AWSSDK.S3": "[4.0.15.2, )",
+          "AWSSDK.S3": "[4.0.16, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Nexus.Application": "[1.0.0, )"
