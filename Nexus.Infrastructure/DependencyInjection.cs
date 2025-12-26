@@ -25,6 +25,14 @@ public static class DependencyInjection
         // Register repositories
         services.AddScoped<ITagMigrationRepository, TagMigrationRepository>();
 
+        // Register auth services
+        services.AddHttpClient("Discord", client =>
+        {
+            client.BaseAddress = new Uri("https://discord.com/api");
+        });
+
+        services.AddScoped<IDiscordApiService, DiscordApiService>();
+
         return services;
     }
 }

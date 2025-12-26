@@ -8,5 +8,8 @@ public enum ErrorType
     Conflict,
     BusinessRule,
     Forbidden,
+    Unauthorized,
+    ExternalService,
     Failure
 }
+
