@@ -51,10 +51,9 @@ public sealed class AlbaWebAppFixture : IAsyncLifetime
         // Build Alba host from Program.cs
         _host = await AlbaHost.For<Program>();
 
-        // Initialize database schema for Marten with extended timeout
+        // Initialize database schema for Marten
         var store = _host.Services.GetRequiredService<IDocumentStore>();
-        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-        await store.Storage.ApplyAllConfiguredChangesToDatabaseAsync(cts.Token);
+        await store.Storage.ApplyAllConfiguredChangesToDatabaseAsync();
     }
 
     public async ValueTask DisposeAsync()
