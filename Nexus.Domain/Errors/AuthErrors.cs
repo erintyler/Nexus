@@ -8,7 +8,7 @@ public static class AuthErrors
         "Auth.InvalidToken",
         ErrorType.Unauthorized,
         "The provided access token is invalid or expired.");
-    
+
     public static readonly Error DiscordApiError = new(
         "Auth.DiscordApiError",
         ErrorType.ExternalService,

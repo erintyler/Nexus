@@ -1,4 +1,5 @@
 namespace Nexus.Application.Common.Contracts;
+
 public record TokenExchangeResponse
 {
     public required string AccessToken { get; init; }

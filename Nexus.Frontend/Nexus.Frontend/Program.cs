@@ -42,16 +42,16 @@ builder.Services.AddAuthentication(options =>
         options.ClientId = builder.Configuration["Discord:ClientId"] ?? throw new InvalidOperationException("Discord:ClientId not configured");
         options.ClientSecret = builder.Configuration["Discord:ClientSecret"] ?? throw new InvalidOperationException("Discord:ClientSecret not configured");
         options.CallbackPath = new PathString("/signin-discord");
-        
+
         options.AuthorizationEndpoint = "https://discord.com/oauth2/authorize";
         options.TokenEndpoint = "https://discord.com/api/oauth2/token";
         options.UserInformationEndpoint = "https://discord.com/api/users/@me";
-        
+
         options.Scope.Add("identify");
         options.Scope.Add("email");
-        
+
         options.SaveTokens = true;
-        
+
         options.Events = new OAuthEvents
         {
             OnCreatingTicket = async context =>
@@ -59,21 +59,21 @@ builder.Services.AddAuthentication(options =>
                 // Exchange the Discord access token for our JWT
                 var tokenExchangeService = context.HttpContext.RequestServices.GetRequiredService<ITokenExchangeService>();
                 var discordAccessToken = context.AccessToken ?? throw new InvalidOperationException("No access token received");
-                
+
                 var exchangeResult = await tokenExchangeService.ExchangeTokenAsync(discordAccessToken);
-                
+
                 if (exchangeResult == null)
                 {
                     throw new InvalidOperationException("Failed to exchange token");
                 }
-                
+
                 // Store the JWT in the authentication properties
                 context.Properties.StoreTokens(new[]
                 {
                     new AuthenticationToken { Name = "access_token", Value = exchangeResult.AccessToken },
                     new AuthenticationToken { Name = "token_type", Value = exchangeResult.TokenType }
                 });
-                
+
                 // Add claims from the user info endpoint
                 var identity = (ClaimsIdentity)context.Principal!.Identity!;
                 identity.AddClaim(new Claim("jwt_token", exchangeResult.AccessToken));

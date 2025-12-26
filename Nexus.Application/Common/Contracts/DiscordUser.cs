@@ -1,4 +1,5 @@
 namespace Nexus.Application.Common.Contracts;
+
 public record DiscordUser
 {
     public required string Id { get; init; }

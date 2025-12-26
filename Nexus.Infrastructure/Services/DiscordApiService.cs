@@ -18,7 +18,7 @@ public class DiscordApiService(
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await httpClient.GetAsync("users/@me", cancellationToken);
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 logger.LogWarning("Failed to validate Discord token: {StatusCode}", response.StatusCode);
