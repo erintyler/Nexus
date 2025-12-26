@@ -19,7 +19,7 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         readModel.CreatedBy = @event.UserId.ToString();
     }
 
-    public static async Task Apply(
+    public static async Task ApplyAsync(
         IDocumentOperations ops,
         CollectionReadModel readModel, 
         ImagePostAddedToCollectionDomainEvent @event)
@@ -45,7 +45,7 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         }
     }
 
-    public static async Task Apply(
+    public static async Task ApplyAsync(
         IDocumentOperations ops,
         CollectionReadModel readModel, 
         ImagePostRemovedFromCollectionDomainEvent @event)
@@ -53,10 +53,10 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         readModel.ImagePostIds.Remove(@event.ImagePostId);
 
         // Rebuild aggregated tags from remaining image posts
-        await RebuildAggregatedTags(ops, readModel);
+        await RebuildAggregatedTagsAsync(ops, readModel);
     }
 
-    private static async Task RebuildAggregatedTags(IDocumentOperations ops, CollectionReadModel readModel)
+    private static async Task RebuildAggregatedTagsAsync(IDocumentOperations ops, CollectionReadModel readModel)
     {
         readModel.AggregatedTags.Clear();
 
