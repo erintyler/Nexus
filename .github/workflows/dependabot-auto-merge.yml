@@ -1,0 +1,26 @@
+name: Dependabot Auto-Merge
+
+on:
+  pull_request_target:
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  dependabot:
+    name: Auto-merge Dependabot PRs
+    runs-on: ubuntu-slim
+    if: github.actor == 'dependabot[bot]'
+    
+    steps:
+      - name: Merge Dependabot PR
+        uses: fastify/github-action-merge-dependabot@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          api-token: ${{ secrets.GITHUB_TOKEN }}
+          target: minor
+          merge-method: squash
+          approve-only: false
+          use-github-auto-merge: true
+
