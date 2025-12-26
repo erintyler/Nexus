@@ -7,18 +7,17 @@ using Nexus.Application.Common.Services;
 namespace Nexus.Infrastructure.Services;
 
 public class DiscordApiService(
-    HttpClient httpClient,
+    IHttpClientFactory httpClientFactory,
     ILogger<DiscordApiService> logger) : IDiscordApiService
 {
-    private const string DiscordApiBaseUrl = "https://discord.com/api";
-    
     public async Task<DiscordUser?> ValidateTokenAsync(string accessToken, CancellationToken cancellationToken = default)
     {
         try
         {
+            var httpClient = httpClientFactory.CreateClient("Discord");
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            var response = await httpClient.GetAsync($"{DiscordApiBaseUrl}/users/@me", cancellationToken);
+            var response = await httpClient.GetAsync("users/@me", cancellationToken);
             
             if (!response.IsSuccessStatusCode)
             {
