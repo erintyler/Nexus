@@ -23,7 +23,7 @@ public class CreateCollectionCommandHandler
 
         // Start the event stream with the created event
         var stream = MartenOps.StartStream<Collection>(createEventResult.Value);
-        var response = new CreateCollectionResponse(stream.StreamId, request.Title, DateTime.UtcNow);
+        var response = new CreateCollectionResponse(stream.StreamId, request.Title, DateTimeOffset.UtcNow);
 
         return (response, stream);
     }

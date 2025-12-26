@@ -72,7 +72,7 @@ public class AddImagePostToCollectionCommandHandlerTests
         // Assert
         Assert.True(result.IsFailure);
         Assert.Empty(events);
-        Assert.Contains(ImagePostErrors.NotFound, result.Errors);
+        Assert.Contains("Collection.ImagePostId.Empty", result.Errors.Select(e => e.Code));
     }
 
     private Collection CreateCollection(Guid? id = null)

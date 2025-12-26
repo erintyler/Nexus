@@ -135,7 +135,7 @@ public class CollectionTests
 
         // Assert
         Assert.True(result.IsFailure);
-        Assert.Contains(ImagePostErrors.NotFound, result.Errors);
+        Assert.Contains("Collection.ImagePostId.Empty", result.Errors.Select(e => e.Code));
     }
 
     [Fact]

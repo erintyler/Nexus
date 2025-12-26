@@ -66,8 +66,8 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         // Aggregate all unique tags from the image posts
         var allTags = imagePosts
             .SelectMany(ip => ip.Tags)
-            .Distinct(new TagReadModelComparer())
             .Select(t => new TagReadModel(t.Value, t.Type))
+            .Distinct(new TagReadModelComparer())
             .ToList();
 
         readModel.AggregatedTags.AddRange(allTags);
