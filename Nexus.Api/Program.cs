@@ -34,14 +34,23 @@ using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
+// Add service defaults only when not in test environment
+if (!builder.Environment.IsEnvironment("Test"))
 {
-    o.ConfigureTracing(c =>
+    builder.AddServiceDefaults();
+    builder.AddNpgsqlDataSource("postgres", configureDataSourceBuilder: o =>
     {
-        c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark") && !f.CommandText.Contains("wolverine_control_queue"));
+        o.ConfigureTracing(c =>
+        {
+            c.ConfigureCommandFilter(f => !f.CommandText.Contains("HighWaterMark") && !f.CommandText.Contains("wolverine_control_queue"));
+        });
     });
-});
+}
+else
+{
+    // For tests, add NpgsqlDataSource with connection string from configuration
+    builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("postgres") ?? throw new InvalidOperationException("Postgres connection string not found"));
+}
 
 builder.UseWolverine(o =>
 {
@@ -51,15 +60,32 @@ builder.UseWolverine(o =>
     o.Policies.AddMiddleware(typeof(MartenUserMiddleware));
     o.UseFluentValidation();
 
-    o.UseRabbitMqUsingNamedConnection("rabbitmq")
-        .AutoProvision();
+    // Only configure RabbitMQ and agents in non-test environments
+    if (!builder.Environment.IsEnvironment("Test"))
+    {
+        o.UseRabbitMqUsingNamedConnection("rabbitmq")
+            .AutoProvision();
 
-    o.PublishMessage<ProcessImageCommand>()
-        .ToRabbitQueue("image-processing");
+        o.PublishMessage<ProcessImageCommand>()
+            .ToRabbitQueue("image-processing");
+    }
+    else
+    {
+        // Disable message persistence and external transports for tests
+        o.Services.DisableAllWolverineMessagePersistence();
+        o.Services.DisableAllExternalWolverineTransports();
+    }
 
     o.Services.CritterStackDefaults(c =>
     {
-        c.Production.GeneratedCodeMode = TypeLoadMode.Static;
+        if (builder.Environment.IsEnvironment("Test"))
+        {
+            c.Production.GeneratedCodeMode = TypeLoadMode.Auto;
+        }
+        else
+        {
+            c.Production.GeneratedCodeMode = TypeLoadMode.Static;
+        }
         c.Production.ResourceAutoCreate = AutoCreate.None;
     });
 });
@@ -170,7 +196,12 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
-app.MapDefaultEndpoints();
+
+// Map default endpoints only when not in test environment
+if (!app.Environment.IsEnvironment("Test"))
+{
+    app.MapDefaultEndpoints();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -192,3 +223,6 @@ api.MapAuthEndpoints();
 
 
 await app.RunJasperFxCommands(args);
+
+// Make Program class accessible to integration tests
+public partial class Program { }
