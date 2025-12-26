@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Api.Extensions;
 using Nexus.Application.Features.Collections.AddImagePostToCollection;
+using Nexus.Application.Features.Collections.Common.Models;
 using Nexus.Application.Features.Collections.CreateCollection;
 using Nexus.Application.Features.Collections.GetCollectionById;
 using Nexus.Application.Features.Collections.RemoveImagePostFromCollection;
@@ -50,13 +51,13 @@ public static class CollectionEndpoints
 
         public void MapGetCollectionByIdEndpoint()
         {
-            app.MapGet("/{id:guid}", async Task<Results<Ok<Application.Features.Collections.Common.Models.CollectionReadModel>, NotFound, ProblemHttpResult>> (
+            app.MapGet("/{id:guid}", async Task<Results<Ok<CollectionReadModel>, NotFound, ProblemHttpResult>> (
                 [FromRoute] Guid id,
                 IMessageBus bus,
                 CancellationToken cancellationToken) =>
             {
                 var query = new GetCollectionByIdQuery(id);
-                var result = await bus.InvokeAsync<Result<Application.Features.Collections.Common.Models.CollectionReadModel>>(query, cancellationToken);
+                var result = await bus.InvokeAsync<Result<CollectionReadModel>>(query, cancellationToken);
 
                 if (result.IsSuccess)
                 {
@@ -67,7 +68,7 @@ public static class CollectionEndpoints
             }).WithName("GetCollectionById")
             .WithSummary("Get collection by ID")
             .WithDescription("Retrieves a collection by its unique identifier, including aggregated tags from all child image posts.")
-            .Produces<Application.Features.Collections.Common.Models.CollectionReadModel>()
+            .Produces<CollectionReadModel>()
             .Produces(StatusCodes.Status404NotFound)
             .ProducesValidationProblem();
         }
