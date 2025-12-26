@@ -37,6 +37,9 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2a28468f_002Dc9e2_002D47ca_002D92a9_002D52b668b8964d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/saxolotl/RiderProjects/Nexus" Presentation="&amp;lt;Tests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ab45e8d2_002Dc478_002D48df_002Dae8c_002Dbeb2fff85a3b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Tests&amp;gt;\&amp;lt;Nexus.Migrations.IntegrationTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/home/saxolotl/RiderProjects/Nexus/Nexus.Migrations.IntegrationTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;Nexus.Migrations.IntegrationTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bc7092d1_002D2511_002D42c1_002D8011_002Dfad8d26ceff4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
