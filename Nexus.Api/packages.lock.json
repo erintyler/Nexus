@@ -16,9 +16,9 @@
       },
       "MicroElements.OpenApi.FluentValidation": {
         "type": "Direct",
-        "requested": "[7.0.1, )",
-        "resolved": "7.0.1",
-        "contentHash": "M8AC1jNbdqd3Rk1gHhyPkdlWj65OPd34f+ax9zeC8WI0leQnTSeV5iIKNXFgOIQMKN6KnOqsngRZFXQCcPAlXw==",
+        "requested": "[7.0.3, )",
+        "resolved": "7.0.3",
+        "contentHash": "a9vPU9E6nmZZQqabzuhe2u2iFZ/ZTOX3NgIeD2SSLOKRQH2CH6by4Wsrn9nQKtgsCXYQKubKclhO6PaaR3UEVg==",
         "dependencies": {
           "FluentValidation": "12.0.0"
         }
@@ -106,8 +106,8 @@
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.15.2",
-        "contentHash": "eoRF05aEQbKJhUatPRFuYIjNB+QI/xtQVU76tR5mEZxcNMwU0/8bvIZUAeADewJQ+AH27OQIbvGoYn144H4DzQ==",
+        "resolved": "4.0.16",
+        "contentHash": "CsaZOVNBza63UgX8DD4cA1gPrzEBcnuCk+a9AnKTAsevtU4YCrt0y19G34lidh/xRKLeTpNh0c7VgH6TR9cUdg==",
         "dependencies": {
           "AWSSDK.Core": "[4.0.3.6, 5.0.0)"
         }
@@ -845,7 +845,7 @@
         "type": "Project",
         "dependencies": {
           "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.17, )",
-          "AWSSDK.S3": "[4.0.15.2, )",
+          "AWSSDK.S3": "[4.0.16, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Nexus.Application": "[1.0.0, )"
