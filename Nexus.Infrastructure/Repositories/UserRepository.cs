@@ -1,7 +1,6 @@
 using Marten;
 using Nexus.Application.Common.Abstractions;
 using Nexus.Domain.Entities;
-using Nexus.Domain.Events.Users;
 
 namespace Nexus.Infrastructure.Repositories;
 
@@ -25,10 +24,16 @@ public class UserRepository(IDocumentSession session) : IUserRepository
 
     public async Task<Guid> CreateAsync(string discordId, string discordUsername, CancellationToken ct)
     {
-        var userId = Guid.NewGuid();
-        var createEvent = new UserCreatedDomainEvent(discordId, discordUsername);
+        // Use the factory method to validate and create the domain event
+        var createResult = User.Create(discordId, discordUsername);
         
-        session.Events.StartStream<User>(userId, createEvent);
+        if (createResult.IsFailure)
+        {
+            throw new InvalidOperationException($"Failed to create user: {string.Join(", ", createResult.Errors.Select(e => e.Description ?? e.Code))}");
+        }
+
+        var userId = Guid.NewGuid();
+        session.Events.StartStream<User>(userId, createResult.Value);
         await session.SaveChangesAsync(ct);
         
         return userId;
