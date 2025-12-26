@@ -34,22 +34,22 @@ public class ExchangeTokenCommandHandlerTests
     public async Task HandleAsync_ShouldReturnSuccess_WhenDiscordTokenIsValid_AndUserExists()
     {
         // Arrange
-        var command = new ExchangeTokenCommand("valid-discord-token");
+        var command = new ExchangeTokenCommand(_fixture.Create<string>());
         var discordUser = new DiscordUser
         {
-            Id = "123456789",
-            Username = "testuser",
-            Email = "test@example.com",
-            Discriminator = "0001",
-            Avatar = "avatar-hash"
+            Id = _fixture.Create<string>(),
+            Username = _fixture.Create<string>(),
+            Email = _fixture.Create<string>(),
+            Discriminator = _fixture.Create<string>(),
+            Avatar = _fixture.Create<string>()
         };
 
-        var userId = Guid.NewGuid();
+        var userId = _fixture.Create<Guid>();
         var existingUser = new User(userId);
         var userCreatedEvent = User.Create(discordUser.Id, discordUser.Username).Value;
         existingUser.Apply(userCreatedEvent);
 
-        var jwtToken = "jwt-token-string";
+        var jwtToken = _fixture.Create<string>();
         var claims = new Dictionary<string, string>
         {
             [System.Security.Claims.ClaimTypes.NameIdentifier] = userId.ToString()
@@ -90,18 +90,18 @@ public class ExchangeTokenCommandHandlerTests
     public async Task HandleAsync_ShouldCreateUser_WhenDiscordTokenIsValid_AndUserDoesNotExist()
     {
         // Arrange
-        var command = new ExchangeTokenCommand("valid-discord-token");
+        var command = new ExchangeTokenCommand(_fixture.Create<string>());
         var discordUser = new DiscordUser
         {
-            Id = "123456789",
-            Username = "testuser",
-            Email = "test@example.com",
-            Discriminator = "0001",
-            Avatar = "avatar-hash"
+            Id = _fixture.Create<string>(),
+            Username = _fixture.Create<string>(),
+            Email = _fixture.Create<string>(),
+            Discriminator = _fixture.Create<string>(),
+            Avatar = _fixture.Create<string>()
         };
 
-        var newUserId = Guid.NewGuid();
-        var jwtToken = "jwt-token-string";
+        var newUserId = _fixture.Create<Guid>();
+        var jwtToken = _fixture.Create<string>();
         var claims = new Dictionary<string, string>
         {
             [System.Security.Claims.ClaimTypes.NameIdentifier] = newUserId.ToString()
@@ -146,7 +146,7 @@ public class ExchangeTokenCommandHandlerTests
     public async Task HandleAsync_ShouldReturnInvalidTokenError_WhenDiscordTokenIsInvalid()
     {
         // Arrange
-        var command = new ExchangeTokenCommand("invalid-discord-token");
+        var command = new ExchangeTokenCommand(_fixture.Create<string>());
 
         _mockDiscordApiService
             .Setup(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()))
@@ -168,7 +168,7 @@ public class ExchangeTokenCommandHandlerTests
     public async Task HandleAsync_ShouldLogWarning_WhenDiscordTokenValidationFails()
     {
         // Arrange
-        var command = new ExchangeTokenCommand("invalid-discord-token");
+        var command = new ExchangeTokenCommand(_fixture.Create<string>());
 
         _mockDiscordApiService
             .Setup(s => s.ValidateTokenAsync(command.AccessToken, It.IsAny<CancellationToken>()))
@@ -192,16 +192,16 @@ public class ExchangeTokenCommandHandlerTests
     public async Task HandleAsync_ShouldLogInformation_WhenNewUserIsCreated()
     {
         // Arrange
-        var command = new ExchangeTokenCommand("valid-discord-token");
+        var command = new ExchangeTokenCommand(_fixture.Create<string>());
         var discordUser = new DiscordUser
         {
-            Id = "123456789",
-            Username = "newuser",
-            Email = "newuser@example.com"
+            Id = _fixture.Create<string>(),
+            Username = _fixture.Create<string>(),
+            Email = _fixture.Create<string>()
         };
 
-        var newUserId = Guid.NewGuid();
-        var jwtToken = "jwt-token-string";
+        var newUserId = _fixture.Create<Guid>();
+        var jwtToken = _fixture.Create<string>();
         var claims = new Dictionary<string, string>
         {
             [System.Security.Claims.ClaimTypes.NameIdentifier] = newUserId.ToString()
@@ -215,7 +215,7 @@ public class ExchangeTokenCommandHandlerTests
 
         _mockUserRepository
             .Setup(s => s.GetByDiscordIdAsync(discordUser.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(null);
+            .ReturnsAsync((User?)null);
 
         _mockUserRepository
             .Setup(s => s.CreateAsync(discordUser.Id, discordUser.Username, It.IsAny<CancellationToken>()))
