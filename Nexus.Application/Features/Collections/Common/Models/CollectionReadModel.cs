@@ -28,5 +28,5 @@ public class CollectionReadModel
     public string LastModifiedBy { get; set; }
 
     public List<Guid> ImagePostIds { get; set; }
-    public List<TagReadModel> AggregatedTags { get; set; }
+    public HashSet<TagReadModel> AggregatedTags { get; set; }
 }

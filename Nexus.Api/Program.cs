@@ -164,6 +164,7 @@ var api = app.MapGroup("/api");
 
 api.MapImageEndpoints();
 api.MapTagEndpoints();
+api.MapCollectionEndpoints();
 
 
 await app.RunJasperFxCommands(args);

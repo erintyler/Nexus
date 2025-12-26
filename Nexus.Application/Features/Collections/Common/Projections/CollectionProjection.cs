@@ -33,14 +33,7 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
             // Add tags from the image post that aren't already in the collection
             foreach (var tag in imagePost.Tags)
             {
-                var tagExists = readModel.AggregatedTags.Any(t =>
-                    t.Type == tag.Type &&
-                    t.Value == tag.Value);
-
-                if (!tagExists)
-                {
-                    readModel.AggregatedTags.Add(new TagReadModel(tag.Value, tag.Type));
-                }
+                readModel.AggregatedTags.Add(new TagReadModel(tag.Value, tag.Type));
             }
         }
     }
@@ -67,24 +60,11 @@ public class CollectionProjection : SingleStreamProjection<CollectionReadModel, 
         var allTags = imagePosts
             .SelectMany(ip => ip.Tags)
             .Select(t => new TagReadModel(t.Value, t.Type))
-            .Distinct(new TagReadModelComparer())
-            .ToList();
+            .ToHashSet();
 
-        readModel.AggregatedTags.AddRange(allTags);
-    }
-
-    private class TagReadModelComparer : IEqualityComparer<TagReadModel>
-    {
-        public bool Equals(TagReadModel? x, TagReadModel? y)
+        foreach (var tag in allTags)
         {
-            if (x == null && y == null) return true;
-            if (x == null || y == null) return false;
-            return x.Type == y.Type && x.Value == y.Value;
-        }
-
-        public int GetHashCode(TagReadModel obj)
-        {
-            return HashCode.Combine(obj.Type, obj.Value);
+            readModel.AggregatedTags.Add(tag);
         }
     }
 }
