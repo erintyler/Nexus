@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Nexus.Api.Configuration.Models;
-using Nexus.Application.Common.Contracts;
 using Nexus.Application.Common.Models;
 using Nexus.Application.Common.Services;
 
@@ -15,17 +14,11 @@ public class JwtTokenService(IOptions<JwtSettings> jwtSettings) : IJwtTokenServi
 {
     private readonly JwtSettings _settings = jwtSettings.Value;
 
-    public JwtTokenDto GenerateToken(DiscordUser user)
+    public JwtTokenDto GenerateToken(Guid userId)
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Email, user.Email ?? string.Empty),
-            new("discord_id", user.Id),
-            new("discord_username", user.Username),
-            new("discord_discriminator", user.Discriminator ?? "0"),
-            new("discord_avatar", user.Avatar ?? string.Empty)
+            new(ClaimTypes.NameIdentifier, userId.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));

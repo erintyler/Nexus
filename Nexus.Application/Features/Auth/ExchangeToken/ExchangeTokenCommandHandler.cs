@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Nexus.Application.Common.Abstractions;
 using Nexus.Application.Common.Services;
 using Nexus.Domain.Common;
 using Nexus.Domain.Errors;
@@ -8,6 +9,7 @@ namespace Nexus.Application.Features.Auth.ExchangeToken;
 public class ExchangeTokenCommandHandler(
     IDiscordApiService discordApiService,
     IJwtTokenService jwtTokenService,
+    IUserRepository userRepository,
     ILogger<ExchangeTokenCommandHandler> logger)
 {
     public async Task<Result<ExchangeTokenResponse>> HandleAsync(
@@ -23,8 +25,23 @@ public class ExchangeTokenCommandHandler(
             return AuthErrors.InvalidToken;
         }
 
-        // Generate JWT token with claims
-        var jwtResult = jwtTokenService.GenerateToken(discordUser);
+        // Get or create internal user
+        var user = await userRepository.GetByDiscordIdAsync(discordUser.Id, ct);
+        Guid userId;
+
+        if (user == null)
+        {
+            // Create new user
+            userId = await userRepository.CreateAsync(discordUser.Id, discordUser.Username, ct);
+            logger.LogInformation("Created new user {UserId} for Discord user {DiscordId}", userId, discordUser.Id);
+        }
+        else
+        {
+            userId = user.Id;
+        }
+
+        // Generate JWT token with internal user ID only
+        var jwtResult = jwtTokenService.GenerateToken(userId);
 
         var response = new ExchangeTokenResponse(
             AccessToken: jwtResult.Token,

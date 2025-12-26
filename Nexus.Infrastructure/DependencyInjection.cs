@@ -24,6 +24,7 @@ public static class DependencyInjection
 
         // Register repositories
         services.AddScoped<ITagMigrationRepository, TagMigrationRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         // Register auth services
         services.AddHttpClient("Discord", client =>
