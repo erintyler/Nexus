@@ -258,7 +258,7 @@ public class ExchangeTokenCommandHandlerTests
 
         _mockUserRepository
             .Setup(s => s.GetByDiscordIdAsync(discordUser.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(null);
+            .ReturnsAsync((User?)null);
 
         _mockUserRepository
             .Setup(s => s.CreateAsync(discordUser.Id, discordUser.Username, It.IsAny<CancellationToken>()))
