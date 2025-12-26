@@ -21,6 +21,7 @@ using Nexus.Application.Features.ImagePosts.Common.Projections;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
 using Nexus.Application.Features.ImageProcessing.ProcessImage;
 using Nexus.Application.Features.Tags.Common.Projections;
+using Nexus.Application.Features.Users.Common.Projections;
 using Nexus.Application.Helpers;
 using Nexus.Domain.Entities;
 using Nexus.Infrastructure;
@@ -91,6 +92,7 @@ else
             o.Projections.Add<ImagePostProjection>(ProjectionLifecycle.Inline);
             o.Projections.Add<CollectionProjection>(ProjectionLifecycle.Inline);
             o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
+            o.Projections.Add<UserProjection>(ProjectionLifecycle.Inline);
 
             o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
             o.OpenTelemetry.TrackEventCounters();
@@ -104,6 +106,16 @@ else
             o.Schema.For<TagMigration>()
                 .Index(x => x.SourceTag.Type)
                 .Index(x => x.SourceTag.Value)
+                .Metadata(m =>
+                {
+                    m.CreatedAt.MapTo(x => x.CreatedAt);
+                    m.LastModified.MapTo(x => x.LastModified);
+                    m.LastModifiedBy.MapTo(x => x.LastModifiedBy);
+                });
+
+            // Configure User document with index on DiscordId for fast lookups
+            o.Schema.For<User>()
+                .Index(x => x.DiscordId)
                 .Metadata(m =>
                 {
                     m.CreatedAt.MapTo(x => x.CreatedAt);
