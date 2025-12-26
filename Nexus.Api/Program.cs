@@ -13,6 +13,7 @@ using Nexus.Api.Middleware.Wolverine;
 using Nexus.Api.Services;
 using Nexus.Application.Common.Services;
 using Nexus.Application.Configuration.Models;
+using Nexus.Application.Features.Collections.Common.Projections;
 using Nexus.Application.Features.ImagePosts.Common.Models;
 using Nexus.Application.Features.ImagePosts.Common.Projections;
 using Nexus.Application.Features.ImagePosts.CreateImagePost;
@@ -86,6 +87,7 @@ else
     builder.Services.AddMarten(o =>
         {
             o.Projections.Add<ImagePostProjection>(ProjectionLifecycle.Inline);
+            o.Projections.Add<CollectionProjection>(ProjectionLifecycle.Inline);
             o.Projections.Add<TagCountProjection>(ProjectionLifecycle.Async);
 
             o.OpenTelemetry.TrackConnections = TrackLevel.Normal;
