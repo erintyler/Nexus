@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Nexus.Frontend.Components;
 using Nexus.Frontend.Services;
+using Yarp.ReverseProxy;
 
 var builder = WebApplication.CreateBuilder(args);
 
