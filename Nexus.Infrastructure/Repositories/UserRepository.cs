@@ -26,17 +26,17 @@ public class UserRepository(IDocumentSession session) : IUserRepository
     {
         // Use the factory method to validate and create the domain event
         var createResult = User.Create(discordId, discordUsername);
-        
+
         if (createResult.IsFailure)
         {
-            var errorMessages = string.Join(", ", createResult.Errors.Select(e => e.Description ?? $"Error: {e.Code}"));
+            var errorMessages = string.Join(", ", createResult.Errors.Select(e => e.Description ?? string.Empty));
             throw new InvalidOperationException($"Failed to create user: {errorMessages}");
         }
 
         var userId = Guid.NewGuid();
         session.Events.StartStream<User>(userId, createResult.Value);
         await session.SaveChangesAsync(ct);
-        
+
         return userId;
     }
 }

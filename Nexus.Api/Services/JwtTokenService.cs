@@ -16,6 +16,10 @@ public class JwtTokenService(IOptions<JwtSettings> jwtSettings) : IJwtTokenServi
 
     public JwtTokenDto GenerateToken(Guid userId)
     {
+        // Note: This JWT now only includes the internal user ID as the NameIdentifier claim.
+        // Downstream services are responsible for transforming this user ID into any additional
+        // claims they require (for example, Discord-specific claims). This is a breaking change
+        // from the previous implementation, which emitted multiple Discord claims directly.
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userId.ToString())
