@@ -29,7 +29,8 @@ public class UserRepository(IDocumentSession session) : IUserRepository
         
         if (createResult.IsFailure)
         {
-            throw new InvalidOperationException($"Failed to create user: {string.Join(", ", createResult.Errors.Select(e => e.Description ?? e.Code))}");
+            var errorMessages = string.Join(", ", createResult.Errors.Select(e => e.Description ?? $"Error: {e.Code}"));
+            throw new InvalidOperationException($"Failed to create user: {errorMessages}");
         }
 
         var userId = Guid.NewGuid();
