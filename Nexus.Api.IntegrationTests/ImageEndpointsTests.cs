@@ -14,8 +14,9 @@ namespace Nexus.Api.IntegrationTests;
 /// <summary>
 /// Integration tests for Image API endpoints.
 /// Tests the full HTTP request/response cycle including Wolverine and Marten.
+/// Each test gets its own isolated Alba host instance.
 /// </summary>
-public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAsyncLifetime
+public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
 {
     private readonly AlbaWebApplicationFixture _fixture;
     private readonly Fixture _autoFixture = new();
@@ -25,20 +26,12 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         _fixture = fixture;
     }
 
-    public async ValueTask InitializeAsync()
-    {
-        // Clean up database before each test
-        var documentStore = _fixture.Host.Services.GetRequiredService<IDocumentStore>();
-        await documentStore.Advanced.Clean.DeleteAllDocumentsAsync();
-        await documentStore.Advanced.Clean.DeleteAllEventDataAsync();
-    }
-
-    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
-
     [Fact]
     public async Task CreateImage_WithValidRequest_ReturnsCreated()
     {
         // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var command = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -50,7 +43,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         );
 
         // Act
-        var result = await _fixture.Host.Scenario(scenario =>
+        var result = await host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -68,6 +61,8 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     public async Task CreateImage_WithInvalidTitle_ReturnsBadRequest()
     {
         // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var command = new CreateImagePostCommand(
             Title: "",
             Tags:
@@ -78,7 +73,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         );
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.BadRequest);
@@ -88,7 +83,9 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     [Fact]
     public async Task GetImageById_WhenImageExists_ReturnsOk()
     {
-        // Arrange - Create an image first
+        // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -98,7 +95,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
             ContentType: "image/jpeg"
         );
 
-        var createResult = await _fixture.Host.Scenario(scenario =>
+        var createResult = await host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -107,7 +104,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         var createdImage = createResult.ReadAsJson<CreateImagePostResponse>();
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{createdImage.Id}");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -118,10 +115,11 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     public async Task GetImageById_WhenImageDoesNotExist_ReturnsNotFound()
     {
         // Arrange
+        await using var host = await _fixture.CreateHost();
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{nonExistentId}");
             scenario.StatusCodeShouldBe(HttpStatusCode.NotFound);
@@ -131,7 +129,9 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     [Fact]
     public async Task AddTagsToImage_WithValidTags_ReturnsOk()
     {
-        // Arrange - Create an image first
+        // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -141,7 +141,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
             ContentType: "image/jpeg"
         );
 
-        var createResult = await _fixture.Host.Scenario(scenario =>
+        var createResult = await host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -156,7 +156,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         };
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Post.Json(newTags).ToUrl($"/api/images/{createdImage.Id}/tags");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -166,7 +166,9 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     [Fact]
     public async Task RemoveTagsFromImage_WithValidTags_ReturnsOk()
     {
-        // Arrange - Create an image with multiple tags
+        // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -177,7 +179,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
             ContentType: "image/jpeg"
         );
 
-        var createResult = await _fixture.Host.Scenario(scenario =>
+        var createResult = await host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -191,7 +193,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         };
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Delete.Json(tagsToRemove).ToUrl($"/api/images/{createdImage.Id}/tags");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -201,7 +203,9 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     [Fact]
     public async Task MarkImageUploadComplete_WhenImageExists_ReturnsOk()
     {
-        // Arrange - Create an image first
+        // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -211,7 +215,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
             ContentType: "image/jpeg"
         );
 
-        var createResult = await _fixture.Host.Scenario(scenario =>
+        var createResult = await host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -220,7 +224,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
         var createdImage = createResult.ReadAsJson<CreateImagePostResponse>();
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Put.Url($"/api/images/{createdImage.Id}/upload-complete");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -230,7 +234,9 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
     [Fact]
     public async Task GetImagesByTags_WithValidTags_ReturnsOk()
     {
-        // Arrange - Create an image first
+        // Arrange
+        await using var host = await _fixture.CreateHost();
+
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -240,14 +246,14 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>, IAs
             ContentType: "image/jpeg"
         );
 
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
         });
 
         // Act & Assert
-        await _fixture.Host.Scenario(scenario =>
+        await host.Scenario(scenario =>
         {
             scenario.Get.Url("/api/images/search?tags=Artist:searchable-artist");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
