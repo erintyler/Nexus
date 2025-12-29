@@ -169,7 +169,13 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
-app.UseExceptionHandler();
+
+// Only use exception handler in production to get clear error messages in development/testing
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler();
+}
+
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.

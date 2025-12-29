@@ -7,7 +7,8 @@ public static class TestDataGenerator
 {
     public static TagDto CreateTagDto(TagType type = TagType.General, string? value = null)
     {
-        return new TagDto(type, value ?? $"test-{type.ToString().ToLower()}-{Guid.NewGuid():N}");
+        // Generate short tag values (max 20 chars to be under 30 char limit)
+        return new TagDto(type, value ?? $"tag-{Guid.NewGuid():N}"[..20]);
     }
 
     public static List<TagDto> CreateTags(int count = 3)
