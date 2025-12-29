@@ -31,7 +31,7 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
                 new(TagType.General, "common_tag")
             },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand1);
+        await _client.PostAsJsonAsync("/api/images", createCommand1, TestContext.Current.CancellationToken);
 
         var createCommand2 = new CreateImagePostCommand(
             Title: "Image with unique tag 2",
@@ -41,14 +41,14 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
                 new(TagType.General, "common_tag")
             },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand2);
+        await _client.PostAsJsonAsync("/api/images", createCommand2, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync("/api/tags/search");
+        var response = await _client.GetAsync("/api/tags/search", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagCountDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagCountDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotEmpty(result.Items);
     }
@@ -64,14 +64,14 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
                 new(TagType.Artist, "filterable_artist_xyz")
             },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand);
+        await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync("/api/tags/search?searchTerm=filterable_artist");
+        var response = await _client.GetAsync("/api/tags/search?searchTerm=filterable_artist", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagCountDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagCountDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         // Note: Results may include tags from other tests, so we just verify the response structure
         Assert.NotNull(result.Items);
@@ -90,15 +90,15 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
                     new(TagType.General, $"pagination_tag_{i}")
                 },
                 ContentType: "image/jpeg");
-            await _client.PostAsJsonAsync("/api/images", createCommand);
+            await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
         }
 
         // Act
-        var response = await _client.GetAsync("/api/tags/search?pageNumber=1&pageSize=3");
+        var response = await _client.GetAsync("/api/tags/search?pageNumber=1&pageSize=3", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagCountDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagCountDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
         Assert.True(result.PageSize <= 3 || result.Items.Count <= 3);
@@ -115,22 +115,22 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
             Title: "Image for migration 1",
             Tags: new List<TagDto> { sourceTag },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand1);
+        await _client.PostAsJsonAsync("/api/images", createCommand1, TestContext.Current.CancellationToken);
 
         var createCommand2 = new CreateImagePostCommand(
             Title: "Image for migration 2",
             Tags: new List<TagDto> { sourceTag },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand2);
+        await _client.PostAsJsonAsync("/api/images", createCommand2, TestContext.Current.CancellationToken);
 
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand);
+        var response = await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<MigrateTagResponse>();
+        var result = await response.Content.ReadFromJsonAsync<MigrateTagResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.PostsMigrated >= 2);
     }
@@ -143,7 +143,7 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
         var migrateCommand = new MigrateTagCommand(sameTag, sameTag);
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand);
+        var response = await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -160,17 +160,17 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
             Title: "Image for migration history",
             Tags: new List<TagDto> { sourceTag },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand);
+        await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
 
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-        await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand);
+        await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync("/api/tags/migrations");
+        var response = await _client.GetAsync("/api/tags/migrations", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotEmpty(result.Items);
     }
@@ -186,17 +186,17 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
             Title: "Image for filtered migration",
             Tags: new List<TagDto> { sourceTag },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand);
+        await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
 
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-        await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand);
+        await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync($"/api/tags/migrations?sourceTag={sourceTag.Type}:{sourceTag.Value}");
+        var response = await _client.GetAsync($"/api/tags/migrations?sourceTag={sourceTag.Type}:{sourceTag.Value}", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
     }
@@ -212,17 +212,17 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
             Title: "Image for target filter migration",
             Tags: new List<TagDto> { sourceTag },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand);
+        await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
 
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-        await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand);
+        await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync($"/api/tags/migrations?targetTag={targetTag.Type}:{targetTag.Value}");
+        var response = await _client.GetAsync($"/api/tags/migrations?targetTag={targetTag.Type}:{targetTag.Value}", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
     }
@@ -240,18 +240,18 @@ public class TagEndpointsTests : IClassFixture<ApiFixture>
                 Title: $"Image for pagination migration {i}",
                 Tags: new List<TagDto> { sourceTag },
                 ContentType: "image/jpeg");
-            await _client.PostAsJsonAsync("/api/images", createCommand);
+            await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
 
             var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-            await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand);
+            await _client.PostAsJsonAsync("/api/tags/migrate", migrateCommand, TestContext.Current.CancellationToken);
         }
 
         // Act
-        var response = await _client.GetAsync("/api/tags/migrations?pageNumber=1&pageSize=2");
+        var response = await _client.GetAsync("/api/tags/migrations?pageNumber=1&pageSize=2", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TagMigrationDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
         Assert.True(result.PageSize <= 2 || result.Items.Count <= 2);

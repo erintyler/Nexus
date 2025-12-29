@@ -21,7 +21,7 @@ public class AuthEndpointsTests : IClassFixture<ApiFixture>
         var command = new ExchangeTokenCommand("invalid_discord_token");
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/auth/exchange", command);
+        var response = await _client.PostAsJsonAsync("/api/auth/exchange", command, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -34,7 +34,7 @@ public class AuthEndpointsTests : IClassFixture<ApiFixture>
         var command = new ExchangeTokenCommand("");
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/auth/exchange", command);
+        var response = await _client.PostAsJsonAsync("/api/auth/exchange", command, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -59,7 +59,7 @@ public class AuthEndpointsTests : IClassFixture<ApiFixture>
         var command = new ExchangeTokenCommand("test_discord_token");
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/auth/exchange", command);
+        var response = await _client.PostAsJsonAsync("/api/auth/exchange", command, TestContext.Current.CancellationToken);
 
         // Assert
         // Since we don't have a valid Discord token in tests, we expect Unauthorized
@@ -72,7 +72,7 @@ public class AuthEndpointsTests : IClassFixture<ApiFixture>
         // If the response is OK (in case of valid test setup), verify the response structure
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var result = await response.Content.ReadFromJsonAsync<ExchangeTokenResponse>();
+            var result = await response.Content.ReadFromJsonAsync<ExchangeTokenResponse>(TestContext.Current.CancellationToken);
             Assert.NotNull(result);
             Assert.NotEmpty(result.AccessToken);
             Assert.Equal("Bearer", result.TokenType);

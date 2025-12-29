@@ -32,11 +32,11 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             ContentType: "image/jpeg");
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/images", command);
+        var response = await _client.PostAsJsonAsync("/api/images", command, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<CreateImagePostResponse>();
+        var result = await response.Content.ReadFromJsonAsync<CreateImagePostResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotEqual(Guid.Empty, result.Id);
         Assert.Equal("Test Image", result.Title);
@@ -56,7 +56,7 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             ContentType: "image/jpeg");
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/images", command);
+        var response = await _client.PostAsJsonAsync("/api/images", command, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -73,16 +73,16 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
                 new(TagType.Artist, "artist_name")
             },
             ContentType: "image/jpeg");
-        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand);
-        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>();
+        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
+        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(createdImage);
 
         // Act
-        var response = await _client.GetAsync($"/api/images/{createdImage.Id}");
+        var response = await _client.GetAsync($"/api/images/{createdImage.Id}", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<ImagePostDto>();
+        var result = await response.Content.ReadFromJsonAsync<ImagePostDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("Test Image for Get", result.Title);
         Assert.NotEmpty(result.Tags);
@@ -95,7 +95,7 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
         var nonExistentId = Guid.NewGuid();
 
         // Act
-        var response = await _client.GetAsync($"/api/images/{nonExistentId}");
+        var response = await _client.GetAsync($"/api/images/{nonExistentId}", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -110,14 +110,14 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             Title: "Searchable Image",
             Tags: new List<TagDto> { tag1 },
             ContentType: "image/jpeg");
-        await _client.PostAsJsonAsync("/api/images", createCommand);
+        await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync($"/api/images/search?tags={tag1.Type}:{tag1.Value}");
+        var response = await _client.GetAsync($"/api/images/search?tags={tag1.Type}:{tag1.Value}", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<ImagePostDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<ImagePostDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotEmpty(result.Items);
     }
@@ -130,8 +130,8 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             Title: "Test Image for Tags",
             Tags: new List<TagDto> { new(TagType.Artist, "original_artist") },
             ContentType: "image/jpeg");
-        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand);
-        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>();
+        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
+        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(createdImage);
 
         var newTags = new List<TagDto>
@@ -141,14 +141,14 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync($"/api/images/{createdImage.Id}/tags", newTags);
+        var response = await _client.PostAsJsonAsync($"/api/images/{createdImage.Id}/tags", newTags, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Verify tags were added
-        var getResponse = await _client.GetAsync($"/api/images/{createdImage.Id}");
-        var updatedImage = await getResponse.Content.ReadFromJsonAsync<ImagePostDto>();
+        var getResponse = await _client.GetAsync($"/api/images/{createdImage.Id}", TestContext.Current.CancellationToken);
+        var updatedImage = await getResponse.Content.ReadFromJsonAsync<ImagePostDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(updatedImage);
         Assert.Contains(updatedImage.Tags, t => t.Type == TagType.Character && t.Value == "new_character");
     }
@@ -163,8 +163,8 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             Title: "Test Image for Tag Removal",
             Tags: new List<TagDto> { tag1, tag2 },
             ContentType: "image/jpeg");
-        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand);
-        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>();
+        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
+        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(createdImage);
 
         var tagsToRemove = new List<TagDto> { tag2 };
@@ -174,14 +174,14 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
         {
             Content = JsonContent.Create(tagsToRemove)
         };
-        var response = await _client.SendAsync(request);
+        var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Verify tag was removed
-        var getResponse = await _client.GetAsync($"/api/images/{createdImage.Id}");
-        var updatedImage = await getResponse.Content.ReadFromJsonAsync<ImagePostDto>();
+        var getResponse = await _client.GetAsync($"/api/images/{createdImage.Id}", TestContext.Current.CancellationToken);
+        var updatedImage = await getResponse.Content.ReadFromJsonAsync<ImagePostDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(updatedImage);
         Assert.DoesNotContain(updatedImage.Tags, t => t.Value == "tag_to_remove");
         Assert.Contains(updatedImage.Tags, t => t.Value == "artist_to_keep");
@@ -195,12 +195,12 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             Title: "Test Image for Upload Complete",
             Tags: new List<TagDto> { new(TagType.General, "test") },
             ContentType: "image/jpeg");
-        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand);
-        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>();
+        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
+        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(createdImage);
 
         // Act
-        var response = await _client.PutAsync($"/api/images/{createdImage.Id}/upload-complete", null);
+        var response = await _client.PutAsync($"/api/images/{createdImage.Id}/upload-complete", null, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -214,20 +214,20 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
             Title: "Test Image for History",
             Tags: new List<TagDto> { new(TagType.Artist, "history_artist") },
             ContentType: "image/jpeg");
-        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand);
-        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>();
+        var createResponse = await _client.PostAsJsonAsync("/api/images", createCommand, TestContext.Current.CancellationToken);
+        var createdImage = await createResponse.Content.ReadFromJsonAsync<CreateImagePostResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(createdImage);
 
         // Make some changes to create history
         var newTags = new List<TagDto> { new(TagType.Character, "history_character") };
-        await _client.PostAsJsonAsync($"/api/images/{createdImage.Id}/tags", newTags);
+        await _client.PostAsJsonAsync($"/api/images/{createdImage.Id}/tags", newTags, TestContext.Current.CancellationToken);
 
         // Act
-        var response = await _client.GetAsync($"/api/images/{createdImage.Id}/history");
+        var response = await _client.GetAsync($"/api/images/{createdImage.Id}/history", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<HistoryDto>>();
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<HistoryDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotEmpty(result.Items);
     }
@@ -239,7 +239,7 @@ public class ImageEndpointsTests : IClassFixture<ApiFixture>
         var nonExistentId = Guid.NewGuid();
 
         // Act
-        var response = await _client.GetAsync($"/api/images/{nonExistentId}/history");
+        var response = await _client.GetAsync($"/api/images/{nonExistentId}/history", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
