@@ -39,7 +39,11 @@ public static class GetImagesByTagsQueryHandler
 
         if (totalCount == 0)
         {
-            return ImagePostErrors.NotFound;
+            // Return empty paged result instead of error
+            return PagedResult<ImagePostDto>.Create(
+                Array.Empty<ImagePostDto>(),
+                0,
+                request);
         }
 
         var results = await query

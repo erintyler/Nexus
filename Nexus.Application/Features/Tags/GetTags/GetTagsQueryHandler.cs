@@ -24,7 +24,11 @@ public static class GetTagsQueryHandler
 
         if (totalCount == 0)
         {
-            return TagErrors.NoResults;
+            // Return empty paged result instead of error
+            return PagedResult<TagCountDto>.Create(
+                Array.Empty<TagCountDto>(),
+                0,
+                request);
         }
 
         return await query
