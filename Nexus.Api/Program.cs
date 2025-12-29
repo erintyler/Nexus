@@ -192,3 +192,6 @@ api.MapAuthEndpoints();
 
 
 await app.RunJasperFxCommands(args);
+
+// Make Program class accessible for integration testing
+public partial class Program { }
