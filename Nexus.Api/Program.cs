@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using FluentValidation;
 using JasperFx;
 using JasperFx.CodeGeneration;
 using JasperFx.Events.Daemon;
@@ -170,8 +171,31 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-// Only use exception handler in production to get clear error messages in development/testing
-if (!app.Environment.IsDevelopment())
+// In Development, use custom middleware to convert validation exceptions to ProblemDetails
+// This keeps error messages clear while returning proper status codes
+if (app.Environment.IsDevelopment())
+{
+    app.Use(async (context, next) =>
+    {
+        try
+        {
+            await next(context);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            context.Response.StatusCode = 422;
+            context.Response.ContentType = "application/problem+json";
+            await context.Response.WriteAsJsonAsync(new
+            {
+                type = "https://tools.ietf.org/html/rfc4918#section-11.2",
+                title = "Request cannot be processed",
+                status = 422,
+                errors = ex.Errors.ToDictionary(e => e.PropertyName, e => new[] { e.ErrorMessage })
+            });
+        }
+    });
+}
+else
 {
     app.UseExceptionHandler();
 }
