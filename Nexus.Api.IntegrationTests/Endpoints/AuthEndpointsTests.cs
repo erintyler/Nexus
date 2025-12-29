@@ -47,8 +47,8 @@ public class AuthEndpointsTests : IClassFixture<ApiFixture>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
         });
-        
-        Assert.True(expectUnauthorized.Context.Response.StatusCode == (int)HttpStatusCode.BadRequest || 
+
+        Assert.True(expectUnauthorized.Context.Response.StatusCode == (int)HttpStatusCode.BadRequest ||
                     expectUnauthorized.Context.Response.StatusCode == (int)HttpStatusCode.Unauthorized);
     }
 }

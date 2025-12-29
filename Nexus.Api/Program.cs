@@ -190,7 +190,6 @@ api.MapTagEndpoints();
 api.MapCollectionEndpoints();
 api.MapAuthEndpoints();
 
-
 await app.RunJasperFxCommands(args);
 
 // Make Program class accessible for integration testing
