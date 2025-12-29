@@ -1,5 +1,4 @@
 using Nexus.Application.Common.Services;
-using Nexus.Application.Features.ImagePosts.AddTagsToImagePost;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Primitives;
@@ -11,7 +10,7 @@ namespace Nexus.Application.Features.ImagePosts.RemoveTagsToImagePost;
 public class RemoveTagsFromImagePostCommandHandler
 {
     public static async Task<(Result, Events)> HandleAsync(
-        AddTagsToImagePostCommand request,
+        RemoveTagsFromImagePostCommand request,
         [WriteAggregate(OnMissing = OnMissing.ProblemDetailsWith404)] ImagePost imagePost,
         CancellationToken ct)
     {
