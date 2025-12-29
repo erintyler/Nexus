@@ -11,6 +11,15 @@
           "Testcontainers": "4.9.0"
         }
       },
+      "Testcontainers.RabbitMq": {
+        "type": "Direct",
+        "requested": "[4.9.0, )",
+        "resolved": "4.9.0",
+        "contentHash": "bpeBvFIJZgZPrbl2L/ucCsWbSZPbYrOkL9zkNkKJsBHH9qhuvw9Y8ROf4jXyRvFUdLR+Zd1mIkIwEBy6m4WQPw==",
+        "dependencies": {
+          "Testcontainers": "4.9.0"
+        }
+      },
       "xunit.analyzers": {
         "type": "Direct",
         "requested": "[1.26.0, )",

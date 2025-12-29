@@ -859,6 +859,14 @@
           "Testcontainers": "4.9.0"
         }
       },
+      "Testcontainers.RabbitMq": {
+        "type": "Transitive",
+        "resolved": "4.9.0",
+        "contentHash": "bpeBvFIJZgZPrbl2L/ucCsWbSZPbYrOkL9zkNkKJsBHH9qhuvw9Y8ROf4jXyRvFUdLR+Zd1mIkIwEBy6m4WQPw==",
+        "dependencies": {
+          "Testcontainers": "4.9.0"
+        }
+      },
       "Weasel.Core": {
         "type": "Transitive",
         "resolved": "8.4.2",
@@ -1030,6 +1038,7 @@
         "type": "Project",
         "dependencies": {
           "Testcontainers.PostgreSql": "[4.9.0, )",
+          "Testcontainers.RabbitMq": "[4.9.0, )",
           "xunit.analyzers": "[1.26.0, )",
           "xunit.v3.extensibility.core": "[3.2.1, )"
         }
