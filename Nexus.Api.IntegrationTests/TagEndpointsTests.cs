@@ -12,26 +12,28 @@ namespace Nexus.Api.IntegrationTests;
 /// <summary>
 /// Integration tests for Tag API endpoints.
 /// Tests the full HTTP request/response cycle including Wolverine and Marten.
-/// Each test gets its own isolated Alba host instance.
+/// Each test gets its own isolated Alba host instance with fresh database and RabbitMQ containers.
 /// </summary>
-public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
+public class TagEndpointsTests : IAsyncLifetime
 {
-    private readonly AlbaWebApplicationFixture _fixture;
+    private readonly AlbaWebApplicationFixture _fixture = new();
     private readonly Fixture _autoFixture = new();
 
-    public TagEndpointsTests(AlbaWebApplicationFixture fixture)
+    public async ValueTask InitializeAsync()
     {
-        _fixture = fixture;
+        await _fixture.InitializeAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _fixture.DisposeAsync();
     }
 
     [Fact]
     public async Task SearchTags_WithoutSearchTerm_ReturnsOk()
     {
-        // Arrange
-        await using var host = await _fixture.CreateHost();
-
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/search");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -41,11 +43,8 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     [Fact]
     public async Task SearchTags_WithSearchTerm_ReturnsOk()
     {
-        // Arrange
-        await using var host = await _fixture.CreateHost();
-
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/search?searchTerm=test");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -56,15 +55,13 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task MigrateTag_WithValidTags_ReturnsOk()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var command = new MigrateTagCommand(
             Source: new TagDto(TagType.General, "old-tag"),
             Target: new TagDto(TagType.General, "new-tag")
         );
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/tags/migrate");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -74,11 +71,8 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     [Fact]
     public async Task GetTagMigrations_WithoutFilters_ReturnsOk()
     {
-        // Arrange
-        await using var host = await _fixture.CreateHost();
-
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/migrations");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -88,11 +82,8 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     [Fact]
     public async Task GetTagMigrations_WithPagination_ReturnsOk()
     {
-        // Arrange
-        await using var host = await _fixture.CreateHost();
-
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/migrations?pageNumber=1&pageSize=10");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);

@@ -13,30 +13,33 @@ namespace Nexus.Api.IntegrationTests;
 /// <summary>
 /// Integration tests for Collection API endpoints.
 /// Tests the full HTTP request/response cycle including Wolverine and Marten.
-/// Each test gets its own isolated Alba host instance.
+/// Each test gets its own isolated Alba host instance with fresh database and RabbitMQ containers.
 /// </summary>
-public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
+public class CollectionEndpointsTests : IAsyncLifetime
 {
-    private readonly AlbaWebApplicationFixture _fixture;
+    private readonly AlbaWebApplicationFixture _fixture = new();
     private readonly Fixture _autoFixture = new();
 
-    public CollectionEndpointsTests(AlbaWebApplicationFixture fixture)
+    public async ValueTask InitializeAsync()
     {
-        _fixture = fixture;
+        await _fixture.InitializeAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _fixture.DisposeAsync();
     }
 
     [Fact]
     public async Task CreateCollection_WithValidRequest_ReturnsCreated()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var command = new CreateCollectionCommand(
             Title: _autoFixture.Create<string>()
         );
 
         // Act
-        var result = await host.Scenario(scenario =>
+        var result = await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -53,14 +56,12 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task CreateCollection_WithEmptyTitle_ReturnsBadRequest()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var command = new CreateCollectionCommand(
             Title: ""
         );
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(HttpStatusCode.BadRequest);
@@ -71,13 +72,11 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task GetCollectionById_WhenCollectionExists_ReturnsOk()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var createCommand = new CreateCollectionCommand(
             Title: _autoFixture.Create<string>()
         );
 
-        var createResult = await host.Scenario(scenario =>
+        var createResult = await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -86,7 +85,7 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var createdCollection = createResult.ReadAsJson<CreateCollectionResponse>();
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{createdCollection.Id}");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -97,11 +96,10 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task GetCollectionById_WhenCollectionDoesNotExist_ReturnsNotFound()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{nonExistentId}");
             scenario.StatusCodeShouldBe(HttpStatusCode.NotFound);

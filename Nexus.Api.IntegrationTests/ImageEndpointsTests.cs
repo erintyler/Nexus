@@ -14,24 +14,27 @@ namespace Nexus.Api.IntegrationTests;
 /// <summary>
 /// Integration tests for Image API endpoints.
 /// Tests the full HTTP request/response cycle including Wolverine and Marten.
-/// Each test gets its own isolated Alba host instance.
+/// Each test gets its own isolated Alba host instance with fresh database and RabbitMQ containers.
 /// </summary>
-public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
+public class ImageEndpointsTests : IAsyncLifetime
 {
-    private readonly AlbaWebApplicationFixture _fixture;
+    private readonly AlbaWebApplicationFixture _fixture = new();
     private readonly Fixture _autoFixture = new();
 
-    public ImageEndpointsTests(AlbaWebApplicationFixture fixture)
+    public async ValueTask InitializeAsync()
     {
-        _fixture = fixture;
+        await _fixture.InitializeAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _fixture.DisposeAsync();
     }
 
     [Fact]
     public async Task CreateImage_WithValidRequest_ReturnsCreated()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var command = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -43,7 +46,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         );
 
         // Act
-        var result = await host.Scenario(scenario =>
+        var result = await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -61,8 +64,6 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task CreateImage_WithInvalidTitle_ReturnsBadRequest()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var command = new CreateImagePostCommand(
             Title: "",
             Tags:
@@ -73,7 +74,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         );
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.BadRequest);
@@ -84,8 +85,6 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task GetImageById_WhenImageInProcessing_ReturnsNotFound()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -95,7 +94,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResult = await host.Scenario(scenario =>
+        var createResult = await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -105,7 +104,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
 
         // Mark upload as complete - this triggers image processing
         // Status becomes Processing (not Completed) until ImageProcessor completes
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Put.Url($"/api/images/{createdImage.Id}/upload-complete");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -114,7 +113,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         // Act & Assert
         // GetImageById only returns images with Completed status
         // Images in Processing status return 404
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{createdImage.Id}");
             scenario.StatusCodeShouldBe(HttpStatusCode.NotFound);
@@ -125,11 +124,10 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task GetImageById_WhenImageDoesNotExist_ReturnsNotFound()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{nonExistentId}");
             scenario.StatusCodeShouldBe(HttpStatusCode.NotFound);
@@ -140,8 +138,6 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task MarkImageUploadComplete_WhenImageExists_ReturnsOk()
     {
         // Arrange
-        await using var host = await _fixture.CreateHost();
-
         var createCommand = new CreateImagePostCommand(
             Title: _autoFixture.Create<string>(),
             Tags:
@@ -151,7 +147,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResult = await host.Scenario(scenario =>
+        var createResult = await _fixture.Host.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(HttpStatusCode.Created);
@@ -160,7 +156,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var createdImage = createResult.ReadAsJson<CreateImagePostResponse>();
 
         // Act & Assert
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Put.Url($"/api/images/{createdImage.Id}/upload-complete");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
@@ -170,12 +166,9 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     [Fact]
     public async Task GetImagesByTags_ReturnsOk()
     {
-        // Arrange
-        await using var host = await _fixture.CreateHost();
-
         // Act & Assert
         // Search endpoint works even with no images or only Processing images
-        await host.Scenario(scenario =>
+        await _fixture.Host.Scenario(scenario =>
         {
             scenario.Get.Url("/api/images/search?tags=Artist:any-artist");
             scenario.StatusCodeShouldBe(HttpStatusCode.OK);
