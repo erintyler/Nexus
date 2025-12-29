@@ -137,6 +137,37 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     }
 
     [Fact]
+    public async Task MarkImageUploadComplete_WhenImageExists_ReturnsOk()
+    {
+        // Arrange
+        await using var host = await _fixture.CreateHost();
+
+        var createCommand = new CreateImagePostCommand(
+            Title: _autoFixture.Create<string>(),
+            Tags:
+            [
+                new TagDto(TagType.Artist, "test-artist")
+            ],
+            ContentType: "image/jpeg"
+        );
+
+        var createResult = await host.Scenario(scenario =>
+        {
+            scenario.Post.Json(createCommand).ToUrl("/api/images");
+            scenario.StatusCodeShouldBe(HttpStatusCode.Created);
+        });
+
+        var createdImage = createResult.ReadAsJson<CreateImagePostResponse>();
+
+        // Act & Assert
+        await host.Scenario(scenario =>
+        {
+            scenario.Put.Url($"/api/images/{createdImage.Id}/upload-complete");
+            scenario.StatusCodeShouldBe(HttpStatusCode.OK);
+        });
+    }
+
+    [Fact]
     public async Task GetImagesByTags_ReturnsOk()
     {
         // Arrange
