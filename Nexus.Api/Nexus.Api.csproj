@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>c54457fb-fb1a-47ba-9f32-caf024e89469</UserSecretsId>
+        <InternalsVisibleTo>Nexus.Api.IntegrationTests</InternalsVisibleTo>
     </PropertyGroup>
 
     <ItemGroup>

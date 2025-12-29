@@ -2,6 +2,17 @@
   "version": 1,
   "dependencies": {
     "net10.0": {
+      "Alba": {
+        "type": "Direct",
+        "requested": "[8.4.0, )",
+        "resolved": "8.4.0",
+        "contentHash": "JhkbV/pYhJIz6UtiFKjiXhUm9PTsLwhI66Ow9eXpd9i8gQ9LErn/yx9HH+BVKPQ1aGrENugwCcAO419YvDbdlg==",
+        "dependencies": {
+          "IdentityModel": "6.2.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.0",
+          "Microsoft.AspNetCore.Mvc.Testing": "10.0.0"
+        }
+      },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
         "requested": "[18.0.1, )",
@@ -19,6 +30,15 @@
         "contentHash": "EA55cjyNn8eTNWrgrdZJH5QLFp2L43oxl1tlkoYUKIE9pRwL784OWiTXeCV5ApS+AMYEAlt7Fo03A2XfouvHmQ==",
         "dependencies": {
           "Castle.Core": "5.1.1"
+        }
+      },
+      "Testcontainers.RabbitMq": {
+        "type": "Direct",
+        "requested": "[4.9.0, )",
+        "resolved": "4.9.0",
+        "contentHash": "bpeBvFIJZgZPrbl2L/ucCsWbSZPbYrOkL9zkNkKJsBHH9qhuvw9Y8ROf4jXyRvFUdLR+Zd1mIkIwEBy6m4WQPw==",
+        "dependencies": {
+          "Testcontainers": "4.9.0"
         }
       },
       "xunit.v3.mtp-v2": {
@@ -84,6 +104,11 @@
           "AWSSDK.Core": "[4.0.3.6, 5.0.0)"
         }
       },
+      "BouncyCastle.Cryptography": {
+        "type": "Transitive",
+        "resolved": "2.6.2",
+        "contentHash": "7oWOcvnntmMKNzDLsdxAYqApt+AjpRpP2CShjMfIa3umZ42UQMvH0tl1qAliYPNYO6vTdcGMqnRrCPmsfzTI1w=="
+      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "5.1.1",
@@ -104,6 +129,22 @@
         "dependencies": {
           "DistributedLock.Core": "[1.0.8, 1.1.0)",
           "Npgsql": "8.0.6"
+        }
+      },
+      "Docker.DotNet.Enhanced": {
+        "type": "Transitive",
+        "resolved": "3.130.0",
+        "contentHash": "LQpn/tmB4TPInO9ILgFg98ivcr5QsLBm6sUltqOjgU/FKDU4SW3mbR9QdmYgBJlE6PtKmSffDdSyVYMyUYyEjA==",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.3"
+        }
+      },
+      "Docker.DotNet.Enhanced.X509": {
+        "type": "Transitive",
+        "resolved": "3.130.0",
+        "contentHash": "stAlaM/h5u8bIqqXQVR4tgJgsN8CDC0ynjmCYZFy4alXs2VJdIoRZwJJmgmmYYrAdMwWJC8lWWe0ilxPqc8Wkg==",
+        "dependencies": {
+          "Docker.DotNet.Enhanced": "3.130.0"
         }
       },
       "FastExpressionCompiler": {
@@ -152,6 +193,11 @@
         "type": "Transitive",
         "resolved": "2.14.1",
         "contentHash": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw=="
+      },
+      "IdentityModel": {
+        "type": "Transitive",
+        "resolved": "6.2.0",
+        "contentHash": "4AXZ6Tp+DNwrSSeBziiX/231i8ZpD77A9nEMyc68gLSCWG0kgWsIBeFquYcBebiIPkfB7GEXzCYuuLeR1QZJIQ=="
       },
       "ImTools": {
         "type": "Transitive",
@@ -259,6 +305,16 @@
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
         }
       },
+      "Microsoft.AspNetCore.Mvc.Testing": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "Gdtv34h2qvynOEu+B2+6apBiiPhEs39namGax02UgaQMRetlxQ88p2/jK1eIdz3m1NRgYszNBN/jBdXkucZhvw==",
+        "dependencies": {
+          "Microsoft.AspNetCore.TestHost": "10.0.0",
+          "Microsoft.Extensions.DependencyModel": "10.0.0",
+          "Microsoft.Extensions.Hosting": "10.0.0"
+        }
+      },
       "Microsoft.AspNetCore.OpenApi": {
         "type": "Transitive",
         "resolved": "10.0.1",
@@ -266,6 +322,11 @@
         "dependencies": {
           "Microsoft.OpenApi": "2.0.0"
         }
+      },
+      "Microsoft.AspNetCore.TestHost": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "Q3ia+k+wYM3Iv/Qq5IETOdpz/R0xizs3WNAXz699vEQx5TMVAfG715fBSq9Thzopvx8dYZkxQ/mumTn6AJ/vGQ=="
       },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
@@ -1212,6 +1273,11 @@
           "Serilog": "4.2.0"
         }
       },
+      "SharpZipLib": {
+        "type": "Transitive",
+        "resolved": "1.4.2",
+        "contentHash": "yjj+3zgz8zgXpiiC3ZdF/iyTBbz2fFvMxZFEBPUcwZjIvXOf37Ylm+K58hqMfIBt5JgU/Z2uoUS67JmTLe973A=="
+      },
       "SkiaSharp": {
         "type": "Transitive",
         "resolved": "3.119.1",
@@ -1240,6 +1306,15 @@
         "type": "Transitive",
         "resolved": "0.53.0",
         "contentHash": "m2iv8Egfywp7FaNLKCmCFHbSf36D4ctzZKvlAK9NXMyGLh6L+CnrZWK8o+LOYsoAS1jtoHn0W1BT0W8vuq/FUw=="
+      },
+      "SSH.NET": {
+        "type": "Transitive",
+        "resolved": "2025.1.0",
+        "contentHash": "jrnbtf0ItVaXAe6jE8X/kSLa6uC+0C+7W1vepcnRQB/rD88qy4IxG7Lf1FIbWmkoc4iVXv0pKrz+Wc6J4ngmHw==",
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.6.2",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.3"
+        }
       },
       "System.Composition": {
         "type": "Transitive",
@@ -1307,6 +1382,26 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "7mu9v0QDv66ar3DpGSZHg9NuNcxDaaAcnMULuZlaTpP9+hwXhrxNGsF5GmLkSHxFdb5bBc1TzeujsRgTrPWi+Q=="
+      },
+      "Testcontainers": {
+        "type": "Transitive",
+        "resolved": "4.9.0",
+        "contentHash": "OmU6x91OozhCRVOt7ISQDdaHACaKQImrN6fWDJJnvMAwMv/iJ95Q4cr7K1FU+nAYLDDIMDbSS8SOCzKkERsoIw==",
+        "dependencies": {
+          "Docker.DotNet.Enhanced": "3.130.0",
+          "Docker.DotNet.Enhanced.X509": "3.130.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
+          "SSH.NET": "2025.1.0",
+          "SharpZipLib": "1.4.2"
+        }
+      },
+      "Testcontainers.PostgreSql": {
+        "type": "Transitive",
+        "resolved": "4.9.0",
+        "contentHash": "N9jgBIf/gh202wbsCUd4xtiSY8p3MYjHtM5mXJiPNnRIiJp05wgkFqaouwE4tWHczyk2nrwUvEzDzX5mYe9CVg==",
+        "dependencies": {
+          "Testcontainers": "4.9.0"
+        }
       },
       "Weasel.Core": {
         "type": "Transitive",
@@ -1510,6 +1605,14 @@
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Nexus.Application": "[1.0.0, )"
+        }
+      },
+      "nexus.integrationtests.utilities": {
+        "type": "Project",
+        "dependencies": {
+          "Testcontainers.PostgreSql": "[4.9.0, )",
+          "xunit.analyzers": "[1.26.0, )",
+          "xunit.v3.extensibility.core": "[3.2.1, )"
         }
       },
       "nexus.servicedefaults": {
