@@ -15,7 +15,7 @@ public static class GetImagePostQueryHandler
         IImageService imageService,
         [ReadAggregate] ImagePostReadModel? imagePost)
     {
-        if (imagePost?.Status is not UploadStatus.Completed)
+        if (imagePost == null)
         {
             return ImagePostErrors.NotFound;
         }

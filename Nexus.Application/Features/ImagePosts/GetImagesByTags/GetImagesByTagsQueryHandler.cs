@@ -25,8 +25,7 @@ public static class GetImagesByTagsQueryHandler
         }
 
         // Build query to find images that have all the requested tags
-        var query = session.Query<ImagePostReadModel>()
-            .Where(x => x.Status == UploadStatus.Completed);
+        IQueryable<ImagePostReadModel> query = session.Query<ImagePostReadModel>();
 
         // Filter by tags - image must contain all requested tags
         foreach (var requestedTag in request.Tags)
