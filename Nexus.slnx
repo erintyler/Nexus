@@ -14,6 +14,7 @@
   <Project Path="Nexus.Api/Nexus.Api.csproj" />
   <Project Path="Nexus.AppHost/Nexus.AppHost.csproj" />
   <Project Path="Nexus.Application/Nexus.Application.csproj" />
+  <Project Path="Nexus.Aspire.IntegrationTests/Nexus.Aspire.IntegrationTests.csproj" />
   <Project Path="Nexus.Domain/Nexus.Domain.csproj" />
   <Project Path="Nexus.Frontend/Nexus.Frontend.Client/Nexus.Frontend.Client.csproj" />
   <Project Path="Nexus.Frontend/Nexus.Frontend/Nexus.Frontend.csproj" />

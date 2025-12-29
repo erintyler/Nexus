@@ -123,6 +123,15 @@ Image processor service integration tests
 #### **Nexus.Migrations.IntegrationTests**
 Database migration validation tests
 
+#### **Nexus.Aspire.IntegrationTests**
+.NET Aspire integration tests:
+- Complete application orchestration testing
+- Service-to-service communication validation
+- Infrastructure dependency testing (PostgreSQL, RabbitMQ, LocalStack)
+- Health check and observability verification
+- End-to-end workflow scenarios
+- See [Aspire Integration Tests README](Nexus.Aspire.IntegrationTests/README.md) for details
+
 ### Utility Projects
 
 #### **Nexus.UnitTests.Utilities**
@@ -190,10 +199,13 @@ dotnet test
 # Run specific test project
 dotnet test Nexus.Domain.UnitTests
 dotnet test Nexus.Architecture.Tests
+dotnet test Nexus.Aspire.IntegrationTests
 
 # Run with coverage
 dotnet test --collect:"XPlat Code Coverage"
 ```
+
+**Note:** Aspire integration tests require Docker Desktop to be running as they spin up complete application stacks with all dependencies.
 
 ## 🛠️ Technology Stack
 
