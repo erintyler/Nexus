@@ -16,14 +16,17 @@ public class AddImagePostToCollectionCommandHandlerTests
         // Arrange
         var collectionId = _fixture.Create<Guid>();
         var imagePostId = _fixture.Create<Guid>();
+
         var collection = CreateCollection(collectionId);
+        var imagePost = _fixture.CreateImagePost(imagePostId);
 
         var command = new AddImagePostToCollectionCommand(collectionId, imagePostId);
 
         // Act
-        var (result, events) = AddImagePostToCollectionCommandHandler.HandleAsync(
+        var (result, events) = AddImagePostToCollectionCommandHandler.Handle(
             command,
-            collection);
+            collection,
+            imagePost);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -37,6 +40,7 @@ public class AddImagePostToCollectionCommandHandlerTests
         var collectionId = _fixture.Create<Guid>();
         var imagePostId = _fixture.Create<Guid>();
         var collection = CreateCollection(collectionId);
+        var imagePost = _fixture.CreateImagePost(imagePostId);
 
         // Add the image post first
         var addEvent = collection.AddImagePost(imagePostId).Value;
@@ -45,9 +49,10 @@ public class AddImagePostToCollectionCommandHandlerTests
         var command = new AddImagePostToCollectionCommand(collectionId, imagePostId);
 
         // Act
-        var (result, events) = AddImagePostToCollectionCommandHandler.HandleAsync(
+        var (result, events) = AddImagePostToCollectionCommandHandler.Handle(
             command,
-            collection);
+            collection,
+            imagePost);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -65,14 +70,15 @@ public class AddImagePostToCollectionCommandHandlerTests
         var command = new AddImagePostToCollectionCommand(collectionId, Guid.Empty);
 
         // Act
-        var (result, events) = AddImagePostToCollectionCommandHandler.HandleAsync(
+        var (result, events) = AddImagePostToCollectionCommandHandler.Handle(
             command,
-            collection);
+            collection,
+            null);
 
         // Assert
         Assert.True(result.IsFailure);
         Assert.Empty(events);
-        Assert.Contains("Collection.ImagePostId.Empty", result.Errors.Select(e => e.Code));
+        Assert.Contains(CollectionErrors.ImagePostDoesNotExist.Code, result.Errors.Select(e => e.Code));
     }
 
     private Collection CreateCollection(Guid? id = null)

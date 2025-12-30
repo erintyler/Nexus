@@ -42,7 +42,7 @@ public static class ImageEndpoints
                     return TypedResults.CreatedAtRoute(result.Value, "GetImageById", new { id = result.Value.Id });
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("CreateImage")
             .WithSummary("Create new image")
             .WithDescription("Creates a new image post with the specified title and tags.")
@@ -109,7 +109,7 @@ public static class ImageEndpoints
                     return TypedResults.Ok();
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("MarkImageUploadComplete")
             .WithSummary("Mark image upload as complete")
             .WithDescription("Marks the image upload as complete and triggers image processing.")
@@ -132,7 +132,7 @@ public static class ImageEndpoints
                     return TypedResults.Ok();
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("AddTagsToImage")
             .WithSummary("Add tags to image post")
             .WithDescription("Adds tags to the specified image post.")
@@ -155,7 +155,7 @@ public static class ImageEndpoints
                     return TypedResults.Ok();
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("RemoveTagsFromImage")
             .WithSummary("Remove tags from image post")
             .WithDescription("Removes tags from the specified image post.")

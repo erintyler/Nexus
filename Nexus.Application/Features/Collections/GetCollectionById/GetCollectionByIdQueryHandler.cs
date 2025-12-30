@@ -5,17 +5,12 @@ using Wolverine.Marten;
 
 namespace Nexus.Application.Features.Collections.GetCollectionById;
 
-public class GetCollectionByIdQueryHandler
+public static class GetCollectionByIdQueryHandler
 {
-    public static Result<CollectionReadModel> HandleAsync(
+    public static Result<CollectionReadModel> Handle(
         GetCollectionByIdQuery query,
-        [ReadAggregate] CollectionReadModel? collection)
+        [ReadAggregate(Required = false)] CollectionReadModel? collection)
     {
-        if (collection == null)
-        {
-            return Result.Failure<CollectionReadModel>(CollectionErrors.NotFound);
-        }
-
-        return Result.Success(collection);
+        return collection is null ? Result.Failure<CollectionReadModel>(CollectionErrors.NotFound) : Result.Success(collection);
     }
 }

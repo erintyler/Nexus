@@ -8,7 +8,7 @@ using Nexus.Domain.Errors;
 
 namespace Nexus.Application.Features.Tags.GetTagMigrations;
 
-public class GetTagMigrationsQueryHandler
+public static class GetTagMigrationsQueryHandler
 {
     public static async Task<Result<PagedResult<TagMigrationDto>>> HandleAsync(
         GetTagMigrationsQuery request,
@@ -32,7 +32,11 @@ public class GetTagMigrationsQueryHandler
 
         if (totalCount == 0)
         {
-            return TagMigrationErrors.NoResults;
+            // Return empty paged result instead of error
+            return PagedResult<TagMigrationDto>.Create(
+                Array.Empty<TagMigrationDto>(),
+                0,
+                request);
         }
 
         return await query

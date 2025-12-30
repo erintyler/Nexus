@@ -18,4 +18,9 @@ public static class TagMigrationErrors
         "TagMigration.NoResults",
         ErrorType.NotFound,
         "No tag migrations found matching the specified criteria.");
+
+    public static readonly Error SourceAndTargetIdentical = new(
+        "TagMigration.SourceAndTarget.Identical",
+        ErrorType.BusinessRule,
+        "The source and target tags cannot be identical.");
 }
