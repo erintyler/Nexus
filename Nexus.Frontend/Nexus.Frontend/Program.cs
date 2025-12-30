@@ -17,7 +17,7 @@ builder.Services.AddRazorComponents()
 // Register token exchange service with service discovery
 builder.Services.AddHttpClient<ITokenExchangeService, TokenExchangeService>(client =>
 {
-    client.BaseAddress = new Uri("https://nexus-api");
+    client.BaseAddress = new Uri("https+http://nexus-api");
 });
 
 // Configure authentication

@@ -29,7 +29,7 @@ public static class DependencyInjection
         // Register auth services
         services.AddHttpClient("Discord", client =>
         {
-            client.BaseAddress = new Uri("https://discord.com/api");
+            client.BaseAddress = new Uri("https://discord.com/api/");
         });
 
         services.AddScoped<IDiscordApiService, DiscordApiService>();
