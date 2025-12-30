@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Nexus.Frontend.Components;
 using Nexus.Frontend.Services;
+using Yarp.ReverseProxy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +85,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 
+// Configure YARP reverse proxy with JWT token transform
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddTransforms<JwtCookieTransform>();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -107,6 +113,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseAntiforgery();
+
+// Map YARP reverse proxy for API requests
+app.MapReverseProxy();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
