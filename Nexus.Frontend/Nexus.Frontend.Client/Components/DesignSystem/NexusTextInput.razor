@@ -1,0 +1,127 @@
+@* Modern text input component following Nexus design system *@
+
+<div class="@WrapperClasses">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <NexusLabel For="@Id" IsRequired="@IsRequired">@Label</NexusLabel>
+    }
+    
+    <input 
+        type="@Type"
+        id="@Id"
+        class="@GetInputClasses()"
+        placeholder="@Placeholder"
+        disabled="@Disabled"
+        value="@Value"
+        @oninput="HandleInput"
+        @attributes="AdditionalAttributes" />
+    
+    @if (!string.IsNullOrWhiteSpace(HelperText))
+    {
+        <p class="@GetHelperTextClasses()">@HelperText</p>
+    }
+    
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <p class="text-red-600 text-sm mt-2 font-medium">@ErrorMessage</p>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Input value
+    /// </summary>
+    [Parameter]
+    public string? Value { get; set; }
+
+    /// <summary>
+    /// Value changed callback
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    /// <summary>
+    /// Input type (text, email, password, etc.)
+    /// </summary>
+    [Parameter]
+    public string Type { get; set; } = "text";
+
+    /// <summary>
+    /// Input label
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>
+    /// Input placeholder
+    /// </summary>
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    /// <summary>
+    /// Whether the input is required
+    /// </summary>
+    [Parameter]
+    public bool IsRequired { get; set; }
+
+    /// <summary>
+    /// Whether the input is disabled
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Helper text to display below the input
+    /// </summary>
+    [Parameter]
+    public string? HelperText { get; set; }
+
+    /// <summary>
+    /// Error message to display
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the wrapper
+    /// </summary>
+    [Parameter]
+    public string? WrapperClasses { get; set; }
+
+    /// <summary>
+    /// Input ID
+    /// </summary>
+    [Parameter]
+    public string Id { get; set; } = $"input-{Guid.NewGuid():N}";
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetInputClasses()
+    {
+        var baseClasses = "w-full px-4 py-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm outline-none transition-all duration-200 hover:shadow-md";
+        
+        var borderClasses = !string.IsNullOrWhiteSpace(ErrorMessage)
+            ? "border-2 border-red-400 focus:ring-2 focus:ring-red-500"
+            : "border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500";
+        
+        return $"{baseClasses} {borderClasses}".Trim();
+    }
+
+    private string GetHelperTextClasses()
+    {
+        return string.IsNullOrWhiteSpace(ErrorMessage) 
+            ? "text-xs text-gray-500 mt-2" 
+            : "text-xs text-gray-500 mt-2";
+    }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        var value = e.Value?.ToString() ?? string.Empty;
+        Value = value;
+        await ValueChanged.InvokeAsync(value);
+    }
+}
