@@ -5,13 +5,10 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
-public class AuthEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
+public class AuthEndpointsTests : DatabaseResetFixture
 {
-    private readonly AlbaWebApplicationFixture _fixture;
-
-    public AuthEndpointsTests(AlbaWebApplicationFixture fixture)
+    public AuthEndpointsTests(AlbaWebApplicationFixture fixture) : base(fixture)
     {
-        _fixture = fixture;
     }
 
     [Fact]
@@ -21,7 +18,7 @@ public class AuthEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var command = new ExchangeTokenCommand(AccessToken: "");
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
             scenario.StatusCodeShouldBe(422);
@@ -35,7 +32,7 @@ public class AuthEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var command = new ExchangeTokenCommand(AccessToken: "invalid-token-123");
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
             scenario.StatusCodeShouldBe(401);
@@ -49,7 +46,7 @@ public class AuthEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var command = new ExchangeTokenCommand(AccessToken: null!);
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
             scenario.StatusCodeShouldBe(422);

@@ -181,7 +181,7 @@ if (app.Environment.IsDevelopment())
         {
             await next(context);
         }
-        catch (FluentValidation.ValidationException ex)
+        catch (ValidationException ex)
         {
             context.Response.StatusCode = 422;
             context.Response.ContentType = "application/problem+json";

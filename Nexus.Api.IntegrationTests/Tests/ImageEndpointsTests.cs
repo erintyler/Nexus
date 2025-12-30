@@ -10,13 +10,10 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
-public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
+public class ImageEndpointsTests : DatabaseResetFixture
 {
-    private readonly AlbaWebApplicationFixture _fixture;
-
-    public ImageEndpointsTests(AlbaWebApplicationFixture fixture)
+    public ImageEndpointsTests(AlbaWebApplicationFixture fixture) : base(fixture)
     {
-        _fixture = fixture;
     }
 
     [Fact]
@@ -31,7 +28,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         );
 
         // Act & Assert
-        var response = await _fixture.AlbaHost.Scenario(scenario =>
+        var response = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -54,7 +51,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         );
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(422);
@@ -72,7 +69,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         );
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(422);
@@ -90,7 +87,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/png"
         );
 
-        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -99,7 +96,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var created = createResponse.ReadAsJson<CreateImagePostResponse>();
 
         // Act & Assert
-        var response = await _fixture.AlbaHost.Scenario(scenario =>
+        var response = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{created!.Id}");
             scenario.StatusCodeShouldBe(200);
@@ -118,7 +115,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{nonExistentId}");
             scenario.StatusCodeShouldBe(404);
@@ -138,14 +135,14 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
         });
 
         // Act & Assert
-        var response = await _fixture.AlbaHost.Scenario(scenario =>
+        var response = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/search?tags={tag1.Type}:{tag1.Value}");
             scenario.StatusCodeShouldBe(200);
@@ -168,7 +165,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -177,7 +174,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var created = createResponse.ReadAsJson<CreateImagePostResponse>();
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Put.Url($"/api/images/{created!.Id}/upload-complete");
             scenario.StatusCodeShouldBe(200);
@@ -191,7 +188,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Put.Url($"/api/images/{nonExistentId}/upload-complete");
             scenario.StatusCodeShouldBe(404);
@@ -209,7 +206,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -219,14 +216,14 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var newTags = TestDataGenerator.CreateTags(2);
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(newTags).ToUrl($"/api/images/{created!.Id}/tags");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Verify tags were added
-        var getResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var getResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{created!.Id}");
             scenario.StatusCodeShouldBe(200);
@@ -245,7 +242,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var tags = TestDataGenerator.CreateTags(1);
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(tags).ToUrl($"/api/images/{nonExistentId}/tags");
             scenario.StatusCodeShouldBe(404);
@@ -263,7 +260,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -273,14 +270,14 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var tagsToRemove = new[] { tags[0] };
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Delete.Json(tagsToRemove).ToUrl($"/api/images/{created!.Id}/tags");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Verify tag was removed
-        var getResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var getResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{created!.Id}");
             scenario.StatusCodeShouldBe(200);
@@ -299,7 +296,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var tags = TestDataGenerator.CreateTags(1);
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Delete.Json(tags).ToUrl($"/api/images/{nonExistentId}/tags");
             scenario.StatusCodeShouldBe(404);
@@ -317,7 +314,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -327,14 +324,14 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
 
         // Add more tags to create history
         var newTags = TestDataGenerator.CreateTags(1);
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(newTags).ToUrl($"/api/images/{created!.Id}/tags");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Act & Assert
-        var response = await _fixture.AlbaHost.Scenario(scenario =>
+        var response = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{created!.Id}/history");
             scenario.StatusCodeShouldBe(200);
@@ -352,7 +349,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
+        await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{nonExistentId}/history");
             scenario.StatusCodeShouldBe(404);
@@ -370,7 +367,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             ContentType: "image/jpeg"
         );
 
-        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -381,7 +378,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         var dateTo = DateTimeOffset.UtcNow.AddDays(1);
 
         // Act & Assert
-        var response = await _fixture.AlbaHost.Scenario(scenario =>
+        var response = await Fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/images/{created!.Id}/history?dateFrom={dateFrom:s}&dateTo={dateTo:s}");
             scenario.StatusCodeShouldBe(200);
