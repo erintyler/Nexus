@@ -11,7 +11,9 @@ namespace Nexus.Domain.Entities;
 /// </summary>
 public sealed class User : BaseEntity
 {
-    internal User() { }
+    // Public parameterless constructor required for Marten document deserialization
+    // when User is used as a projected document (not just event-sourced aggregate)
+    public User() { }
     internal User(Guid id) : base(id) { }
 
     // Properties with private setters for encapsulation
