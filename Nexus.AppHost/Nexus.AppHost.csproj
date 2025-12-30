@@ -20,4 +20,10 @@
       <ProjectReference Include="..\Nexus.ImageProcessor\Nexus.ImageProcessor.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="cloudformation-stack.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
