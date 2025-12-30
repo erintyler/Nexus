@@ -8,10 +8,13 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
-public class CollectionEndpointsTests : DatabaseResetFixture
+public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
 {
-    public CollectionEndpointsTests(AlbaWebApplicationFixture fixture) : base(fixture)
+    private readonly AlbaWebApplicationFixture _fixture;
+
+    public CollectionEndpointsTests(AlbaWebApplicationFixture fixture)
     {
+        _fixture = fixture;
     }
 
     [Fact]
@@ -21,7 +24,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var command = new CreateCollectionCommand(Title: "Test Collection");
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(201);
@@ -39,7 +42,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var command = new CreateCollectionCommand(Title: "");
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(422);
@@ -52,7 +55,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         // Arrange - Create a collection first
         var createCommand = new CreateCollectionCommand(Title: "Collection for Get");
 
-        var createResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var createResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(createCommand).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(201);
@@ -61,7 +64,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var created = createResponse.ReadAsJson<CreateCollectionResponse>();
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{created!.Id}");
             scenario.StatusCodeShouldBe(200);
@@ -81,7 +84,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var nonExistentId = Guid.NewGuid();
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{nonExistentId}");
             scenario.StatusCodeShouldBe(404);
@@ -93,7 +96,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
     {
         // Arrange - Create a collection and an image
         var collectionCommand = new CreateCollectionCommand(Title: "Collection for Adding Image");
-        var collectionResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var collectionResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(collectionCommand).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(201);
@@ -106,7 +109,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
             Tags: tags,
             ContentType: "image/jpeg"
         );
-        var imageResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var imageResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -114,14 +117,14 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var image = imageResponse.ReadAsJson<CreateImagePostResponse>();
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{collection!.Id}/images/{image!.Id}");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Verify image was added to collection
-        var getResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var getResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{collection!.Id}");
             scenario.StatusCodeShouldBe(200);
@@ -143,7 +146,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
             Tags: tags,
             ContentType: "image/jpeg"
         );
-        var imageResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var imageResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -153,7 +156,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var nonExistentCollectionId = Guid.NewGuid();
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{nonExistentCollectionId}/images/{image!.Id}");
             scenario.StatusCodeShouldBe(404);
@@ -165,7 +168,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
     {
         // Arrange - Create a collection only
         var collectionCommand = new CreateCollectionCommand(Title: "Collection for Non-existent Image");
-        var collectionResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var collectionResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(collectionCommand).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(201);
@@ -175,7 +178,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var nonExistentImageId = Guid.NewGuid();
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{collection!.Id}/images/{nonExistentImageId}");
             scenario.StatusCodeShouldBe(422);
@@ -187,7 +190,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
     {
         // Arrange - Create a collection and add an image to it
         var collectionCommand = new CreateCollectionCommand(Title: "Collection for Removing Image");
-        var collectionResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var collectionResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(collectionCommand).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(201);
@@ -200,7 +203,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
             Tags: tags,
             ContentType: "image/jpeg"
         );
-        var imageResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var imageResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -208,21 +211,21 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var image = imageResponse.ReadAsJson<CreateImagePostResponse>();
 
         // Add image to collection
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{collection!.Id}/images/{image!.Id}");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Act & Assert - Remove the image
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Delete.Url($"/api/collections/{collection!.Id}/images/{image!.Id}");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Verify image was removed from collection
-        var getResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var getResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{collection!.Id}");
             scenario.StatusCodeShouldBe(200);
@@ -241,7 +244,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var nonExistentImageId = Guid.NewGuid();
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Delete.Url($"/api/collections/{nonExistentCollectionId}/images/{nonExistentImageId}");
             scenario.StatusCodeShouldBe(404);
@@ -253,7 +256,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
     {
         // Arrange - Create a collection
         var collectionCommand = new CreateCollectionCommand(Title: "Collection with Tag Aggregation");
-        var collectionResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var collectionResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(collectionCommand).ToUrl("/api/collections");
             scenario.StatusCodeShouldBe(201);
@@ -267,7 +270,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
             Tags: tags1,
             ContentType: "image/jpeg"
         );
-        var imageResponse1 = await Fixture.AlbaHost.Scenario(scenario =>
+        var imageResponse1 = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand1).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -280,7 +283,7 @@ public class CollectionEndpointsTests : DatabaseResetFixture
             Tags: tags2,
             ContentType: "image/jpeg"
         );
-        var imageResponse2 = await Fixture.AlbaHost.Scenario(scenario =>
+        var imageResponse2 = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand2).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -288,20 +291,20 @@ public class CollectionEndpointsTests : DatabaseResetFixture
         var image2 = imageResponse2.ReadAsJson<CreateImagePostResponse>();
 
         // Add both images to collection
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{collection!.Id}/images/{image1!.Id}");
             scenario.StatusCodeShouldBe(200);
         });
 
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{collection!.Id}/images/{image2!.Id}");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Act & Assert - Get collection and verify tags are aggregated
-        var getResponse = await Fixture.AlbaHost.Scenario(scenario =>
+        var getResponse = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/collections/{collection!.Id}");
             scenario.StatusCodeShouldBe(200);

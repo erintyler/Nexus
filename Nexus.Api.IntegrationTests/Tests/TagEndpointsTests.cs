@@ -11,10 +11,13 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
-public class TagEndpointsTests : DatabaseResetFixture
+public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
 {
-    public TagEndpointsTests(AlbaWebApplicationFixture fixture) : base(fixture)
+    private readonly AlbaWebApplicationFixture _fixture;
+
+    public TagEndpointsTests(AlbaWebApplicationFixture fixture)
     {
+        _fixture = fixture;
     }
 
     [Fact]
@@ -28,14 +31,14 @@ public class TagEndpointsTests : DatabaseResetFixture
             ContentType: "image/jpeg"
         );
 
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
         });
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/search");
             scenario.StatusCodeShouldBe(200);
@@ -56,14 +59,14 @@ public class TagEndpointsTests : DatabaseResetFixture
             ContentType: "image/jpeg"
         );
 
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
         });
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/tags/search?searchTerm={specificTag.Value}");
             scenario.StatusCodeShouldBe(200);
@@ -86,7 +89,7 @@ public class TagEndpointsTests : DatabaseResetFixture
                 ContentType: "image/jpeg"
             );
 
-            await Fixture.AlbaHost.Scenario(scenario =>
+            await _fixture.AlbaHost.Scenario(scenario =>
             {
                 scenario.Post.Json(imageCommand).ToUrl("/api/images");
                 scenario.StatusCodeShouldBe(201);
@@ -94,7 +97,7 @@ public class TagEndpointsTests : DatabaseResetFixture
         }
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/search?pageNumber=1&pageSize=3");
             scenario.StatusCodeShouldBe(200);
@@ -121,7 +124,7 @@ public class TagEndpointsTests : DatabaseResetFixture
                 ContentType: "image/jpeg"
             );
 
-            await Fixture.AlbaHost.Scenario(scenario =>
+            await _fixture.AlbaHost.Scenario(scenario =>
             {
                 scenario.Post.Json(imageCommand).ToUrl("/api/images");
                 scenario.StatusCodeShouldBe(201);
@@ -131,7 +134,7 @@ public class TagEndpointsTests : DatabaseResetFixture
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
             scenario.StatusCodeShouldBe(200);
@@ -150,7 +153,7 @@ public class TagEndpointsTests : DatabaseResetFixture
         var migrateCommand = new MigrateTagCommand(tag, tag);
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
             scenario.StatusCodeShouldBe(422);
@@ -171,7 +174,7 @@ public class TagEndpointsTests : DatabaseResetFixture
             ContentType: "image/jpeg"
         );
 
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -179,14 +182,14 @@ public class TagEndpointsTests : DatabaseResetFixture
 
         // Perform migration
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/migrations");
             scenario.StatusCodeShouldBe(200);
@@ -211,7 +214,7 @@ public class TagEndpointsTests : DatabaseResetFixture
             ContentType: "image/jpeg"
         );
 
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -219,14 +222,14 @@ public class TagEndpointsTests : DatabaseResetFixture
 
         // Perform migration
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/tags/migrations?sourceTag={sourceTag.Type}:{sourceTag.Value}");
             scenario.StatusCodeShouldBe(200);
@@ -250,7 +253,7 @@ public class TagEndpointsTests : DatabaseResetFixture
             ContentType: "image/jpeg"
         );
 
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(imageCommand).ToUrl("/api/images");
             scenario.StatusCodeShouldBe(201);
@@ -258,14 +261,14 @@ public class TagEndpointsTests : DatabaseResetFixture
 
         // Perform migration
         var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
             scenario.StatusCodeShouldBe(200);
         });
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url($"/api/tags/migrations?targetTag={targetTag.Type}:{targetTag.Value}");
             scenario.StatusCodeShouldBe(200);
@@ -290,14 +293,14 @@ public class TagEndpointsTests : DatabaseResetFixture
                 ContentType: "image/jpeg"
             );
 
-            await Fixture.AlbaHost.Scenario(scenario =>
+            await _fixture.AlbaHost.Scenario(scenario =>
             {
                 scenario.Post.Json(imageCommand).ToUrl("/api/images");
                 scenario.StatusCodeShouldBe(201);
             });
 
             var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-            await Fixture.AlbaHost.Scenario(scenario =>
+            await _fixture.AlbaHost.Scenario(scenario =>
             {
                 scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
                 scenario.StatusCodeShouldBe(200);
@@ -305,7 +308,7 @@ public class TagEndpointsTests : DatabaseResetFixture
         }
 
         // Act & Assert
-        var response = await Fixture.AlbaHost.Scenario(scenario =>
+        var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Get.Url("/api/tags/migrations?pageNumber=1&pageSize=2");
             scenario.StatusCodeShouldBe(200);

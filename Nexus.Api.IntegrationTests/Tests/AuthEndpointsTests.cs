@@ -5,10 +5,13 @@ using Xunit;
 
 namespace Nexus.Api.IntegrationTests.Tests;
 
-public class AuthEndpointsTests : DatabaseResetFixture
+public class AuthEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
 {
-    public AuthEndpointsTests(AlbaWebApplicationFixture fixture) : base(fixture)
+    private readonly AlbaWebApplicationFixture _fixture;
+
+    public AuthEndpointsTests(AlbaWebApplicationFixture fixture)
     {
+        _fixture = fixture;
     }
 
     [Fact]
@@ -18,7 +21,7 @@ public class AuthEndpointsTests : DatabaseResetFixture
         var command = new ExchangeTokenCommand(AccessToken: "");
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
             scenario.StatusCodeShouldBe(422);
@@ -32,7 +35,7 @@ public class AuthEndpointsTests : DatabaseResetFixture
         var command = new ExchangeTokenCommand(AccessToken: "invalid-token-123");
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
             scenario.StatusCodeShouldBe(401);
@@ -46,7 +49,7 @@ public class AuthEndpointsTests : DatabaseResetFixture
         var command = new ExchangeTokenCommand(AccessToken: null!);
 
         // Act & Assert
-        await Fixture.AlbaHost.Scenario(scenario =>
+        await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(command).ToUrl("/api/auth/exchange");
             scenario.StatusCodeShouldBe(422);

@@ -1,7 +1,5 @@
 using Alba;
-using JasperFx.Core;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Nexus.IntegrationTests.Utilities.Fixtures;
 using Testcontainers.RabbitMq;
 
@@ -29,6 +27,9 @@ public sealed class AlbaWebApplicationFixture : IAsyncLifetime
         await _postgresFixture.InitializeAsync();
         await _rabbitMqContainer.StartAsync();
 
+        // Apply database migrations
+        //await ApplyDatabaseMigrationsAsync();
+
         // Set environment variables before creating the host
         Environment.SetEnvironmentVariable("ConnectionStrings__postgres", _postgresFixture.ConnectionString);
         Environment.SetEnvironmentVariable("ConnectionStrings__rabbitmq", _rabbitMqContainer.GetConnectionString());
@@ -42,7 +43,14 @@ public sealed class AlbaWebApplicationFixture : IAsyncLifetime
 
     public async ValueTask DisposeAsync()
     {
-        AlbaHost.SafeDispose();
+        try
+        {
+            await AlbaHost.DisposeAsync();
+        }
+        catch
+        {
+            // Ignore exceptions during disposal
+        }
 
         await _rabbitMqContainer.DisposeAsync();
         await _postgresFixture.DisposeAsync();
