@@ -13,7 +13,7 @@ namespace Nexus.Domain.Entities;
 public sealed class User : BaseEntity
 {
     internal User() { }
-    
+
     [JsonConstructor]
     internal User(Guid id) : base(id) { }
 

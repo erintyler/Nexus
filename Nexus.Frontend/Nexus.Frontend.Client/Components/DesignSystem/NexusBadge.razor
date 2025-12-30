@@ -1,0 +1,131 @@
+@* Modern badge/tag component following Nexus design system *@
+
+<span class="@GetBadgeClasses()" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <span class="font-semibold">@Label:</span>
+        <span class="ml-1">@ChildContent</span>
+    }
+    else
+    {
+        @ChildContent
+    }
+    
+    @if (Removable)
+    {
+        <button type="button" class="ml-2 text-white/90 hover:text-white focus:outline-none transform hover:scale-110 transition-transform" @onclick="HandleRemove">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+    }
+</span>
+
+@code {
+    /// <summary>
+    /// Badge content
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Badge color variant
+    /// </summary>
+    [Parameter]
+    public BadgeColor Color { get; set; } = BadgeColor.Primary;
+
+    /// <summary>
+    /// Badge style variant
+    /// </summary>
+    [Parameter]
+    public BadgeStyle Style { get; set; } = BadgeStyle.Gradient;
+
+    /// <summary>
+    /// Optional label prefix
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>
+    /// Whether the badge can be removed
+    /// </summary>
+    [Parameter]
+    public bool Removable { get; set; }
+
+    /// <summary>
+    /// Callback when badge is removed
+    /// </summary>
+    [Parameter]
+    public EventCallback OnRemove { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetBadgeClasses()
+    {
+        var baseClasses = "inline-flex items-center text-sm font-medium px-4 py-1.5 rounded-full";
+        
+        var styleClasses = Style switch
+        {
+            BadgeStyle.Gradient => GetGradientClasses(),
+            BadgeStyle.Soft => GetSoftClasses(),
+            _ => GetGradientClasses()
+        };
+
+        var hoverClasses = Removable ? "hover:shadow-lg transition-shadow duration-200" : "";
+
+        return $"{baseClasses} {styleClasses} {hoverClasses}".Trim();
+    }
+
+    private string GetGradientClasses()
+    {
+        return Color switch
+        {
+            BadgeColor.Primary => "bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white shadow-md",
+            BadgeColor.Success => "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md",
+            BadgeColor.Danger => "bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-md",
+            BadgeColor.Accent => "bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-md",
+            BadgeColor.Warning => "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md",
+            BadgeColor.Info => "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md",
+            _ => "bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white shadow-md"
+        };
+    }
+
+    private string GetSoftClasses()
+    {
+        return Color switch
+        {
+            BadgeColor.Primary => "bg-purple-100 text-purple-700 border border-purple-200 shadow-sm",
+            BadgeColor.Success => "bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm",
+            BadgeColor.Danger => "bg-red-100 text-red-700 border border-red-200 shadow-sm",
+            BadgeColor.Accent => "bg-violet-100 text-violet-700 border border-violet-200 shadow-sm",
+            BadgeColor.Warning => "bg-amber-100 text-amber-700 border border-amber-200 shadow-sm",
+            BadgeColor.Info => "bg-blue-100 text-blue-700 border border-blue-200 shadow-sm",
+            _ => "bg-purple-100 text-purple-700 border border-purple-200 shadow-sm"
+        };
+    }
+
+    private async Task HandleRemove()
+    {
+        await OnRemove.InvokeAsync();
+    }
+
+    public enum BadgeColor
+    {
+        Primary,
+        Success,
+        Danger,
+        Accent,
+        Warning,
+        Info
+    }
+
+    public enum BadgeStyle
+    {
+        Gradient,
+        Soft
+    }
+}

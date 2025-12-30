@@ -81,7 +81,7 @@ builder.Services.AddAuthentication(options =>
                 {
                     identity.AddClaim(new Claim(claim.Key, claim.Value));
                 }
-                
+
                 context.Principal = new ClaimsPrincipal(identity);
             }
         };
