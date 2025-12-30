@@ -17,12 +17,12 @@ public class AddImagePostToCollectionCommandHandler
         {
             return (CollectionErrors.NotFound, []);
         }
-        
+
         if (imagePost is null)
         {
             return (CollectionErrors.ImagePostDoesNotExist, []);
         }
-        
+
         // Let the aggregate handle validation and event creation
         var addResult = collection.AddImagePost(request.ImagePostId);
 

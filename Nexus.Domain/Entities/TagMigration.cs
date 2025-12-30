@@ -53,7 +53,7 @@ public sealed class TagMigration : BaseEntity
         {
             return Result.Failure<TagMigration>(targetTagResult.Errors);
         }
-        
+
         if (sourceTagResult.Value.Equals(targetTagResult.Value))
         {
             return TagMigrationErrors.SourceAndTargetIdentical;

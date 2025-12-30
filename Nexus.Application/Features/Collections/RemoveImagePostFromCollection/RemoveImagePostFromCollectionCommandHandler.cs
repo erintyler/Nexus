@@ -15,7 +15,7 @@ public class RemoveImagePostFromCollectionCommandHandler
         {
             return (CollectionErrors.NotFound, []);
         }
-        
+
         // Let the aggregate handle validation and event creation
         var removeResult = collection.RemoveImagePost(request.ImagePostId);
 

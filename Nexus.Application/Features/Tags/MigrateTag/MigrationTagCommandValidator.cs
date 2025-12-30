@@ -12,11 +12,11 @@ public class MigrateTagCommandValidator : AbstractValidator<MigrateTagCommand>
         RuleFor(x => x.Source)
             .NotNull()
             .WithMessage("Source tag must be provided.");
-        
+
         RuleFor(x => x.Target)
             .NotNull()
             .WithMessage("Target tag must be provided.");
-        
+
         RuleFor(x => x)
             .Must(cmd => cmd.Source.Type != cmd.Target.Type || cmd.Source.Value != cmd.Target.Value)
             .WithMessage("Source and Target tags must be different.");

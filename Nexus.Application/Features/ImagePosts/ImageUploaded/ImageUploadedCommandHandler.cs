@@ -19,7 +19,7 @@ public class ImageUploadedCommandHandler
         {
             return (ImagePostErrors.NotFound, [], []);
         }
-        
+
         var userId = userContextService.GetUserId();
         var markAsProcessingResult = imagePost.MarkAsProcessing(userId);
 

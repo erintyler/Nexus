@@ -46,12 +46,12 @@ public sealed class AlbaWebApplicationFixture : IAsyncLifetime
         try
         {
             await AlbaHost.DisposeAsync();
-        } 
+        }
         catch
         {
             // Ignore exceptions during disposal
         }
-        
+
         await _rabbitMqContainer.DisposeAsync();
         await _postgresFixture.DisposeAsync();
     }

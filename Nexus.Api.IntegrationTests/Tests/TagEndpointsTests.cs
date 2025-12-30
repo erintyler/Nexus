@@ -159,7 +159,7 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             scenario.StatusCodeShouldBe(422);
         });
     }
-    
+
     [Fact]
     public async Task GetTagMigrations_WithoutFilters_ReturnsAllMigrations()
     {

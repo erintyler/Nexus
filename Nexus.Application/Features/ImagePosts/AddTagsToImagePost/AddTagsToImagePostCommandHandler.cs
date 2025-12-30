@@ -20,7 +20,7 @@ public class AddTagsToImagePostCommandHandler
         {
             return (ImagePostErrors.NotFound, []);
         }
-        
+
         var tags = request.Tags
             .Select(t => new TagData(t.Type, t.Value))
             .ToList();

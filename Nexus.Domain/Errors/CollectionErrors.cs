@@ -39,7 +39,7 @@ public static class CollectionErrors
         "Collection.ImagePost.NotFound",
         ErrorType.BusinessRule,
         "The image post is not in this collection.");
-    
+
     public static readonly Error ImagePostDoesNotExist = new(
         "Collection.ImagePost.DoesNotExist",
         ErrorType.BusinessRule,

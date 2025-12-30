@@ -12,7 +12,7 @@ public class PagedResult<T>
         PageNumber = pageNumber;
         PageSize = pageSize;
     }
-    
+
     private PagedResult(IReadOnlyList<T> items, int totalCount, PaginationRequest paginationRequest)
     {
         Items = items;

@@ -28,7 +28,7 @@ public static class ResultExtensions
         public ProblemHttpResult ToProblem()
         {
             // Get most severe status code
-            var statusCode = result.Errors.Max(e => e.Type) switch 
+            var statusCode = result.Errors.Max(e => e.Type) switch
             {
                 ErrorType.Validation => StatusCodes.Status400BadRequest,
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
@@ -39,7 +39,7 @@ public static class ResultExtensions
                 ErrorType.ExternalService => StatusCodes.Status502BadGateway,
                 _ => StatusCodes.Status500InternalServerError
             };
-            
+
             return TypedResults.Problem(
                 statusCode: statusCode,
                 title: "An error occurred while processing the request",
