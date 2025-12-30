@@ -1,3 +1,7 @@
+@import "tailwindcss";
+
+@source "../../Nexus.Frontend.Client/**/*.razor";
+
 h1:focus {
     outline: none;
 }

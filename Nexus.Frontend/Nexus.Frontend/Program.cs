@@ -74,9 +74,15 @@ builder.Services.AddAuthentication(options =>
                     new AuthenticationToken { Name = "token_type", Value = exchangeResult.TokenType }
                 });
 
-                // Add claims from the user info endpoint
-                var identity = (ClaimsIdentity)context.Principal!.Identity!;
-                identity.AddClaim(new Claim("jwt_token", exchangeResult.AccessToken));
+                // Create a new identity
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                foreach (var claim in exchangeResult.Claims)
+                {
+                    identity.AddClaim(new Claim(claim.Key, claim.Value));
+                }
+                
+                context.Principal = new ClaimsPrincipal(identity);
             }
         };
     });
