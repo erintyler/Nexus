@@ -21,7 +21,6 @@ public abstract class DatabaseResetFixture : IClassFixture<AlbaWebApplicationFix
         // Reset the database before each test
         var store = Fixture.AlbaHost.Services.GetRequiredService<IDocumentStore>();
         await store.Advanced.Clean.CompletelyRemoveAllAsync();
-        await store.Storage.ApplyAllConfiguredChangesToDatabaseAsync();
     }
 
     public ValueTask DisposeAsync()
