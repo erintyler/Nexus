@@ -352,10 +352,13 @@ In development, .NET Aspire manages connection strings automatically. For produc
 ## 📚 Additional Resources
 
 ### Documentation
-- [Discord OAuth Setup Guide](DISCORD_AUTH_SETUP.md)
-- [Authentication Microservice Analysis](AUTHENTICATION_MICROSERVICE_ANALYSIS.md)
-- [Authentication Dependencies Technical Analysis](AUTHENTICATION_DEPENDENCIES.md)
-- [Architecture Tests README](Nexus.Architecture.Tests/README.md)
+- [Discord OAuth Setup Guide](DISCORD_AUTH_SETUP.md) - How to configure Discord authentication
+- [Authentication Microservice Evaluation](AUTHENTICATION_EVALUATION_INDEX.md) - **Complete analysis of whether to extract auth to microservice** ⭐
+  - [Quick Decision Summary](AUTHENTICATION_DECISION.md)
+  - [Full Analysis Report](AUTHENTICATION_MICROSERVICE_ANALYSIS.md)
+  - [Technical Dependencies](AUTHENTICATION_DEPENDENCIES.md)
+  - [Architecture Diagrams](AUTHENTICATION_ARCHITECTURE.md)
+- [Architecture Tests README](Nexus.Architecture.Tests/README.md) - Enforced architectural rules
 
 ### External Resources
 - [.NET Aspire Documentation](https://learn.microsoft.com/dotnet/aspire/)
