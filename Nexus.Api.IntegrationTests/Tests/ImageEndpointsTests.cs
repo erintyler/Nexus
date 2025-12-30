@@ -185,7 +185,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     }
 
     [Fact]
-    public async Task MarkImageUploadComplete_WithNonExistentImage_ReturnsUnprocessableEntity()
+    public async Task MarkImageUploadComplete_WithNonExistentImage_ReturnsNotFound()
     {
         // Arrange
         var nonExistentId = Guid.NewGuid();
@@ -194,7 +194,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Put.Url($"/api/images/{nonExistentId}/upload-complete");
-            scenario.StatusCodeShouldBe(422);
+            scenario.StatusCodeShouldBe(404);
         });
     }
 
@@ -238,7 +238,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     }
 
     [Fact]
-    public async Task AddTagsToImage_WithNonExistentImage_ReturnsUnprocessableEntity()
+    public async Task AddTagsToImage_WithNonExistentImage_ReturnsNotFound()
     {
         // Arrange
         var nonExistentId = Guid.NewGuid();
@@ -248,7 +248,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Json(tags).ToUrl($"/api/images/{nonExistentId}/tags");
-            scenario.StatusCodeShouldBe(422);
+            scenario.StatusCodeShouldBe(404);
         });
     }
 
@@ -292,7 +292,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     }
 
     [Fact]
-    public async Task RemoveTagsFromImage_WithNonExistentImage_ReturnsUnprocessableEntity()
+    public async Task RemoveTagsFromImage_WithNonExistentImage_ReturnsNotFound()
     {
         // Arrange
         var nonExistentId = Guid.NewGuid();
@@ -302,7 +302,7 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Delete.Json(tags).ToUrl($"/api/images/{nonExistentId}/tags");
-            scenario.StatusCodeShouldBe(422);
+            scenario.StatusCodeShouldBe(404);
         });
     }
 
@@ -377,13 +377,13 @@ public class ImageEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         });
 
         var created = createResponse.ReadAsJson<CreateImagePostResponse>();
-        var dateFrom = DateTimeOffset.UtcNow.AddDays(-1);
+        var dateFrom = DateTimeOffset.UtcNow.AddDays(-3);
         var dateTo = DateTimeOffset.UtcNow.AddDays(1);
 
         // Act & Assert
         var response = await _fixture.AlbaHost.Scenario(scenario =>
         {
-            scenario.Get.Url($"/api/images/{created!.Id}/history?dateFrom={dateFrom:O}&dateTo={dateTo:O}");
+            scenario.Get.Url($"/api/images/{created!.Id}/history?dateFrom={dateFrom:s}&dateTo={dateTo:s}");
             scenario.StatusCodeShouldBe(200);
         });
 

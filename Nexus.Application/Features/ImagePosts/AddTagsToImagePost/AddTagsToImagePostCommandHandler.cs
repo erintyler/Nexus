@@ -1,6 +1,7 @@
 using Nexus.Application.Common.Services;
 using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
+using Nexus.Domain.Errors;
 using Nexus.Domain.Primitives;
 using Wolverine.Marten;
 using Wolverine.Persistence;
@@ -11,10 +12,15 @@ public class AddTagsToImagePostCommandHandler
 {
     public static async Task<(Result, Events)> HandleAsync(
         AddTagsToImagePostCommand request,
-        [WriteAggregate(OnMissing = OnMissing.ProblemDetailsWith404)] ImagePost imagePost,
+        [WriteAggregate(Required = false)] ImagePost? imagePost,
         ITagMigrationService tagMigrationService,
         CancellationToken ct)
     {
+        if (imagePost is null)
+        {
+            return (ImagePostErrors.NotFound, []);
+        }
+        
         var tags = request.Tags
             .Select(t => new TagData(t.Type, t.Value))
             .ToList();

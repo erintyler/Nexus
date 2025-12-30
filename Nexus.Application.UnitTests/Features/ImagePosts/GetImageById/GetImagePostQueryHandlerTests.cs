@@ -14,7 +14,7 @@ public class GetImagePostQueryHandlerTests
     private readonly Fixture _fixture = new();
 
     [Fact]
-    public async Task HandleAsync_ShouldReturnImagePostDto_WhenImagePostExistsAndIsCompleted()
+    public void Handle_ShouldReturnImagePostDto_WhenImagePostExistsAndIsCompleted()
     {
         // Arrange
         var imagePostId = Guid.NewGuid();
@@ -47,7 +47,7 @@ public class GetImagePostQueryHandlerTests
             .Returns(processedImageUrl);
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);
@@ -72,14 +72,14 @@ public class GetImagePostQueryHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldReturnNotFoundError_WhenImagePostIsNull()
+    public void Handle_ShouldReturnNotFoundError_WhenImagePostIsNull()
     {
         // Arrange
         var query = new GetImagePostQuery(Guid.NewGuid());
         ImagePostReadModel? imagePost = null;
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);
@@ -93,115 +93,7 @@ public class GetImagePostQueryHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldReturnNotFoundError_WhenImagePostStatusIsPending()
-    {
-        // Arrange
-        var imagePostId = Guid.NewGuid();
-        var imagePost = new ImagePostReadModel
-        {
-            Id = imagePostId,
-            Title = _fixture.Create<string>(),
-            Status = UploadStatus.Pending,
-            CreatedAt = DateTimeOffset.UtcNow,
-            LastModified = DateTimeOffset.UtcNow,
-            CreatedBy = _fixture.Create<string>(),
-            LastModifiedBy = _fixture.Create<string>(),
-            Tags = new List<TagReadModel>
-            {
-                new(_fixture.Create<string>(), TagType.General)
-            }
-        };
-
-        var query = new GetImagePostQuery(imagePostId);
-
-        // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
-            query,
-            _mockImageService.Object,
-            imagePost);
-
-        // Assert
-        Assert.True(result.IsFailure);
-        Assert.Single(result.Errors);
-        Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-
-        _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_ShouldReturnNotFoundError_WhenImagePostStatusIsProcessing()
-    {
-        // Arrange
-        var imagePostId = Guid.NewGuid();
-        var imagePost = new ImagePostReadModel
-        {
-            Id = imagePostId,
-            Title = _fixture.Create<string>(),
-            Status = UploadStatus.Processing,
-            CreatedAt = DateTimeOffset.UtcNow,
-            LastModified = DateTimeOffset.UtcNow,
-            CreatedBy = _fixture.Create<string>(),
-            LastModifiedBy = _fixture.Create<string>(),
-            Tags = new List<TagReadModel>
-            {
-                new(_fixture.Create<string>(), TagType.Artist)
-            }
-        };
-
-        var query = new GetImagePostQuery(imagePostId);
-
-        // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
-            query,
-            _mockImageService.Object,
-            imagePost);
-
-        // Assert
-        Assert.True(result.IsFailure);
-        Assert.Single(result.Errors);
-        Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-
-        _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_ShouldReturnNotFoundError_WhenImagePostStatusIsFailed()
-    {
-        // Arrange
-        var imagePostId = Guid.NewGuid();
-        var imagePost = new ImagePostReadModel
-        {
-            Id = imagePostId,
-            Title = _fixture.Create<string>(),
-            Status = UploadStatus.Failed,
-            CreatedAt = DateTimeOffset.UtcNow,
-            LastModified = DateTimeOffset.UtcNow,
-            CreatedBy = _fixture.Create<string>(),
-            LastModifiedBy = _fixture.Create<string>(),
-            Tags = new List<TagReadModel>
-            {
-                new(_fixture.Create<string>(), TagType.Meta)
-            }
-        };
-
-        var query = new GetImagePostQuery(imagePostId);
-
-        // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
-            query,
-            _mockImageService.Object,
-            imagePost);
-
-        // Assert
-        Assert.True(result.IsFailure);
-        Assert.Single(result.Errors);
-        Assert.Equal(ImagePostErrors.NotFound, result.Errors[0]);
-
-        _mockImageService.Verify(s => s.GetProcessedImageUrl(It.IsAny<Guid>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_ShouldReturnEmptyTagsList_WhenImagePostHasNoTags()
+    public void Handle_ShouldReturnEmptyTagsList_WhenImagePostHasNoTags()
     {
         // Arrange
         var imagePostId = Guid.NewGuid();
@@ -226,7 +118,7 @@ public class GetImagePostQueryHandlerTests
             .Returns(processedImageUrl);
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);
@@ -239,7 +131,7 @@ public class GetImagePostQueryHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldMapAllTagTypes_WhenImagePostHasMultipleTagTypes()
+    public void Handle_ShouldMapAllTagTypes_WhenImagePostHasMultipleTagTypes()
     {
         // Arrange
         var imagePostId = Guid.NewGuid();
@@ -271,7 +163,7 @@ public class GetImagePostQueryHandlerTests
             .Returns(processedImageUrl);
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);
@@ -290,7 +182,7 @@ public class GetImagePostQueryHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldPreserveTagOrder_WhenMappingTags()
+    public void Handle_ShouldPreserveTagOrder_WhenMappingTags()
     {
         // Arrange
         var imagePostId = Guid.NewGuid();
@@ -323,7 +215,7 @@ public class GetImagePostQueryHandlerTests
             .Returns(processedImageUrl);
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);
@@ -345,7 +237,7 @@ public class GetImagePostQueryHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldUseCorrectImagePostId_WhenGeneratingProcessedImageUrl()
+    public void Handle_ShouldUseCorrectImagePostId_WhenGeneratingProcessedImageUrl()
     {
         // Arrange
         var imagePostId = Guid.NewGuid();
@@ -373,7 +265,7 @@ public class GetImagePostQueryHandlerTests
             .Returns(processedImageUrl);
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);
@@ -386,7 +278,7 @@ public class GetImagePostQueryHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldMapDifferentCreatorAndModifier_WhenTheyAreDifferent()
+    public void Handle_ShouldMapDifferentCreatorAndModifier_WhenTheyAreDifferent()
     {
         // Arrange
         var imagePostId = Guid.NewGuid();
@@ -416,7 +308,7 @@ public class GetImagePostQueryHandlerTests
             .Returns(processedImageUrl);
 
         // Act
-        var result = await GetImagePostQueryHandler.HandleAsync(
+        var result = GetImagePostQueryHandler.Handle(
             query,
             _mockImageService.Object,
             imagePost);

@@ -7,15 +7,10 @@ namespace Nexus.Application.Features.Collections.GetCollectionById;
 
 public static class GetCollectionByIdQueryHandler
 {
-    public static Task<Result<CollectionReadModel>> HandleAsync(
+    public static Result<CollectionReadModel> Handle(
         GetCollectionByIdQuery query,
-        [ReadAggregate] CollectionReadModel? collection)
+        [ReadAggregate(Required = false)] CollectionReadModel? collection)
     {
-        if (collection == null)
-        {
-            return Task.FromResult(Result.Failure<CollectionReadModel>(CollectionErrors.NotFound));
-        }
-
-        return Task.FromResult(Result.Success(collection));
+        return collection is null ? Result.Failure<CollectionReadModel>(CollectionErrors.NotFound) : Result.Success(collection);
     }
 }

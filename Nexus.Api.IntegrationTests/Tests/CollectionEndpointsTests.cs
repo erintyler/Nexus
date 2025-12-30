@@ -137,7 +137,7 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     }
 
     [Fact]
-    public async Task AddImagePostToCollection_WithNonExistentCollection_ReturnsUnprocessableEntity()
+    public async Task AddImagePostToCollection_WithNonExistentCollection_ReturnsNotFound()
     {
         // Arrange - Create an image only
         var tags = TestDataGenerator.CreateTags(1);
@@ -159,7 +159,7 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Post.Url($"/api/collections/{nonExistentCollectionId}/images/{image!.Id}");
-            scenario.StatusCodeShouldBe(422);
+            scenario.StatusCodeShouldBe(404);
         });
     }
 
@@ -237,7 +237,7 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     }
 
     [Fact]
-    public async Task RemoveImagePostFromCollection_WithNonExistentCollection_ReturnsUnprocessableEntity()
+    public async Task RemoveImagePostFromCollection_WithNonExistentCollection_ReturnsNotFound()
     {
         // Arrange
         var nonExistentCollectionId = Guid.NewGuid();
@@ -247,7 +247,7 @@ public class CollectionEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
         await _fixture.AlbaHost.Scenario(scenario =>
         {
             scenario.Delete.Url($"/api/collections/{nonExistentCollectionId}/images/{nonExistentImageId}");
-            scenario.StatusCodeShouldBe(422);
+            scenario.StatusCodeShouldBe(404);
         });
     }
 

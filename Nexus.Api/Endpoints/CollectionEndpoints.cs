@@ -40,7 +40,7 @@ public static class CollectionEndpoints
                     return TypedResults.CreatedAtRoute(result.Value, "GetCollectionById", new { id = result.Value.Id });
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("CreateCollection")
             .WithSummary("Create new collection")
             .WithDescription("Creates a new collection with the specified title.")
@@ -89,7 +89,7 @@ public static class CollectionEndpoints
                     return TypedResults.Ok();
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("AddImagePostToCollection")
             .WithSummary("Add image post to collection")
             .WithDescription("Adds an existing image post to a collection.")
@@ -114,7 +114,7 @@ public static class CollectionEndpoints
                     return TypedResults.Ok();
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             }).WithName("RemoveImagePostFromCollection")
             .WithSummary("Remove image post from collection")
             .WithDescription("Removes an image post from a collection.")

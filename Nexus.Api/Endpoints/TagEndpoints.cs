@@ -50,7 +50,7 @@ public static class TagEndpoints
                         return TypedResults.Ok(result.Value);
                     }
 
-                    return result.ToUnprocessableEntityProblem();
+                    return result.ToProblem();
                 })
             .WithName("SearchTags")
             .WithSummary("Search tags")
@@ -74,7 +74,7 @@ public static class TagEndpoints
                     return TypedResults.Ok(result.Value);
                 }
 
-                return result.ToUnprocessableEntityProblem();
+                return result.ToProblem();
             })
             .WithName("MigrateTag")
             .WithSummary("Migrate tags across all image posts")

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Nexus.Domain.Common;
+using IResult = Nexus.Domain.Common.IResult;
 
 namespace Nexus.Api.Extensions;
 
@@ -24,21 +25,24 @@ public static class ResultExtensions
                 title: "One or more validation errors occurred");
         }
 
-        public ProblemHttpResult ToUnprocessableEntityProblem()
+        public ProblemHttpResult ToProblem()
         {
-            if (!result.IsFailure)
+            // Get most severe status code
+            var statusCode = result.Errors.Max(e => e.Type) switch 
             {
-                throw new InvalidOperationException("Cannot convert successful result to problem");
-            }
-
-            if (result.Errors.Any(e => e.Type != ErrorType.BusinessRule))
-            {
-                throw new InvalidOperationException("Result contains non-business rule errors");
-            }
-
+                ErrorType.Validation => StatusCodes.Status400BadRequest,
+                ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.BusinessRule => StatusCodes.Status422UnprocessableEntity,
+                ErrorType.Conflict => StatusCodes.Status409Conflict,
+                ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+                ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+                ErrorType.ExternalService => StatusCodes.Status502BadGateway,
+                _ => StatusCodes.Status500InternalServerError
+            };
+            
             return TypedResults.Problem(
-                statusCode: StatusCodes.Status422UnprocessableEntity,
-                title: "Request cannot be processed",
+                statusCode: statusCode,
+                title: "An error occurred while processing the request",
                 extensions: new Dictionary<string, object?>
                 {
                     ["errors"] = result.Errors.ToDictionary(e => e.Code, e => e.Description ?? string.Empty)

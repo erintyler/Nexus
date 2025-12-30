@@ -10,7 +10,7 @@ public class GetCollectionByIdQueryHandlerTests
     private readonly Fixture _fixture = new();
 
     [Fact]
-    public void HandleAsync_ShouldReturnCollection_WhenCollectionExists()
+    public void Handle_ShouldReturnCollection_WhenCollectionExists()
     {
         // Arrange
         var collectionId = _fixture.Create<Guid>();
@@ -26,7 +26,7 @@ public class GetCollectionByIdQueryHandlerTests
         var query = new GetCollectionByIdQuery(collectionId);
 
         // Act
-        var result = GetCollectionByIdQueryHandler.HandleAsync(
+        var result = GetCollectionByIdQueryHandler.Handle(
             query,
             expectedCollection);
 
@@ -39,14 +39,14 @@ public class GetCollectionByIdQueryHandlerTests
     }
 
     [Fact]
-    public void HandleAsync_ShouldReturnFailure_WhenCollectionNotFound()
+    public void Handle_ShouldReturnFailure_WhenCollectionNotFound()
     {
         // Arrange
         var collectionId = _fixture.Create<Guid>();
         var query = new GetCollectionByIdQuery(collectionId);
 
         // Act
-        var result = GetCollectionByIdQueryHandler.HandleAsync(
+        var result = GetCollectionByIdQueryHandler.Handle(
             query,
             null);
 

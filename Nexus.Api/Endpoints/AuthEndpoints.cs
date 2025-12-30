@@ -42,7 +42,7 @@ public static class AuthEndpoints
             return TypedResults.Unauthorized();
         }
 
-        return result.ToUnprocessableEntityProblem();
+        return result.ToProblem();
     }
 }
 

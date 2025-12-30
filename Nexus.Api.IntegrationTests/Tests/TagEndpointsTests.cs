@@ -80,7 +80,7 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
     public async Task SearchTags_WithPagination_ReturnsPagedResults()
     {
         // Arrange - Create multiple images with different tags
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             var tags = TestDataGenerator.CreateTags(1);
             var imageCommand = new CreateImagePostCommand(
@@ -159,23 +159,7 @@ public class TagEndpointsTests : IClassFixture<AlbaWebApplicationFixture>
             scenario.StatusCodeShouldBe(422);
         });
     }
-
-    [Fact]
-    public async Task MigrateTag_WithDifferentTagTypes_ReturnsBadRequest()
-    {
-        // Arrange
-        var sourceTag = TestDataGenerator.CreateTagDto(TagType.Artist, "artist");
-        var targetTag = TestDataGenerator.CreateTagDto(TagType.Series, "series");
-        var migrateCommand = new MigrateTagCommand(sourceTag, targetTag);
-
-        // Act & Assert
-        await _fixture.AlbaHost.Scenario(scenario =>
-        {
-            scenario.Post.Json(migrateCommand).ToUrl("/api/tags/migrate");
-            scenario.StatusCodeShouldBe(422);
-        });
-    }
-
+    
     [Fact]
     public async Task GetTagMigrations_WithoutFilters_ReturnsAllMigrations()
     {

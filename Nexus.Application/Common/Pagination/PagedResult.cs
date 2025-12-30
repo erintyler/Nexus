@@ -1,10 +1,21 @@
+using System.Text.Json.Serialization;
+
 namespace Nexus.Application.Common.Pagination;
 
 public class PagedResult<T>
 {
-    private PagedResult(IReadOnlyList<T> data, int totalCount, PaginationRequest paginationRequest)
+    [JsonConstructor]
+    private PagedResult(IReadOnlyList<T> items, int totalCount, int pageNumber, int pageSize)
     {
-        Items = data;
+        Items = items;
+        TotalCount = totalCount;
+        PageNumber = pageNumber;
+        PageSize = pageSize;
+    }
+    
+    private PagedResult(IReadOnlyList<T> items, int totalCount, PaginationRequest paginationRequest)
+    {
+        Items = items;
         TotalCount = totalCount;
         PageNumber = paginationRequest.PageNumber;
         PageSize = paginationRequest.PageSize;
@@ -18,7 +29,7 @@ public class PagedResult<T>
     public bool HasPreviousPage => PageNumber > 1;
     public bool HasNextPage => PageNumber < TotalPages;
 
-    public static PagedResult<T> Create(IReadOnlyList<T> data, int totalCount, PaginationRequest paginationRequest)
+    public static PagedResult<T> Create(IReadOnlyList<T> items, int totalCount, PaginationRequest paginationRequest)
     {
         if (paginationRequest.PageNumber < 1)
         {
@@ -30,6 +41,6 @@ public class PagedResult<T>
             throw new ArgumentOutOfRangeException(nameof(paginationRequest), "Page size must be greater than 0.");
         }
 
-        return new PagedResult<T>(data, totalCount, paginationRequest);
+        return new PagedResult<T>(items, totalCount, paginationRequest);
     }
 }
