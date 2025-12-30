@@ -72,6 +72,8 @@ Multi-line text input component.
 **Features:**
 - Configurable rows
 - Same validation and styling as NexusTextInput
+- Character counter with visual feedback
+- Max length enforcement
 - Auto-resizing disabled for consistent UI
 
 **Usage:**
@@ -80,6 +82,7 @@ Multi-line text input component.
     Label="Description"
     @bind-Value="description"
     Rows="6"
+    MaxLength="500"
     Placeholder="Enter description..." />
 ```
 

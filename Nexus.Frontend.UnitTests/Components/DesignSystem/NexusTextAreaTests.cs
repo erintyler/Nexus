@@ -190,4 +190,123 @@ public class NexusTextAreaTests : Bunit.TestContext
         var wrapper = cut.Find("div");
         Assert.Contains("custom-wrapper", wrapper.ClassName);
     }
+
+    [Fact]
+    public void NexusTextArea_ShowsCharacterCount_WhenMaxLengthIsSet()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 100)
+            .Add(p => p.Value, "Test")
+        );
+
+        // Assert
+        Assert.Contains("4 / 100", cut.Markup);
+    }
+
+    [Fact]
+    public void NexusTextArea_HidesCharacterCount_WhenShowCharacterCountIsFalse()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 100)
+            .Add(p => p.ShowCharacterCount, false)
+        );
+
+        // Assert
+        Assert.DoesNotContain("/ 100", cut.Markup);
+    }
+
+    [Fact]
+    public void NexusTextArea_DoesNotShowCharacterCount_WhenMaxLengthIsNotSet()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.Value, "Test")
+        );
+
+        // Assert - Check that character count text is not present
+        var divs = cut.FindAll("div");
+        var hasCharacterCount = divs.Any(d => d.TextContent.Contains(" / "));
+        Assert.False(hasCharacterCount);
+    }
+
+    [Fact]
+    public void NexusTextArea_ShowsWarningColor_WhenNear90PercentOfMaxLength()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 100)
+            .Add(p => p.Value, new string('a', 91))
+        );
+
+        // Assert
+        Assert.Contains("text-amber-600", cut.Markup);
+    }
+
+    [Fact]
+    public void NexusTextArea_ShowsErrorColor_WhenAtMaxLength()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 100)
+            .Add(p => p.Value, new string('a', 100))
+        );
+
+        // Assert
+        Assert.Contains("text-red-600", cut.Markup);
+    }
+
+    [Fact]
+    public void NexusTextArea_EnforcesMaxLength()
+    {
+        // Arrange
+        string? capturedValue = null;
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 10)
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueChanged, (string value) => capturedValue = value)
+        );
+
+        // Act
+        var textarea = cut.Find("textarea");
+        textarea.Input("This is a very long text that exceeds the maximum");
+
+        // Assert
+        Assert.Equal("This is a ", capturedValue);
+        Assert.Equal(10, capturedValue?.Length);
+    }
+
+    [Fact]
+    public void NexusTextArea_SetsMaxLengthAttribute_WhenMaxLengthIsProvided()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 200)
+        );
+
+        // Assert
+        var textarea = cut.Find("textarea");
+        Assert.Equal("200", textarea.GetAttribute("maxlength"));
+    }
+
+    [Fact]
+    public void NexusTextArea_UpdatesCharacterCount_WhenValueChanges()
+    {
+        // Arrange
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusTextArea>(parameters => parameters
+            .Add(p => p.MaxLength, 100)
+            .Add(p => p.Value, "Test")
+        );
+
+        // Initial state
+        Assert.Contains("4 / 100", cut.Markup);
+
+        // Act
+        var textarea = cut.Find("textarea");
+        textarea.Input("Updated text");
+
+        // Assert
+        Assert.Contains("12 / 100", cut.Markup);
+    }
 }

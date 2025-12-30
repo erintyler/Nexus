@@ -9,21 +9,33 @@
     <textarea 
         id="@Id"
         rows="@Rows"
+        maxlength="@MaxLength"
         class="@GetTextAreaClasses()"
         placeholder="@Placeholder"
         disabled="@Disabled"
         @oninput="HandleInput"
         @attributes="AdditionalAttributes">@Value</textarea>
     
-    @if (!string.IsNullOrWhiteSpace(HelperText))
-    {
-        <p class="text-xs text-gray-500 mt-2">@HelperText</p>
-    }
-    
-    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
-    {
-        <p class="text-red-600 text-sm mt-2 font-medium">@ErrorMessage</p>
-    }
+    <div class="flex items-center justify-between mt-2">
+        <div class="flex-1">
+            @if (!string.IsNullOrWhiteSpace(HelperText))
+            {
+                <p class="text-xs text-gray-500">@HelperText</p>
+            }
+            
+            @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                <p class="text-red-600 text-sm font-medium">@ErrorMessage</p>
+            }
+        </div>
+        
+        @if (ShowCharacterCount && MaxLength.HasValue)
+        {
+            <p class="@GetCharacterCountClasses()">
+                @GetCurrentLength() / @MaxLength
+            </p>
+        }
+    </div>
 </div>
 
 @code {
@@ -94,6 +106,18 @@
     public string Id { get; set; } = $"textarea-{Guid.NewGuid():N}";
 
     /// <summary>
+    /// Maximum character length
+    /// </summary>
+    [Parameter]
+    public int? MaxLength { get; set; }
+
+    /// <summary>
+    /// Whether to show the character count
+    /// </summary>
+    [Parameter]
+    public bool ShowCharacterCount { get; set; } = true;
+
+    /// <summary>
     /// Additional HTML attributes
     /// </summary>
     [Parameter(CaptureUnmatchedValues = true)]
@@ -113,7 +137,41 @@
     private async Task HandleInput(ChangeEventArgs e)
     {
         var value = e.Value?.ToString() ?? string.Empty;
+        
+        // Enforce max length if specified
+        if (MaxLength.HasValue && value.Length > MaxLength.Value)
+        {
+            value = value[..MaxLength.Value];
+        }
+        
         Value = value;
         await ValueChanged.InvokeAsync(value);
+    }
+
+    private int GetCurrentLength()
+    {
+        return Value?.Length ?? 0;
+    }
+
+    private string GetCharacterCountClasses()
+    {
+        var baseClasses = "text-xs font-medium ml-2 whitespace-nowrap";
+        
+        if (!MaxLength.HasValue)
+        {
+            return $"{baseClasses} text-gray-500";
+        }
+
+        var currentLength = GetCurrentLength();
+        var percentage = (double)currentLength / MaxLength.Value;
+
+        var colorClasses = percentage switch
+        {
+            >= 1.0 => "text-red-600",
+            >= 0.9 => "text-amber-600",
+            _ => "text-gray-500"
+        };
+
+        return $"{baseClasses} {colorClasses}";
     }
 }
