@@ -74,15 +74,20 @@ builder.Services.AddAuthentication(options =>
                     new AuthenticationToken { Name = "token_type", Value = exchangeResult.TokenType }
                 });
 
-                // Create a new identity
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                // Use existing identity if available, otherwise create a new one
+                var identity = context.Principal?.Identity as ClaimsIdentity
+                    ?? new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 
                 foreach (var claim in exchangeResult.Claims)
                 {
                     identity.AddClaim(new Claim(claim.Key, claim.Value));
                 }
 
-                context.Principal = new ClaimsPrincipal(identity);
+                // Only create a new principal if one does not already exist
+                if (context.Principal == null)
+                {
+                    context.Principal = new ClaimsPrincipal(identity);
+                }
             }
         };
     });
