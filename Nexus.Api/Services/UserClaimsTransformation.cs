@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Nexus.Application.Common.Abstractions;
+using Nexus.Application.Constants;
 
 namespace Nexus.Api.Services;
 
@@ -13,14 +14,14 @@ public class UserClaimsTransformation(IUserRepository userRepository) : IClaimsT
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
         // Check if transformation has already been applied to avoid duplicate calls
-        if (principal.HasClaim(c => c.Type == "transformed"))
+        if (principal.HasClaim(c => c.Type == ClaimConstants.Transformed))
         {
             return principal;
         }
 
         // Get the user ID from the existing claims
         var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
-        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        if (userIdClaim is null || !Guid.TryParse(userIdClaim.Value, out var userId))
         {
             return principal;
         }
@@ -29,7 +30,7 @@ public class UserClaimsTransformation(IUserRepository userRepository) : IClaimsT
         // Note: Using default cancellation token as IClaimsTransformation doesn't support CancellationToken parameter
         // In production, this should be fast due to caching layer
         var user = await userRepository.GetByIdAsync(userId, default);
-        if (user == null)
+        if (user is null)
         {
             return principal;
         }
@@ -38,11 +39,19 @@ public class UserClaimsTransformation(IUserRepository userRepository) : IClaimsT
         var identity = new ClaimsIdentity(principal.Identity);
 
         // Add Discord-related claims
-        identity.AddClaim(new Claim("discord_id", user.DiscordId));
-        identity.AddClaim(new Claim("discord_username", user.DiscordUsername));
+        identity.AddClaim(new Claim(ClaimConstants.DiscordId, user.DiscordId));
+        identity.AddClaim(new Claim(ClaimConstants.DiscordUsername, user.DiscordUsername));
+
+        // Add permission claims
+        identity.AddClaim(new Claim(ClaimConstants.CanCreateImage, user.CanCreateImage.ToString()));
+        identity.AddClaim(new Claim(ClaimConstants.CanEditImage, user.CanEditImage.ToString()));
+        identity.AddClaim(new Claim(ClaimConstants.CanAddComment, user.CanAddComment.ToString()));
+        identity.AddClaim(new Claim(ClaimConstants.CanAddTags, user.CanAddTags.ToString()));
+        identity.AddClaim(new Claim(ClaimConstants.CanDeleteContent, user.CanDeleteContent.ToString()));
+        identity.AddClaim(new Claim(ClaimConstants.IsAdmin, user.IsAdmin.ToString()));
 
         // Add a marker claim to indicate transformation has been applied
-        identity.AddClaim(new Claim("transformed", "true"));
+        identity.AddClaim(new Claim(ClaimConstants.Transformed, "true"));
 
         return new ClaimsPrincipal(identity);
     }

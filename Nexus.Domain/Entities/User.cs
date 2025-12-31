@@ -18,6 +18,14 @@ public sealed class User : BaseEntity
     public string DiscordId { get; private set; } = null!;
     public string DiscordUsername { get; private set; } = null!;
 
+    // Permission properties
+    public bool CanCreateImage { get; private set; } = true;
+    public bool CanEditImage { get; private set; } = true;
+    public bool CanAddComment { get; private set; } = true;
+    public bool CanAddTags { get; private set; } = true;
+    public bool CanDeleteContent { get; private set; } = false;
+    public bool IsAdmin { get; private set; } = false;
+
     // Marten event sourcing metadata
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset LastModified { get; private set; }
@@ -51,5 +59,12 @@ public sealed class User : BaseEntity
     {
         DiscordId = @event.DiscordId;
         DiscordUsername = @event.DiscordUsername;
+        // Default permissions for new users
+        CanCreateImage = true;
+        CanEditImage = true;
+        CanAddComment = true;
+        CanAddTags = true;
+        CanDeleteContent = false;
+        IsAdmin = false;
     }
 }
