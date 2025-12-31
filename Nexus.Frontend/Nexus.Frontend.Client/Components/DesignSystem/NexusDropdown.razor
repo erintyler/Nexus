@@ -9,9 +9,7 @@
         aria-haspopup="true"
         aria-expanded="@IsOpen">
         @TriggerContent
-        <svg class="@GetChevronClasses()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
+        <NexusIcon Icon="fa-solid fa-chevron-down" Size="fa-xs" class="@GetChevronClasses()" />
     </button>
 
     <div class="@GetDropdownClasses()" style="@GetDropdownStyle()">
@@ -115,20 +113,5 @@
     {
         // High z-index to ensure dropdown appears above cards and other elements
         return "z-index: 10000;";
-    }
-
-    public enum DropdownPosition
-    {
-        BottomLeft,
-        BottomRight,
-        TopLeft,
-        TopRight
-    }
-
-    public enum DropdownStyle
-    {
-        Elevated,
-        Glass,
-        Gradient
     }
 }

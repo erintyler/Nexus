@@ -76,11 +76,9 @@
 
     private string GetMenuItemClasses()
     {
-        var baseClasses = "flex items-center font-medium text-sm transition-all duration-200";
+        var baseClasses = "flex items-center font-medium text-sm transition-all duration-200 px-3 py-2 rounded-lg";
         
-        var mobileClasses = IsMobile 
-            ? "w-full px-4 py-3 rounded-lg" 
-            : "px-4 py-2 rounded-lg";
+        var mobileClasses = IsMobile ? "w-full" : "";
 
         var activeClasses = IsActive
             ? "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-md"

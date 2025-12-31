@@ -88,7 +88,7 @@ public class NexusDropdownTests : Bunit.TestContext
         );
 
         var button = cut.Find("button");
-        var chevron = cut.Find("svg");
+        var chevron = cut.Find("i");
 
         // Initially not rotated
         Assert.DoesNotContain("rotate-180", chevron.ClassName);
@@ -97,7 +97,7 @@ public class NexusDropdownTests : Bunit.TestContext
         button.Click();
 
         // Assert
-        chevron = cut.Find("svg");
+        chevron = cut.Find("i");
         Assert.Contains("rotate-180", chevron.ClassName);
     }
 

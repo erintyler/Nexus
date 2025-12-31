@@ -1,0 +1,51 @@
+@* Reusable icon component using Font Awesome icons *@
+
+<i class="@GetIconClasses()" @attributes="AdditionalAttributes"></i>
+
+@code {
+    /// <summary>
+    /// Font Awesome icon class name (e.g., "fa-solid fa-home", "fa-bars", "fa-user")
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Icon { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Size of the icon
+    /// </summary>
+    [Parameter]
+    public string? Size { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetIconClasses()
+    {
+        var classes = new List<string>();
+        
+        // Add the icon class (ensure it has fa- prefix)
+        if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            // If user provides full class names, use them as-is
+            if (Icon.Contains("fa-"))
+            {
+                classes.Add(Icon);
+            }
+            else
+            {
+                // Otherwise, default to fa-solid
+                classes.Add($"fa-solid fa-{Icon}");
+            }
+        }
+        
+        // Add size if specified
+        if (!string.IsNullOrWhiteSpace(Size))
+        {
+            classes.Add(Size);
+        }
+
+        return string.Join(" ", classes);
+    }
+}

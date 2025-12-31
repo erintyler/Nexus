@@ -75,11 +75,11 @@ public class NexusSpinnerTests : Bunit.TestContext
         var colors = new[]
         {
             (SpinnerColor.Primary, "text-purple-600"),
-            (SpinnerColor.Secondary, "text-gray-600"),
             (SpinnerColor.Success, "text-emerald-600"),
             (SpinnerColor.Danger, "text-red-600"),
             (SpinnerColor.Warning, "text-amber-600"),
             (SpinnerColor.Info, "text-blue-600"),
+            (SpinnerColor.Accent, "text-indigo-600"),
             (SpinnerColor.White, "text-white")
         };
 

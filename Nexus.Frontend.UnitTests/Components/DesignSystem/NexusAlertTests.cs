@@ -104,7 +104,7 @@ public class NexusAlertTests : Bunit.TestContext
         );
 
         // Assert
-        var icon = cut.Find("svg");
+        var icon = cut.Find("i");
         Assert.NotNull(icon);
     }
 

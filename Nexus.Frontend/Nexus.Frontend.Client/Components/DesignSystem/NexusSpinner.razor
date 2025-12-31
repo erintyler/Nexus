@@ -45,34 +45,15 @@
         var colorClasses = Color switch
         {
             SpinnerColor.Primary => "text-purple-600",
-            SpinnerColor.Secondary => "text-gray-600",
             SpinnerColor.Success => "text-emerald-600",
             SpinnerColor.Danger => "text-red-600",
             SpinnerColor.Warning => "text-amber-600",
             SpinnerColor.Info => "text-blue-600",
+            SpinnerColor.Accent => "text-indigo-600",
             SpinnerColor.White => "text-white",
             _ => "text-purple-600"
         };
 
         return $"{baseClasses} {sizeClasses} {colorClasses}".Trim();
-    }
-
-    public enum SpinnerSize
-    {
-        Small,
-        Medium,
-        Large,
-        ExtraLarge
-    }
-
-    public enum SpinnerColor
-    {
-        Primary,
-        Secondary,
-        Success,
-        Danger,
-        Warning,
-        Info,
-        White
     }
 }
