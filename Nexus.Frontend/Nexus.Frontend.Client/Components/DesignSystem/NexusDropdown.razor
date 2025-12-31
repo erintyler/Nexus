@@ -1,6 +1,6 @@
 @* Dropdown menu component following Nexus design system *@
 
-<div class="relative inline-block" style="z-index: 1000;" @attributes="AdditionalAttributes">
+<div class="relative inline-block" @attributes="AdditionalAttributes">
     <button 
         type="button"
         class="@GetTriggerClasses()"
@@ -14,12 +14,9 @@
         </svg>
     </button>
 
-    @if (IsOpen)
-    {
-        <div class="@GetDropdownClasses()" style="z-index: 10000;">
-            @DropdownContent
-        </div>
-    }
+    <div class="@GetDropdownClasses()" style="@GetDropdownStyle()">
+        @DropdownContent
+    </div>
 </div>
 
 @code {
@@ -85,10 +82,14 @@
 
     private string GetDropdownClasses()
     {
-        // High z-index to ensure dropdown appears above cards and other elements
-        // Animation: scale from 95% to 100%, fade in from 0 to 1, slide down slightly
+        // Use CSS transitions for smooth open/close animations
+        // Removed backdrop-blur to avoid stacking context issues
         var baseClasses = "absolute mt-2 w-56 rounded-xl shadow-2xl overflow-hidden transition-all duration-200 ease-out";
-        var animationClasses = "animate-dropdown-open opacity-100 scale-100 translate-y-0";
+        
+        // Animate opacity, scale, and translate based on IsOpen state
+        var visibilityClasses = IsOpen 
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto" 
+            : "opacity-0 scale-95 -translate-y-2 pointer-events-none";
         
         var positionClasses = Position switch
         {
@@ -102,12 +103,18 @@
         var styleClasses = Style switch
         {
             DropdownStyle.Elevated => "bg-white border border-gray-100",
-            DropdownStyle.Glass => "bg-white/95 backdrop-blur-lg border border-white/20",
+            DropdownStyle.Glass => "bg-white/95 border border-white/20",
             DropdownStyle.Gradient => "bg-gradient-to-br from-purple-50 to-fuchsia-50 border border-purple-100",
             _ => "bg-white border border-gray-100"
         };
 
-        return $"{baseClasses} {animationClasses} {positionClasses} {styleClasses}".Trim();
+        return $"{baseClasses} {visibilityClasses} {positionClasses} {styleClasses}".Trim();
+    }
+
+    private string GetDropdownStyle()
+    {
+        // High z-index to ensure dropdown appears above cards and other elements
+        return "z-index: 10000;";
     }
 
     public enum DropdownPosition

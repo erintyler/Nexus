@@ -29,8 +29,10 @@ public class NexusDropdownTests : Bunit.TestContext
             .Add(p => p.DropdownContent, builder => builder.AddMarkupContent(0, "<div>Dropdown Item</div>"))
         );
 
-        // Assert
-        Assert.DoesNotContain("Dropdown Item", cut.Markup);
+        // Assert - Dropdown content is rendered but hidden with pointer-events-none and opacity-0
+        var dropdown = cut.Find("div.absolute");
+        Assert.Contains("pointer-events-none", dropdown.ClassName);
+        Assert.Contains("opacity-0", dropdown.ClassName);
     }
 
     [Fact]
@@ -46,8 +48,10 @@ public class NexusDropdownTests : Bunit.TestContext
         var button = cut.Find("button");
         button.Click();
 
-        // Assert
-        Assert.Contains("Dropdown Item", cut.Markup);
+        // Assert - Dropdown is visible with pointer-events-auto and opacity-100
+        var dropdown = cut.Find("div.absolute");
+        Assert.Contains("pointer-events-auto", dropdown.ClassName);
+        Assert.Contains("opacity-100", dropdown.ClassName);
     }
 
     [Fact]
@@ -63,13 +67,16 @@ public class NexusDropdownTests : Bunit.TestContext
 
         // Act - Open
         button.Click();
-        Assert.Contains("Dropdown Item", cut.Markup);
+        var dropdown = cut.Find("div.absolute");
+        Assert.Contains("pointer-events-auto", dropdown.ClassName);
 
         // Act - Close
         button.Click();
 
-        // Assert
-        Assert.DoesNotContain("Dropdown Item", cut.Markup);
+        // Assert - Dropdown is hidden again
+        dropdown = cut.Find("div.absolute");
+        Assert.Contains("pointer-events-none", dropdown.ClassName);
+        Assert.Contains("opacity-0", dropdown.ClassName);
     }
 
     [Fact]
@@ -153,9 +160,10 @@ public class NexusDropdownTests : Bunit.TestContext
             .Add(p => p.IsOpen, true)
         );
 
-        // Assert
+        // Assert - Glass style no longer uses backdrop-blur to avoid stacking context issues
         var dropdown = cut.Find("div.absolute");
-        Assert.Contains("backdrop-blur-lg", dropdown.ClassName);
+        Assert.Contains("bg-white/95", dropdown.ClassName);
+        Assert.DoesNotContain("backdrop-blur", dropdown.ClassName);
     }
 
     [Fact]
