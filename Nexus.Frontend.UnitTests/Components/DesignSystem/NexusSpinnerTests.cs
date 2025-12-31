@@ -1,6 +1,5 @@
 using Bunit;
 using Xunit;
-using static Nexus.Frontend.Client.Components.DesignSystem.NexusSpinner;
 
 namespace Nexus.Frontend.UnitTests.Components.DesignSystem;
 
@@ -13,8 +12,9 @@ public class NexusSpinnerTests : Bunit.TestContext
         var cut = RenderComponent<Client.Components.DesignSystem.NexusSpinner>();
 
         // Assert
-        var spinner = cut.Find("svg");
-        Assert.Contains("animate-spin", spinner.ClassName);
+        var spinner = cut.Find("i");
+        Assert.Contains("fa-spinner", spinner.ClassName);
+        Assert.Contains("fa-spin", spinner.ClassName);
     }
 
     [Fact]
@@ -26,8 +26,8 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("svg");
-        Assert.Contains("h-4 w-4", spinner.ClassName);
+        var spinner = cut.Find("i");
+        Assert.Contains("fa-sm", spinner.ClassName);
     }
 
     [Fact]
@@ -39,8 +39,8 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("svg");
-        Assert.Contains("h-8 w-8", spinner.ClassName);
+        var spinner = cut.Find("i");
+        Assert.Contains("fa-2x", spinner.ClassName);
     }
 
     [Fact]
@@ -52,8 +52,8 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("svg");
-        Assert.Contains("h-12 w-12", spinner.ClassName);
+        var spinner = cut.Find("i");
+        Assert.Contains("fa-3x", spinner.ClassName);
     }
 
     [Fact]
@@ -65,8 +65,8 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("svg");
-        Assert.Contains("h-16 w-16", spinner.ClassName);
+        var spinner = cut.Find("i");
+        Assert.Contains("fa-4x", spinner.ClassName);
     }
 
     [Fact]
@@ -89,8 +89,8 @@ public class NexusSpinnerTests : Bunit.TestContext
                 .Add(p => p.Color, color)
             );
 
-            var spinner = cut.Find("svg");
-            Assert.Contains(expectedClass, spinner.ClassName);
+            var wrapper = cut.Find("span");
+            Assert.Contains(expectedClass, wrapper.ClassName);
         }
     }
 }

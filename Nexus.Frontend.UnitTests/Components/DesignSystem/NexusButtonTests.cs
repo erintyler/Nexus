@@ -182,8 +182,9 @@ public class NexusButtonTests : Bunit.TestContext
         // Assert
         var button = cut.Find("button");
         Assert.Contains("Processing...", button.TextContent);
-        var spinner = cut.Find("svg.animate-spin");
+        var spinner = cut.Find("i.fa-spinner");
         Assert.NotNull(spinner);
+        Assert.Contains("fa-spin", spinner.ClassName);
     }
 
     [Fact]

@@ -76,8 +76,9 @@ public class NexusCardTests : Bunit.TestContext
         );
 
         // Assert
-        var arrow = cut.Find("svg");
+        var arrow = cut.Find("i");
         Assert.NotNull(arrow);
+        Assert.Contains("fa-chevron-right", arrow.ClassName);
     }
 
     [Fact]
@@ -91,7 +92,7 @@ public class NexusCardTests : Bunit.TestContext
         );
 
         // Assert
-        Assert.DoesNotContain("M9 5l7 7-7 7", cut.Markup);
+        Assert.DoesNotContain("fa-chevron-right", cut.Markup);
     }
 
     [Fact]

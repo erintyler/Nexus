@@ -25,9 +25,7 @@
                             @if (_selectedFile is null)
                             {
                                 <div class="mb-4 p-4 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                    </svg>
+                                    <NexusIcon Icon="fa-solid fa-cloud-arrow-up" Size="fa-2x" />
                                 </div>
                                 <p class="mb-2 text-sm text-gray-600 font-semibold">
                                     <span class="text-blue-600">Click to upload</span> or drag and drop
@@ -37,9 +35,7 @@
                             else
                             {
                                 <div class="mb-4 p-4 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
+                                    <NexusIcon Icon="fa-solid fa-check" Size="fa-2x" />
                                 </div>
                                 <p class="mb-2 text-sm text-gray-700 font-bold">@_selectedFile.Name</p>
                                 <p class="text-xs text-gray-500">@_selectedFile.ContentType - @FormatFileSize(_selectedFile.Size)</p>
@@ -90,9 +86,7 @@
                                     <span class="font-semibold">@tag.Type:</span>
                                     <span class="ml-1">@tag.Value</span>
                                     <button type="button" @onclick="() => RemoveTag(tag)" class="ml-2 text-white/90 hover:text-white focus:outline-none transform hover:scale-110 transition-transform">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                        </svg>
+                                        <NexusIcon Icon="fa-solid fa-xmark" />
                                     </button>
                                 </div>
                             }
@@ -140,11 +134,8 @@
                         @if (_isSubmitting)
                         {
                             <span class="flex items-center justify-center">
-                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Uploading...
+                                <NexusIcon Icon="fa-solid fa-spinner fa-spin" Size="fa-lg" />
+                                <span class="ml-2">Uploading...</span>
                             </span>
                         }
                         else
@@ -168,15 +159,11 @@
                             <div class="flex-shrink-0">
                                 @if (_isError)
                                 {
-                                    <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <NexusIcon Icon="fa-solid fa-circle-xmark" Size="fa-lg" />
                                 }
                                 else
                                 {
-                                    <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <NexusIcon Icon="fa-solid fa-circle-check" Size="fa-lg" />
                                 }
                             </div>
                             <p class="font-medium">@_submitMessage</p>
