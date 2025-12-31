@@ -87,8 +87,8 @@
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.16",
-        "contentHash": "CsaZOVNBza63UgX8DD4cA1gPrzEBcnuCk+a9AnKTAsevtU4YCrt0y19G34lidh/xRKLeTpNh0c7VgH6TR9cUdg==",
+        "resolved": "4.0.16.1",
+        "contentHash": "LYqhlD/2ragWo7WHwQOjPLSXn3BuFa2gf+/0eIqSUknwdJLGRNyXdhaSUVvqUDsAVkkQu455X+Oknk/lqCJx9A==",
         "dependencies": {
           "AWSSDK.Core": "[4.0.3.6, 5.0.0)"
         }
@@ -1536,7 +1536,7 @@
         "type": "Project",
         "dependencies": {
           "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.17, )",
-          "AWSSDK.S3": "[4.0.16, )",
+          "AWSSDK.S3": "[4.0.16.1, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Nexus.Application": "[1.0.0, )"

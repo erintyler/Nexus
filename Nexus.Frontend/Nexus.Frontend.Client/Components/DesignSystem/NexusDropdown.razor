@@ -1,6 +1,10 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
 @* Dropdown menu component following Nexus design system *@
 
-<div class="relative inline-block" @attributes="AdditionalAttributes">
+<div class="relative inline-block" @ref="_dropdownRef" @attributes="AdditionalAttributes">
     <button 
         type="button"
         class="@GetTriggerClasses()"
@@ -20,6 +24,9 @@
 </div>
 
 @code {
+    private ElementReference _dropdownRef;
+    private IJSObjectReference? _jsModule;
+    private DotNetObjectReference<NexusDropdown>? _dotNetRef;
     /// <summary>
     /// Content for the dropdown trigger button
     /// </summary>
@@ -62,10 +69,58 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/DesignSystem/NexusDropdown.razor.js");
+            await _jsModule.InvokeVoidAsync("initializeDropdown", _dropdownRef, _dotNetRef);
+        }
+
+        if (_jsModule != null && IsOpen)
+        {
+            await _jsModule.InvokeVoidAsync("addClickOutsideListener", _dropdownRef, _dotNetRef);
+        }
+        else if (_jsModule != null && !IsOpen)
+        {
+            await _jsModule.InvokeVoidAsync("removeClickOutsideListener");
+        }
+    }
+
     private async Task ToggleDropdown()
     {
         IsOpen = !IsOpen;
         await IsOpenChanged.InvokeAsync(IsOpen);
+    }
+
+    [JSInvokable]
+    public async Task CloseDropdownFromJs()
+    {
+        if (IsOpen)
+        {
+            IsOpen = false;
+            await IsOpenChanged.InvokeAsync(IsOpen);
+            StateHasChanged();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule != null)
+        {
+            try
+            {
+                await _jsModule.InvokeVoidAsync("removeClickOutsideListener");
+                await _jsModule.DisposeAsync();
+            }
+            catch
+            {
+                // Ignore errors during disposal
+            }
+        }
+
+        _dotNetRef?.Dispose();
     }
 
     private string GetTriggerClasses()
