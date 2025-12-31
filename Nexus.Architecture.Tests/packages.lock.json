@@ -1464,6 +1464,14 @@
           "xunit.v3.runner.common": "[3.2.1]"
         }
       },
+      "ZiggyCreatures.FusionCache": {
+        "type": "Transitive",
+        "resolved": "2.0.0",
+        "contentHash": "fwUwz4iS9Avq5oh7AI01/RktdG4yEp/jlCrlcq1ww6/mCoQzxq5dJDZhyhLVdx0s7MN22rUW3N+huGYXignrMA==",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Memory": "9.0.0"
+        }
+      },
       "nexus.api": {
         "type": "Project",
         "dependencies": {
@@ -1479,7 +1487,8 @@
           "Serilog.AspNetCore": "[10.0.0, )",
           "Serilog.Sinks.OpenTelemetry": "[4.2.0, )",
           "WolverineFx.FluentValidation": "[5.9.2, )",
-          "WolverineFx.Http": "[5.9.2, )"
+          "WolverineFx.Http": "[5.9.2, )",
+          "ZiggyCreatures.FusionCache": "[1.5.0, )"
         }
       },
       "nexus.application": {
@@ -1506,7 +1515,8 @@
           "AWSSDK.S3": "[4.0.16, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
-          "Nexus.Application": "[1.0.0, )"
+          "Nexus.Application": "[1.0.0, )",
+          "ZiggyCreatures.FusionCache": "[1.5.0, )"
         }
       },
       "nexus.servicedefaults": {

@@ -6,6 +6,7 @@ using Nexus.Application.Common.Abstractions;
 using Nexus.Application.Common.Services;
 using Nexus.Infrastructure.Repositories;
 using Nexus.Infrastructure.Services;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Nexus.Infrastructure;
 
@@ -22,9 +23,23 @@ public static class DependencyInjection
         // Register S3 service
         services.AddSingleton<IStorageService, S3StorageService>();
 
-        // Register repositories
+        // Configure FusionCache
+        services.AddFusionCache()
+            .WithDefaultEntryOptions(options =>
+            {
+                options.Duration = TimeSpan.FromMinutes(5);
+                options.Priority = Microsoft.Extensions.Caching.Memory.CacheItemPriority.Normal;
+            });
+
+        // Register repositories with decorator pattern for caching
         services.AddScoped<ITagMigrationRepository, TagMigrationRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<UserRepository>();
+        services.AddScoped<IUserRepository>(provider =>
+        {
+            var innerRepository = provider.GetRequiredService<UserRepository>();
+            var cache = provider.GetRequiredService<IFusionCache>();
+            return new CachedUserRepository(innerRepository, cache);
+        });
 
         // Register auth services
         services.AddHttpClient("Discord", client =>
