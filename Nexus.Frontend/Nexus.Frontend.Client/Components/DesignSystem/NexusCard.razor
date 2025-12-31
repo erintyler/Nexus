@@ -67,10 +67,10 @@
         
         var variantClasses = Variant switch
         {
-            CardVariant.Elevated => "bg-white/90 backdrop-blur-sm shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300",
+            CardVariant.Elevated => "bg-white/95 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300",
             CardVariant.Interactive => "group relative bg-white shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer",
             CardVariant.Bordered => "bg-white shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200",
-            _ => "bg-white/90 backdrop-blur-sm shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
+            _ => "bg-white/95 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
         };
 
         return $"{baseClasses} {variantClasses}".Trim();

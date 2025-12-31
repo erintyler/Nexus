@@ -111,11 +111,11 @@
         
         var styleClasses = Style switch
         {
-            MenuStyle.Elevated => "bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-100",
-            MenuStyle.Glass => "bg-white/80 backdrop-blur-xl shadow-md border-b border-white/20",
+            MenuStyle.Elevated => "bg-white/95 shadow-lg border-b border-gray-100",
+            MenuStyle.Glass => "bg-white/90 shadow-md border-b border-white/20",
             MenuStyle.Gradient => "bg-gradient-to-r from-purple-600 to-fuchsia-600 shadow-xl",
             MenuStyle.Minimal => "bg-white border-b border-gray-200",
-            _ => "bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-100"
+            _ => "bg-white/95 shadow-lg border-b border-gray-100"
         };
 
         return $"{baseClasses} {stickyClasses} {styleClasses}".Trim();

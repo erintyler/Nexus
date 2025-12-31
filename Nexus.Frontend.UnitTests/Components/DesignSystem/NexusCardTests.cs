@@ -33,8 +33,8 @@ public class NexusCardTests : Bunit.TestContext
 
         // Assert
         var card = cut.Find("div");
-        Assert.Contains("bg-white/90", card.ClassName);
-        Assert.Contains("backdrop-blur-sm", card.ClassName);
+        Assert.Contains("bg-white/95", card.ClassName);
+        Assert.Contains("shadow-xl", card.ClassName);
     }
 
     [Fact]

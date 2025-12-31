@@ -16,7 +16,7 @@ public class NexusMenuTests : Bunit.TestContext
         // Assert
         var nav = cut.Find("nav");
         Assert.NotNull(nav);
-        Assert.Contains("backdrop-blur", nav.ClassName);
+        Assert.Contains("shadow-lg", nav.ClassName);
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class NexusMenuTests : Bunit.TestContext
 
         // Assert
         var nav = cut.Find("nav");
-        Assert.Contains("bg-white/80", nav.ClassName);
-        Assert.Contains("backdrop-blur-xl", nav.ClassName);
+        Assert.Contains("bg-white/90", nav.ClassName);
+        Assert.Contains("shadow-md", nav.ClassName);
     }
 
     [Fact]
