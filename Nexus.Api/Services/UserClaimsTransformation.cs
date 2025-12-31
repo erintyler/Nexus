@@ -26,7 +26,9 @@ public class UserClaimsTransformation(IUserRepository userRepository) : IClaimsT
         }
 
         // Fetch user from repository (cached)
-        var user = await userRepository.GetByIdAsync(userId, CancellationToken.None);
+        // Note: Using default cancellation token as IClaimsTransformation doesn't support CancellationToken parameter
+        // In production, this should be fast due to caching layer
+        var user = await userRepository.GetByIdAsync(userId, default);
         if (user == null)
         {
             return principal;

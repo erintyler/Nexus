@@ -49,8 +49,10 @@ public class CachedUserRepository(
             var cacheKeyByDiscordId = $"{CacheKeyPrefixByDiscordId}{discordId}";
             var cacheKeyById = $"{CacheKeyPrefixById}{result.Value}";
 
-            await cache.RemoveAsync(cacheKeyByDiscordId, token: ct);
-            await cache.RemoveAsync(cacheKeyById, token: ct);
+            // Execute cache invalidations concurrently for better performance
+            await Task.WhenAll(
+                cache.RemoveAsync(cacheKeyByDiscordId, token: ct).AsTask(),
+                cache.RemoveAsync(cacheKeyById, token: ct).AsTask());
         }
 
         return result;
