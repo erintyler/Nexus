@@ -1,0 +1,93 @@
+@* Menu item component for use within NexusMenu *@
+
+<a 
+    href="@Href"
+    class="@GetMenuItemClasses()"
+    @onclick="HandleClick"
+    @attributes="AdditionalAttributes">
+    @if (Icon != null)
+    {
+        <span class="mr-2">
+            @Icon
+        </span>
+    }
+    @ChildContent
+    @if (Badge != null)
+    {
+        <span class="ml-2">
+            @Badge
+        </span>
+    }
+</a>
+
+@code {
+    /// <summary>
+    /// Menu item content
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Optional icon to display before the text
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    /// <summary>
+    /// Optional badge to display after the text
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Badge { get; set; }
+
+    /// <summary>
+    /// Navigation URL
+    /// </summary>
+    [Parameter]
+    public string Href { get; set; } = "#";
+
+    /// <summary>
+    /// Whether this item is currently active
+    /// </summary>
+    [Parameter]
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// Whether this is a mobile menu item (uses full-width styling)
+    /// </summary>
+    [Parameter]
+    public bool IsMobile { get; set; }
+
+    /// <summary>
+    /// Click event callback
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        await OnClick.InvokeAsync(e);
+    }
+
+    private string GetMenuItemClasses()
+    {
+        var baseClasses = "flex items-center font-medium text-sm transition-all duration-200";
+        
+        var mobileClasses = IsMobile 
+            ? "w-full px-4 py-3 rounded-lg" 
+            : "px-4 py-2 rounded-lg";
+
+        var activeClasses = IsActive
+            ? "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-md"
+            : "text-gray-700 hover:bg-purple-50 hover:text-purple-600";
+
+        var hoverClasses = !IsActive ? "hover:scale-105 active:scale-95" : "";
+
+        return $"{baseClasses} {mobileClasses} {activeClasses} {hoverClasses}".Trim();
+    }
+}

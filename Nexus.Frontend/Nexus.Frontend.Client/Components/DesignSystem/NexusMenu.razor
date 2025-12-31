@@ -1,0 +1,138 @@
+@* Modern navigation menu component following Nexus design system *@
+
+<nav class="@GetNavClasses()" @attributes="AdditionalAttributes">
+    <div class="@GetContainerClasses()">
+        <!-- Logo/Brand Section -->
+        @if (BrandContent != null)
+        {
+            <div class="flex items-center">
+                @BrandContent
+            </div>
+        }
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex md:items-center md:space-x-1">
+            @MenuItems
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+            <button 
+                type="button"
+                class="p-2 rounded-lg text-gray-700 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                @onclick="ToggleMobileMenu"
+                aria-label="Toggle menu">
+                @if (IsMobileMenuOpen)
+                {
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                }
+                else
+                {
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                }
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (IsMobileMenuOpen)
+    {
+        <div class="md:hidden mt-4 pb-4 space-y-2 animate-in fade-in slide-in-from-top duration-200">
+            @MobileMenuItems
+        </div>
+    }
+</nav>
+
+@code {
+    /// <summary>
+    /// Brand/Logo content to display on the left
+    /// </summary>
+    [Parameter]
+    public RenderFragment? BrandContent { get; set; }
+
+    /// <summary>
+    /// Menu items for desktop view
+    /// </summary>
+    [Parameter]
+    public RenderFragment? MenuItems { get; set; }
+
+    /// <summary>
+    /// Menu items for mobile view (if different from desktop)
+    /// </summary>
+    [Parameter]
+    public RenderFragment? MobileMenuItems { get; set; }
+
+    /// <summary>
+    /// Menu style variant
+    /// </summary>
+    [Parameter]
+    public MenuStyle Style { get; set; } = MenuStyle.Elevated;
+
+    /// <summary>
+    /// Whether to use full width container
+    /// </summary>
+    [Parameter]
+    public bool IsFullWidth { get; set; }
+
+    /// <summary>
+    /// Whether the menu is sticky at the top
+    /// </summary>
+    [Parameter]
+    public bool IsSticky { get; set; } = true;
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool IsMobileMenuOpen { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // If mobile items not provided, use desktop items
+        MobileMenuItems ??= MenuItems;
+    }
+
+    private void ToggleMobileMenu()
+    {
+        IsMobileMenuOpen = !IsMobileMenuOpen;
+    }
+
+    private string GetNavClasses()
+    {
+        var baseClasses = "w-full transition-all duration-300";
+        
+        var stickyClasses = IsSticky ? "sticky top-0 z-50" : "";
+        
+        var styleClasses = Style switch
+        {
+            MenuStyle.Elevated => "bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-100",
+            MenuStyle.Glass => "bg-white/80 backdrop-blur-xl shadow-md border-b border-white/20",
+            MenuStyle.Gradient => "bg-gradient-to-r from-purple-600 to-fuchsia-600 shadow-xl",
+            MenuStyle.Minimal => "bg-white border-b border-gray-200",
+            _ => "bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-100"
+        };
+
+        return $"{baseClasses} {stickyClasses} {styleClasses}".Trim();
+    }
+
+    private string GetContainerClasses()
+    {
+        var baseClasses = "flex items-center justify-between px-4 py-4";
+        var widthClasses = IsFullWidth ? "w-full" : "max-w-7xl mx-auto";
+        return $"{baseClasses} {widthClasses}".Trim();
+    }
+
+    public enum MenuStyle
+    {
+        Elevated,
+        Glass,
+        Gradient,
+        Minimal
+    }
+}

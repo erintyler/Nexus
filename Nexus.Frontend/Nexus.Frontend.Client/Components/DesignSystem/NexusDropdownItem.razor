@@ -1,0 +1,107 @@
+@* Dropdown menu item component *@
+
+<a 
+    href="@Href"
+    class="@GetDropdownItemClasses()"
+    @onclick="HandleClick"
+    @attributes="AdditionalAttributes">
+    @if (Icon != null)
+    {
+        <span class="mr-3 flex-shrink-0">
+            @Icon
+        </span>
+    }
+    <div class="flex-1">
+        <div class="font-medium text-gray-900">@ChildContent</div>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <div class="text-xs text-gray-500 mt-0.5">@Description</div>
+        }
+    </div>
+    @if (Badge != null)
+    {
+        <span class="ml-3 flex-shrink-0">
+            @Badge
+        </span>
+    }
+</a>
+
+@code {
+    /// <summary>
+    /// Menu item content
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Optional icon to display before the text
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    /// <summary>
+    /// Optional badge to display after the text
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Badge { get; set; }
+
+    /// <summary>
+    /// Optional description text below the main content
+    /// </summary>
+    [Parameter]
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// Navigation URL
+    /// </summary>
+    [Parameter]
+    public string Href { get; set; } = "#";
+
+    /// <summary>
+    /// Whether this item is dangerous/destructive
+    /// </summary>
+    [Parameter]
+    public bool IsDanger { get; set; }
+
+    /// <summary>
+    /// Whether this item is disabled
+    /// </summary>
+    [Parameter]
+    public bool IsDisabled { get; set; }
+
+    /// <summary>
+    /// Click event callback
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        if (!IsDisabled)
+        {
+            await OnClick.InvokeAsync(e);
+        }
+    }
+
+    private string GetDropdownItemClasses()
+    {
+        var baseClasses = "flex items-start px-4 py-3 text-sm transition-colors duration-150";
+        
+        if (IsDisabled)
+        {
+            return $"{baseClasses} text-gray-400 cursor-not-allowed opacity-60";
+        }
+
+        var colorClasses = IsDanger
+            ? "text-red-700 hover:bg-red-50 hover:text-red-900"
+            : "text-gray-700 hover:bg-purple-50 hover:text-purple-900";
+
+        return $"{baseClasses} {colorClasses} cursor-pointer".Trim();
+    }
+}

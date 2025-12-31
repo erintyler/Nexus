@@ -1,0 +1,124 @@
+@* Dropdown menu component following Nexus design system *@
+
+<div class="relative inline-block" @attributes="AdditionalAttributes">
+    <button 
+        type="button"
+        class="@GetTriggerClasses()"
+        @onclick="ToggleDropdown"
+        @onclick:stopPropagation
+        aria-haspopup="true"
+        aria-expanded="@IsOpen">
+        @TriggerContent
+        <svg class="@GetChevronClasses()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+    @if (IsOpen)
+    {
+        <div class="@GetDropdownClasses()">
+            @DropdownContent
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Content for the dropdown trigger button
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TriggerContent { get; set; }
+
+    /// <summary>
+    /// Content for the dropdown menu
+    /// </summary>
+    [Parameter]
+    public RenderFragment? DropdownContent { get; set; }
+
+    /// <summary>
+    /// Dropdown position relative to trigger
+    /// </summary>
+    [Parameter]
+    public DropdownPosition Position { get; set; } = DropdownPosition.BottomLeft;
+
+    /// <summary>
+    /// Dropdown style variant
+    /// </summary>
+    [Parameter]
+    public DropdownStyle Style { get; set; } = DropdownStyle.Elevated;
+
+    /// <summary>
+    /// Whether the dropdown is currently open
+    /// </summary>
+    [Parameter]
+    public bool IsOpen { get; set; }
+
+    /// <summary>
+    /// Callback when dropdown state changes
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> IsOpenChanged { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task ToggleDropdown()
+    {
+        IsOpen = !IsOpen;
+        await IsOpenChanged.InvokeAsync(IsOpen);
+    }
+
+    private string GetTriggerClasses()
+    {
+        return "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200";
+    }
+
+    private string GetChevronClasses()
+    {
+        var baseClasses = "w-4 h-4 transition-transform duration-200";
+        var rotateClasses = IsOpen ? "transform rotate-180" : "";
+        return $"{baseClasses} {rotateClasses}".Trim();
+    }
+
+    private string GetDropdownClasses()
+    {
+        var baseClasses = "absolute z-50 mt-2 w-56 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200";
+        
+        var positionClasses = Position switch
+        {
+            DropdownPosition.BottomLeft => "left-0 origin-top-left",
+            DropdownPosition.BottomRight => "right-0 origin-top-right",
+            DropdownPosition.TopLeft => "bottom-full left-0 mb-2 origin-bottom-left",
+            DropdownPosition.TopRight => "bottom-full right-0 mb-2 origin-bottom-right",
+            _ => "left-0 origin-top-left"
+        };
+
+        var styleClasses = Style switch
+        {
+            DropdownStyle.Elevated => "bg-white border border-gray-100",
+            DropdownStyle.Glass => "bg-white/95 backdrop-blur-lg border border-white/20",
+            DropdownStyle.Gradient => "bg-gradient-to-br from-purple-50 to-fuchsia-50 border border-purple-100",
+            _ => "bg-white border border-gray-100"
+        };
+
+        return $"{baseClasses} {positionClasses} {styleClasses}".Trim();
+    }
+
+    public enum DropdownPosition
+    {
+        BottomLeft,
+        BottomRight,
+        TopLeft,
+        TopRight
+    }
+
+    public enum DropdownStyle
+    {
+        Elevated,
+        Glass,
+        Gradient
+    }
+}
