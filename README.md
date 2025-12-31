@@ -360,6 +360,7 @@ In development, .NET Aspire manages connection strings automatically. For produc
   - [Architecture Diagrams](AUTHENTICATION_ARCHITECTURE.md)
   - [Decoupling Analysis](AUTHENTICATION_DECOUPLING_ANALYSIS.md) - Why User identity must remain integrated
   - [Real-World Examples](AUTHENTICATION_MICROSERVICES_EXAMPLES.md) - How Netflix, Uber, Amazon, etc. handle it
+  - [Domain Services Analysis](AUTHENTICATION_DOMAIN_SERVICES_ANALYSIS.md) - Should auth+user be separate from images/collections?
 - [Architecture Tests README](Nexus.Architecture.Tests/README.md) - Enforced architectural rules
 
 ### External Resources

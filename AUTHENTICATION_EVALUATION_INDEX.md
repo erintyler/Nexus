@@ -10,9 +10,13 @@
 
 **❌ NO** - User identity is a core domain concept, not just an authentication detail. See the [Decoupling Analysis](AUTHENTICATION_DECOUPLING_ANALYSIS.md) for detailed explanation.
 
+**Should auth+user be a separate service, with separate services for images, stories, etc.?**
+
+**❌ NO** - The modular monolith is appropriate for Nexus's scale. See the [Domain Services Analysis](AUTHENTICATION_DOMAIN_SERVICES_ANALYSIS.md) for detailed explanation.
+
 ## 📚 Documentation Index
 
-This evaluation includes five comprehensive documents. Start with the appropriate one based on your needs:
+This evaluation includes comprehensive documents answering different architectural questions. Start with the appropriate one based on your needs:
 
 ### 1. 🚀 Quick Decision (Start Here)
 **File**: [AUTHENTICATION_DECISION.md](AUTHENTICATION_DECISION.md)
@@ -111,6 +115,23 @@ This evaluation includes five comprehensive documents. Start with the appropriat
 - When extraction makes sense (multiple apps, 100M+ users, compliance)
 
 **Reading time**: 25-30 minutes
+
+---
+
+### 7. 🏗️ Domain Services Architecture
+**File**: [AUTHENTICATION_DOMAIN_SERVICES_ANALYSIS.md](AUTHENTICATION_DOMAIN_SERVICES_ANALYSIS.md)
+
+**Best for**: Understanding modular monolith vs domain microservices
+
+**Contents**:
+- Should auth+user be separate from images/collections?
+- Event sourcing constraints with distributed services
+- Cross-domain operation complexity analysis
+- When domain service extraction makes sense
+- Better evolution path: strengthen modular monolith
+- Module boundaries without network overhead
+
+**Reading time**: 20-25 minutes
 
 ---
 
