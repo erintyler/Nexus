@@ -91,7 +91,7 @@ public class NexusButtonTests : Bunit.TestContext
 
         // Assert
         var button = cut.Find("button");
-        Assert.Contains("from-violet-500 to-purple-600", button.ClassName);
+        Assert.Contains("from-indigo-500 to-violet-600", button.ClassName);
     }
 
     [Fact]
