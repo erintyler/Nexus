@@ -98,6 +98,22 @@ This evaluation includes five comprehensive documents. Start with the appropriat
 
 ---
 
+### 6. 🌐 Real-World Examples
+**File**: [AUTHENTICATION_MICROSERVICES_EXAMPLES.md](AUTHENTICATION_MICROSERVICES_EXAMPLES.md)
+
+**Best for**: Understanding how major companies handle auth in microservices
+
+**Contents**:
+- Netflix, Uber, Amazon, Spotify, Airbnb, Twitter, Microsoft examples
+- Common patterns: central auth, distributed authorization, user replication
+- What they DON'T do (fully distributed user identity)
+- Scale considerations and lessons learned
+- When extraction makes sense (multiple apps, 100M+ users, compliance)
+
+**Reading time**: 25-30 minutes
+
+---
+
 ## 📋 Summary
 
 ### Current State

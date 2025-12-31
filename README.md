@@ -359,6 +359,7 @@ In development, .NET Aspire manages connection strings automatically. For produc
   - [Technical Dependencies](AUTHENTICATION_DEPENDENCIES.md)
   - [Architecture Diagrams](AUTHENTICATION_ARCHITECTURE.md)
   - [Decoupling Analysis](AUTHENTICATION_DECOUPLING_ANALYSIS.md) - Why User identity must remain integrated
+  - [Real-World Examples](AUTHENTICATION_MICROSERVICES_EXAMPLES.md) - How Netflix, Uber, Amazon, etc. handle it
 - [Architecture Tests README](Nexus.Architecture.Tests/README.md) - Enforced architectural rules
 
 ### External Resources
