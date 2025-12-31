@@ -88,17 +88,17 @@ public class NexusDropdownTests : Bunit.TestContext
         );
 
         var button = cut.Find("button");
-        var chevron = cut.Find("i");
+        var chevronWrapper = cut.Find("span.transition-transform");
 
         // Initially not rotated
-        Assert.DoesNotContain("rotate-180", chevron.ClassName);
+        Assert.DoesNotContain("rotate-180", chevronWrapper.ClassName);
 
         // Act
         button.Click();
 
         // Assert
-        chevron = cut.Find("i");
-        Assert.Contains("rotate-180", chevron.ClassName);
+        chevronWrapper = cut.Find("span.transition-transform");
+        Assert.Contains("rotate-180", chevronWrapper.ClassName);
     }
 
     [Fact]

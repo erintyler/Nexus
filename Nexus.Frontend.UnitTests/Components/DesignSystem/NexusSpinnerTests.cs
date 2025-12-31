@@ -12,9 +12,9 @@ public class NexusSpinnerTests : Bunit.TestContext
         var cut = RenderComponent<Client.Components.DesignSystem.NexusSpinner>();
 
         // Assert
-        var spinner = cut.Find("i");
-        Assert.Contains("fa-spinner", spinner.ClassName);
-        Assert.Contains("fa-spin", spinner.ClassName);
+        var container = cut.Find(".nexus-spinner-container");
+        var squares = cut.FindAll(".nexus-spinner-square");
+        Assert.Equal(3, squares.Count);
     }
 
     [Fact]
@@ -26,8 +26,9 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("i");
-        Assert.Contains("fa-sm", spinner.ClassName);
+        var container = cut.Find(".nexus-spinner-container");
+        Assert.Contains("w-2", container.ClassName);
+        Assert.Contains("h-2", container.ClassName);
     }
 
     [Fact]
@@ -39,8 +40,9 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("i");
-        Assert.Contains("fa-2x", spinner.ClassName);
+        var container = cut.Find(".nexus-spinner-container");
+        Assert.Contains("w-4", container.ClassName);
+        Assert.Contains("h-4", container.ClassName);
     }
 
     [Fact]
@@ -52,8 +54,9 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("i");
-        Assert.Contains("fa-3x", spinner.ClassName);
+        var container = cut.Find(".nexus-spinner-container");
+        Assert.Contains("w-6", container.ClassName);
+        Assert.Contains("h-6", container.ClassName);
     }
 
     [Fact]
@@ -65,8 +68,9 @@ public class NexusSpinnerTests : Bunit.TestContext
         );
 
         // Assert
-        var spinner = cut.Find("i");
-        Assert.Contains("fa-4x", spinner.ClassName);
+        var container = cut.Find(".nexus-spinner-container");
+        Assert.Contains("w-8", container.ClassName);
+        Assert.Contains("h-8", container.ClassName);
     }
 
     [Fact]
@@ -74,13 +78,13 @@ public class NexusSpinnerTests : Bunit.TestContext
     {
         var colors = new[]
         {
-            (SpinnerColor.Primary, "text-purple-600"),
-            (SpinnerColor.Success, "text-emerald-600"),
-            (SpinnerColor.Danger, "text-red-600"),
-            (SpinnerColor.Warning, "text-amber-600"),
-            (SpinnerColor.Info, "text-blue-600"),
-            (SpinnerColor.Accent, "text-indigo-600"),
-            (SpinnerColor.White, "text-white")
+            (SpinnerColor.Primary, "bg-purple-600"),
+            (SpinnerColor.Success, "bg-emerald-600"),
+            (SpinnerColor.Danger, "bg-red-600"),
+            (SpinnerColor.Warning, "bg-amber-600"),
+            (SpinnerColor.Info, "bg-blue-600"),
+            (SpinnerColor.Accent, "bg-indigo-600"),
+            (SpinnerColor.White, "bg-white")
         };
 
         foreach (var (color, expectedClass) in colors)
@@ -89,8 +93,8 @@ public class NexusSpinnerTests : Bunit.TestContext
                 .Add(p => p.Color, color)
             );
 
-            var wrapper = cut.Find("span");
-            Assert.Contains(expectedClass, wrapper.ClassName);
+            var container = cut.Find(".nexus-spinner-container");
+            Assert.Contains(expectedClass, container.ClassName);
         }
     }
 }

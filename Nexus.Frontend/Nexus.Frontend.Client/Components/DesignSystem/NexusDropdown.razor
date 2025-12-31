@@ -9,7 +9,9 @@
         aria-haspopup="true"
         aria-expanded="@IsOpen">
         @TriggerContent
-        <NexusIcon Icon="fa-solid fa-chevron-down" Size="fa-xs" class="@GetChevronClasses()" />
+        <span class="@GetChevronClasses()">
+            <NexusIcon Icon="fa-solid fa-chevron-down" Size="fa-xs" />
+        </span>
     </button>
 
     <div class="@GetDropdownClasses()" style="@GetDropdownStyle()">
@@ -73,7 +75,7 @@
 
     private string GetChevronClasses()
     {
-        var baseClasses = "w-4 h-4 transition-transform duration-200";
+        var baseClasses = "flex items-center justify-center transition-transform duration-200";
         var rotateClasses = IsOpen ? "transform rotate-180" : "";
         return $"{baseClasses} {rotateClasses}".Trim();
     }

@@ -1,8 +1,47 @@
-@* Spinner loading component following Nexus design system *@
+@* Modern pulsing squares spinner following Nexus design system *@
 
-<span class="@GetColorClasses()" @attributes="AdditionalAttributes">
-    <NexusIcon Icon="fa-solid fa-spinner fa-spin" Size="@GetSizeString()" />
-</span>
+<div class="@GetContainerClasses()" @attributes="AdditionalAttributes">
+    <div class="nexus-spinner-square nexus-spinner-square-1"></div>
+    <div class="nexus-spinner-square nexus-spinner-square-2"></div>
+    <div class="nexus-spinner-square nexus-spinner-square-3"></div>
+</div>
+
+<style>
+    .nexus-spinner-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .nexus-spinner-square {
+        border-radius: 0.25rem;
+        animation: nexus-pulse 1.4s ease-in-out infinite;
+    }
+
+    .nexus-spinner-square-1 {
+        animation-delay: 0s;
+    }
+
+    .nexus-spinner-square-2 {
+        animation-delay: 0.2s;
+    }
+
+    .nexus-spinner-square-3 {
+        animation-delay: 0.4s;
+    }
+
+    @@keyframes nexus-pulse {
+        0%, 100% {
+            opacity: 0.3;
+            transform: scale(0.8);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+    }
+</style>
 
 @code {
     /// <summary>
@@ -23,15 +62,22 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private string GetSizeString()
+    private string GetContainerClasses()
+    {
+        var sizeClasses = GetSizeClasses();
+        var colorClasses = GetColorClasses();
+        return $"nexus-spinner-container {sizeClasses} {colorClasses}".Trim();
+    }
+
+    private string GetSizeClasses()
     {
         return Size switch
         {
-            SpinnerSize.Small => "fa-sm",
-            SpinnerSize.Medium => "fa-2x",
-            SpinnerSize.Large => "fa-3x",
-            SpinnerSize.ExtraLarge => "fa-4x",
-            _ => "fa-2x"
+            SpinnerSize.Small => "[&>.nexus-spinner-square]:w-2 [&>.nexus-spinner-square]:h-2",
+            SpinnerSize.Medium => "[&>.nexus-spinner-square]:w-4 [&>.nexus-spinner-square]:h-4",
+            SpinnerSize.Large => "[&>.nexus-spinner-square]:w-6 [&>.nexus-spinner-square]:h-6",
+            SpinnerSize.ExtraLarge => "[&>.nexus-spinner-square]:w-8 [&>.nexus-spinner-square]:h-8",
+            _ => "[&>.nexus-spinner-square]:w-4 [&>.nexus-spinner-square]:h-4"
         };
     }
 
@@ -39,14 +85,14 @@
     {
         return Color switch
         {
-            SpinnerColor.Primary => "text-purple-600",
-            SpinnerColor.Success => "text-emerald-600",
-            SpinnerColor.Danger => "text-red-600",
-            SpinnerColor.Warning => "text-amber-600",
-            SpinnerColor.Info => "text-blue-600",
-            SpinnerColor.Accent => "text-indigo-600",
-            SpinnerColor.White => "text-white",
-            _ => "text-purple-600"
+            SpinnerColor.Primary => "[&>.nexus-spinner-square]:bg-purple-600",
+            SpinnerColor.Success => "[&>.nexus-spinner-square]:bg-emerald-600",
+            SpinnerColor.Danger => "[&>.nexus-spinner-square]:bg-red-600",
+            SpinnerColor.Warning => "[&>.nexus-spinner-square]:bg-amber-600",
+            SpinnerColor.Info => "[&>.nexus-spinner-square]:bg-blue-600",
+            SpinnerColor.Accent => "[&>.nexus-spinner-square]:bg-indigo-600",
+            SpinnerColor.White => "[&>.nexus-spinner-square]:bg-white",
+            _ => "[&>.nexus-spinner-square]:bg-purple-600"
         };
     }
 }
