@@ -13,8 +13,8 @@ public class NexusSpinnerTests : Bunit.TestContext
 
         // Assert
         var container = cut.Find(".nexus-spinner-container");
-        var squares = cut.FindAll(".nexus-spinner-square");
-        Assert.Equal(3, squares.Count);
+        var rings = cut.FindAll(".nexus-spinner-ring");
+        Assert.Equal(3, rings.Count);
     }
 
     [Fact]
@@ -27,8 +27,8 @@ public class NexusSpinnerTests : Bunit.TestContext
 
         // Assert
         var container = cut.Find(".nexus-spinner-container");
-        Assert.Contains("w-2", container.ClassName);
-        Assert.Contains("h-2", container.ClassName);
+        Assert.Contains("w-8", container.ClassName);
+        Assert.Contains("h-8", container.ClassName);
     }
 
     [Fact]
@@ -41,8 +41,8 @@ public class NexusSpinnerTests : Bunit.TestContext
 
         // Assert
         var container = cut.Find(".nexus-spinner-container");
-        Assert.Contains("w-4", container.ClassName);
-        Assert.Contains("h-4", container.ClassName);
+        Assert.Contains("w-12", container.ClassName);
+        Assert.Contains("h-12", container.ClassName);
     }
 
     [Fact]
@@ -55,8 +55,8 @@ public class NexusSpinnerTests : Bunit.TestContext
 
         // Assert
         var container = cut.Find(".nexus-spinner-container");
-        Assert.Contains("w-6", container.ClassName);
-        Assert.Contains("h-6", container.ClassName);
+        Assert.Contains("w-16", container.ClassName);
+        Assert.Contains("h-16", container.ClassName);
     }
 
     [Fact]
@@ -69,8 +69,8 @@ public class NexusSpinnerTests : Bunit.TestContext
 
         // Assert
         var container = cut.Find(".nexus-spinner-container");
-        Assert.Contains("w-8", container.ClassName);
-        Assert.Contains("h-8", container.ClassName);
+        Assert.Contains("w-24", container.ClassName);
+        Assert.Contains("h-24", container.ClassName);
     }
 
     [Fact]
@@ -78,13 +78,13 @@ public class NexusSpinnerTests : Bunit.TestContext
     {
         var colors = new[]
         {
-            (SpinnerColor.Primary, "bg-purple-600"),
-            (SpinnerColor.Success, "bg-emerald-600"),
-            (SpinnerColor.Danger, "bg-red-600"),
-            (SpinnerColor.Warning, "bg-amber-600"),
-            (SpinnerColor.Info, "bg-blue-600"),
-            (SpinnerColor.Accent, "bg-indigo-600"),
-            (SpinnerColor.White, "bg-white")
+            (SpinnerColor.Primary, "text-purple-600"),
+            (SpinnerColor.Success, "text-emerald-600"),
+            (SpinnerColor.Danger, "text-red-600"),
+            (SpinnerColor.Warning, "text-amber-600"),
+            (SpinnerColor.Info, "text-blue-600"),
+            (SpinnerColor.Accent, "text-indigo-600"),
+            (SpinnerColor.White, "text-white")
         };
 
         foreach (var (color, expectedClass) in colors)

@@ -1,9 +1,9 @@
-@* Modern pulsing squares spinner following Nexus design system *@
+@* Modern circular ripple spinner following Nexus design system *@
 
 <div class="@GetContainerClasses()" @attributes="AdditionalAttributes">
-    <div class="nexus-spinner-square nexus-spinner-square-1"></div>
-    <div class="nexus-spinner-square nexus-spinner-square-2"></div>
-    <div class="nexus-spinner-square nexus-spinner-square-3"></div>
+    <div class="nexus-spinner-ring nexus-spinner-ring-1"></div>
+    <div class="nexus-spinner-ring nexus-spinner-ring-2"></div>
+    <div class="nexus-spinner-ring nexus-spinner-ring-3"></div>
 </div>
 
 <style>
@@ -11,34 +11,38 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
+        position: relative;
     }
 
-    .nexus-spinner-square {
-        border-radius: 0.25rem;
-        animation: nexus-pulse 1.4s ease-in-out infinite;
+    .nexus-spinner-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        animation: nexus-ripple 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
     }
 
-    .nexus-spinner-square-1 {
+    .nexus-spinner-ring-1 {
         animation-delay: 0s;
     }
 
-    .nexus-spinner-square-2 {
-        animation-delay: 0.2s;
+    .nexus-spinner-ring-2 {
+        animation-delay: 0.5s;
     }
 
-    .nexus-spinner-square-3 {
-        animation-delay: 0.4s;
+    .nexus-spinner-ring-3 {
+        animation-delay: 1s;
     }
 
-    @@keyframes nexus-pulse {
-        0%, 100% {
-            opacity: 0.3;
-            transform: scale(0.8);
-        }
-        50% {
+    @@keyframes nexus-ripple {
+        0% {
+            width: 0;
+            height: 0;
             opacity: 1;
-            transform: scale(1.1);
+        }
+        100% {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
         }
     }
 </style>
@@ -73,11 +77,11 @@
     {
         return Size switch
         {
-            SpinnerSize.Small => "[&>.nexus-spinner-square]:w-2 [&>.nexus-spinner-square]:h-2",
-            SpinnerSize.Medium => "[&>.nexus-spinner-square]:w-4 [&>.nexus-spinner-square]:h-4",
-            SpinnerSize.Large => "[&>.nexus-spinner-square]:w-6 [&>.nexus-spinner-square]:h-6",
-            SpinnerSize.ExtraLarge => "[&>.nexus-spinner-square]:w-8 [&>.nexus-spinner-square]:h-8",
-            _ => "[&>.nexus-spinner-square]:w-4 [&>.nexus-spinner-square]:h-4"
+            SpinnerSize.Small => "w-8 h-8",
+            SpinnerSize.Medium => "w-12 h-12",
+            SpinnerSize.Large => "w-16 h-16",
+            SpinnerSize.ExtraLarge => "w-24 h-24",
+            _ => "w-12 h-12"
         };
     }
 
@@ -85,14 +89,14 @@
     {
         return Color switch
         {
-            SpinnerColor.Primary => "[&>.nexus-spinner-square]:bg-purple-600",
-            SpinnerColor.Success => "[&>.nexus-spinner-square]:bg-emerald-600",
-            SpinnerColor.Danger => "[&>.nexus-spinner-square]:bg-red-600",
-            SpinnerColor.Warning => "[&>.nexus-spinner-square]:bg-amber-600",
-            SpinnerColor.Info => "[&>.nexus-spinner-square]:bg-blue-600",
-            SpinnerColor.Accent => "[&>.nexus-spinner-square]:bg-indigo-600",
-            SpinnerColor.White => "[&>.nexus-spinner-square]:bg-white",
-            _ => "[&>.nexus-spinner-square]:bg-purple-600"
+            SpinnerColor.Primary => "text-purple-600",
+            SpinnerColor.Success => "text-emerald-600",
+            SpinnerColor.Danger => "text-red-600",
+            SpinnerColor.Warning => "text-amber-600",
+            SpinnerColor.Info => "text-blue-600",
+            SpinnerColor.Accent => "text-indigo-600",
+            SpinnerColor.White => "text-white",
+            _ => "text-purple-600"
         };
     }
 }
