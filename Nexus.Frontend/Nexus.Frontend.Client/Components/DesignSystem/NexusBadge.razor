@@ -1,6 +1,13 @@
 @* Modern badge/tag component following Nexus design system *@
 
 <span class="@GetBadgeClasses()" @attributes="AdditionalAttributes">
+    @if (PrefixIcon != null)
+    {
+        <span class="mr-1.5">
+            @PrefixIcon
+        </span>
+    }
+    
     @if (!string.IsNullOrWhiteSpace(Label))
     {
         <span class="font-semibold">@Label:</span>
@@ -25,6 +32,12 @@
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Optional prefix icon (provide NexusIcon component)
+    /// </summary>
+    [Parameter]
+    public RenderFragment? PrefixIcon { get; set; }
 
     /// <summary>
     /// Badge color variant

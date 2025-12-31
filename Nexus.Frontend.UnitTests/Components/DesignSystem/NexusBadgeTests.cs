@@ -126,4 +126,59 @@ public class NexusBadgeTests : Bunit.TestContext
         // Assert
         Assert.True(removed);
     }
+
+    [Fact]
+    public void NexusBadge_RendersPrefixIcon_WhenPrefixIconIsProvided()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusBadge>(parameters => parameters
+            .Add(p => p.PrefixIcon, builder =>
+            {
+                builder.OpenComponent<Client.Components.DesignSystem.NexusIcon>(0);
+                builder.AddAttribute(1, "Icon", "fa-solid fa-star");
+                builder.CloseComponent();
+            })
+            .Add(p => p.ChildContent, "Featured")
+        );
+
+        // Assert
+        var icon = cut.Find("i");
+        Assert.Contains("fa-star", icon.ClassName);
+        Assert.Contains("Featured", cut.Markup);
+    }
+
+    [Fact]
+    public void NexusBadge_DoesNotRenderPrefixIcon_WhenPrefixIconIsNull()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusBadge>(parameters => parameters
+            .Add(p => p.ChildContent, "No Icon")
+        );
+
+        // Assert
+        var icons = cut.FindAll("i");
+        Assert.Empty(icons); // Should have no icons when PrefixIcon is null and not removable
+    }
+
+    [Fact]
+    public void NexusBadge_RendersBothPrefixIconAndLabel()
+    {
+        // Arrange & Act
+        var cut = RenderComponent<Client.Components.DesignSystem.NexusBadge>(parameters => parameters
+            .Add(p => p.PrefixIcon, builder =>
+            {
+                builder.OpenComponent<Client.Components.DesignSystem.NexusIcon>(0);
+                builder.AddAttribute(1, "Icon", "fa-solid fa-tag");
+                builder.CloseComponent();
+            })
+            .Add(p => p.Label, "Category")
+            .Add(p => p.ChildContent, "Design")
+        );
+
+        // Assert
+        var icon = cut.Find("i");
+        Assert.Contains("fa-tag", icon.ClassName);
+        Assert.Contains("Category:", cut.Markup);
+        Assert.Contains("Design", cut.Markup);
+    }
 }
