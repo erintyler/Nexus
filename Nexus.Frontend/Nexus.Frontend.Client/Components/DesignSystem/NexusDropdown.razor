@@ -1,6 +1,6 @@
 @* Dropdown menu component following Nexus design system *@
 
-<div class="relative inline-block" @attributes="AdditionalAttributes">
+<div class="relative inline-block" style="z-index: 1000;" @attributes="AdditionalAttributes">
     <button 
         type="button"
         class="@GetTriggerClasses()"
@@ -16,7 +16,7 @@
 
     @if (IsOpen)
     {
-        <div class="@GetDropdownClasses()" style="z-index: 9999;">
+        <div class="@GetDropdownClasses()" style="z-index: 10000;">
             @DropdownContent
         </div>
     }
