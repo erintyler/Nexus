@@ -6,9 +6,13 @@
 
 **❌ NO**
 
+**What about decoupling authentication from user comments/posts?**
+
+**❌ NO** - User identity is a core domain concept, not just an authentication detail. See the [Decoupling Analysis](AUTHENTICATION_DECOUPLING_ANALYSIS.md) for detailed explanation.
+
 ## 📚 Documentation Index
 
-This evaluation includes four comprehensive documents. Start with the appropriate one based on your needs:
+This evaluation includes five comprehensive documents. Start with the appropriate one based on your needs:
 
 ### 1. 🚀 Quick Decision (Start Here)
 **File**: [AUTHENTICATION_DECISION.md](AUTHENTICATION_DECISION.md)
@@ -77,6 +81,23 @@ This evaluation includes four comprehensive documents. Start with the appropriat
 
 ---
 
+### 5. 🔍 Decoupling Analysis
+**File**: [AUTHENTICATION_DECOUPLING_ANALYSIS.md](AUTHENTICATION_DECOUPLING_ANALYSIS.md)
+
+**Best for**: Understanding why User identity must remain integrated
+
+**Contents**:
+- Authentication vs. User Identity distinction
+- Analysis of comment/post coupling
+- Why User can't be decoupled from domain
+- OAuth provider abstraction (viable alternative)
+- External IdP comparison
+- Addresses: "Users can comment on things and like posts"
+
+**Reading time**: 15-20 minutes
+
+---
+
 ## 📋 Summary
 
 ### Current State
@@ -85,6 +106,12 @@ This evaluation includes four comprehensive documents. Start with the appropriat
 - **Performance**: <200ms (adequate)
 - **Architecture**: Clean, well-organized, follows best practices
 - **Issues**: None identified
+
+### Key Insight: Authentication vs. User Identity
+- **Authentication** (~250 LOC): OAuth + JWT generation - small, potentially extractable
+- **User Identity** (pervasive): Guid userId used throughout domain - core concept, can't be extracted
+- **The Coupling**: Comments, posts, and all domain operations need userId for authorization and audit
+- **Conclusion**: User is a domain aggregate, not just an authentication detail
 
 ### Microservice Analysis
 - **Fit Score**: 24% (Poor fit)
