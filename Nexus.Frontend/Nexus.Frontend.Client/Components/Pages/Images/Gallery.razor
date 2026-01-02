@@ -64,7 +64,7 @@
                         type="button"
                         @onclick="@(() => AddSearchTag(tag))"
                         class="cursor-pointer"
-                        disabled="@_selectedTags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase))">
+                        disabled="@_selectedTags.Contains(tag)">
                         <NexusBadge 
                             Color="@GetTagColor(tag)" 
                             Style="BadgeStyle.Soft">
