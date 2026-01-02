@@ -1,0 +1,89 @@
+@* Icon-only button component *@
+
+<button 
+    type="@Type"
+    class="@GetButtonClasses()"
+    disabled="@Disabled"
+    @onclick="OnClick"
+    @attributes="AdditionalAttributes"
+    aria-label="@AriaLabel">
+    @ChildContent
+</button>
+
+@code {
+    /// <summary>
+    /// Icon content to display
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Button color variant
+    /// </summary>
+    [Parameter]
+    public IconButtonColor Color { get; set; } = IconButtonColor.Primary;
+
+    /// <summary>
+    /// Button size
+    /// </summary>
+    [Parameter]
+    public IconButtonSize Size { get; set; } = IconButtonSize.Medium;
+
+    /// <summary>
+    /// Whether the button is disabled
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Button type attribute
+    /// </summary>
+    [Parameter]
+    public string Type { get; set; } = "button";
+
+    /// <summary>
+    /// Accessible label for screen readers
+    /// </summary>
+    [Parameter]
+    public string AriaLabel { get; set; } = "";
+
+    /// <summary>
+    /// Click event callback
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetButtonClasses()
+    {
+        var baseClasses = "focus:outline-none transform hover:scale-110 transition-all duration-200";
+        
+        var sizeClasses = Size switch
+        {
+            IconButtonSize.Small => "p-1",
+            IconButtonSize.Medium => "p-2",
+            IconButtonSize.Large => "p-3",
+            _ => "p-2"
+        };
+
+        var colorClasses = Color switch
+        {
+            IconButtonColor.Primary => "text-purple-600 hover:text-purple-800",
+            IconButtonColor.Secondary => "text-gray-600 hover:text-gray-800",
+            IconButtonColor.Success => "text-emerald-600 hover:text-emerald-800",
+            IconButtonColor.Danger => "text-red-600 hover:text-red-800",
+            IconButtonColor.Warning => "text-amber-600 hover:text-amber-800",
+            IconButtonColor.Info => "text-blue-600 hover:text-blue-800",
+            _ => "text-purple-600 hover:text-purple-800"
+        };
+
+        var disabledClasses = Disabled ? "cursor-not-allowed opacity-50" : "";
+
+        return $"{baseClasses} {sizeClasses} {colorClasses} {disabledClasses}".Trim();
+    }
+}

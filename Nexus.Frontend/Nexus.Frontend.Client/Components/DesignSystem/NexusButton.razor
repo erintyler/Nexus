@@ -1,0 +1,106 @@
+@* Modern button component following Nexus design system *@
+
+<button 
+    type="@Type"
+    class="@GetButtonClasses()"
+    disabled="@Disabled"
+    @onclick="OnClick"
+    @attributes="AdditionalAttributes">
+    @if (IsLoading)
+    {
+        <span class="flex items-center justify-center">
+            <NexusIcon Icon="fa-solid fa-spinner fa-spin" Size="fa-lg" />
+            <span class="ml-2">@LoadingText</span>
+        </span>
+    }
+    else
+    {
+        @ChildContent
+    }
+</button>
+
+@code {
+    /// <summary>
+    /// Content to display inside the button
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Button variant style
+    /// </summary>
+    [Parameter]
+    public ButtonVariant Variant { get; set; } = ButtonVariant.Primary;
+
+    /// <summary>
+    /// Button size
+    /// </summary>
+    [Parameter]
+    public ButtonSize Size { get; set; } = ButtonSize.Medium;
+
+    /// <summary>
+    /// Whether the button is disabled
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Whether the button is in loading state
+    /// </summary>
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    /// <summary>
+    /// Text to display when loading
+    /// </summary>
+    [Parameter]
+    public string LoadingText { get; set; } = "Loading...";
+
+    /// <summary>
+    /// Button type attribute
+    /// </summary>
+    [Parameter]
+    public string Type { get; set; } = "button";
+
+    /// <summary>
+    /// Click event callback
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetButtonClasses()
+    {
+        var baseClasses = "font-semibold focus:outline-none transition-all duration-200";
+        
+        var sizeClasses = Size switch
+        {
+            ButtonSize.Small => "px-4 py-2 text-sm rounded-lg",
+            ButtonSize.Medium => "px-6 py-3 text-base rounded-xl",
+            ButtonSize.Large => "px-8 py-4 text-lg rounded-xl",
+            _ => "px-6 py-3 text-base rounded-xl"
+        };
+
+        var stateClasses = (Disabled || IsLoading) 
+            ? "cursor-not-allowed opacity-60" 
+            : "transform hover:scale-105 active:scale-95";
+
+        var variantClasses = Variant switch
+        {
+            ButtonVariant.Primary => "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white hover:from-purple-700 hover:to-fuchsia-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 shadow-lg hover:shadow-xl",
+            ButtonVariant.Secondary => "bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-gray-200 hover:border-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2",
+            ButtonVariant.Success => "bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-lg hover:shadow-xl",
+            ButtonVariant.Danger => "bg-gradient-to-r from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-lg hover:shadow-xl",
+            ButtonVariant.Accent => "bg-gradient-to-r from-indigo-500 to-violet-600 text-white hover:from-indigo-600 hover:to-violet-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-lg hover:shadow-xl",
+            ButtonVariant.Warning => "bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 shadow-lg hover:shadow-xl",
+            _ => "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white hover:from-purple-700 hover:to-fuchsia-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 shadow-lg hover:shadow-xl"
+        };
+
+        return $"{baseClasses} {sizeClasses} {stateClasses} {variantClasses}".Trim();
+    }
+}

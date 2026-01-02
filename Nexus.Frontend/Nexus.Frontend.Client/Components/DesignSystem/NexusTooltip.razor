@@ -1,0 +1,109 @@
+@* Modern tooltip component following Nexus design system *@
+
+<div class="relative inline-block" 
+     @onmouseenter="ShowTooltip" 
+     @onmouseleave="HideTooltip"
+     @attributes="AdditionalAttributes">
+    
+    @* Target element that triggers the tooltip *@
+    @ChildContent
+    
+    @* Tooltip content *@
+    <div class="@GetTooltipClasses()" style="@GetTooltipStyle()">
+        <div class="@GetTooltipInnerClasses()">
+            @TooltipContent
+        </div>
+        @* Arrow/pointer *@
+        <div class="@GetArrowClasses()"></div>
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// Target element that will show the tooltip on hover
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Content to display inside the tooltip
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TooltipContent { get; set; }
+
+    /// <summary>
+    /// Tooltip position relative to target element
+    /// </summary>
+    [Parameter]
+    public TooltipPosition Position { get; set; } = TooltipPosition.Top;
+
+    /// <summary>
+    /// Whether the tooltip is currently visible
+    /// </summary>
+    private bool IsVisible { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private void ShowTooltip()
+    {
+        IsVisible = true;
+    }
+
+    private void HideTooltip()
+    {
+        IsVisible = false;
+    }
+
+    private string GetTooltipClasses()
+    {
+        var baseClasses = "absolute z-50 transition-all duration-200 ease-out";
+        
+        // Visibility and animation classes
+        var visibilityClasses = IsVisible 
+            ? "opacity-100 scale-100 pointer-events-auto" 
+            : "opacity-0 scale-95 pointer-events-none";
+        
+        // Position-specific classes
+        var positionClasses = Position switch
+        {
+            TooltipPosition.Top => "bottom-full left-1/2 -translate-x-1/2 mb-2",
+            TooltipPosition.Bottom => "top-full left-1/2 -translate-x-1/2 mt-2",
+            TooltipPosition.Left => "right-full top-1/2 -translate-y-1/2 mr-2",
+            TooltipPosition.Right => "left-full top-1/2 -translate-y-1/2 ml-2",
+            _ => "bottom-full left-1/2 -translate-x-1/2 mb-2"
+        };
+
+        return $"{baseClasses} {visibilityClasses} {positionClasses}".Trim();
+    }
+
+    private string GetTooltipInnerClasses()
+    {
+        return "px-3 py-2 text-sm text-white bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg shadow-xl border border-gray-700/50 whitespace-nowrap";
+    }
+
+    private string GetArrowClasses()
+    {
+        var baseClasses = "absolute w-2 h-2 bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 transform rotate-45";
+        
+        var positionClasses = Position switch
+        {
+            TooltipPosition.Top => "top-full left-1/2 -translate-x-1/2 -mt-1 border-t-0 border-l-0",
+            TooltipPosition.Bottom => "bottom-full left-1/2 -translate-x-1/2 -mb-1 border-b-0 border-r-0",
+            TooltipPosition.Left => "left-full top-1/2 -translate-y-1/2 -ml-1 border-t-0 border-l-0",
+            TooltipPosition.Right => "right-full top-1/2 -translate-y-1/2 -mr-1 border-b-0 border-r-0",
+            _ => "top-full left-1/2 -translate-x-1/2 -mt-1 border-t-0 border-l-0"
+        };
+
+        return $"{baseClasses} {positionClasses}".Trim();
+    }
+
+    private string GetTooltipStyle()
+    {
+        // Ensure tooltip appears above all content
+        return "z-index: 9999;";
+    }
+}

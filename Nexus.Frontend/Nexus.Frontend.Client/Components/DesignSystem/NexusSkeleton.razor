@@ -1,0 +1,44 @@
+@* Skeleton loader component following Nexus design system *@
+
+<div class="@GetSkeletonClasses()" @attributes="AdditionalAttributes"></div>
+
+@code {
+    /// <summary>
+    /// Skeleton shape
+    /// </summary>
+    [Parameter]
+    public SkeletonShape Shape { get; set; } = SkeletonShape.Rectangle;
+
+    /// <summary>
+    /// Skeleton width (e.g., "w-full", "w-1/2", "w-3/4")
+    /// </summary>
+    [Parameter]
+    public string Width { get; set; } = "w-full";
+
+    /// <summary>
+    /// Skeleton height (e.g., "h-4", "h-8", "h-12")
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; } = "h-4";
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetSkeletonClasses()
+    {
+        var baseClasses = "animate-pulse bg-gradient-to-r from-gray-200 to-gray-300";
+        
+        var shapeClasses = Shape switch
+        {
+            SkeletonShape.Rectangle => "rounded-lg",
+            SkeletonShape.Circle => "rounded-full",
+            SkeletonShape.Text => "rounded",
+            _ => "rounded-lg"
+        };
+
+        return $"{baseClasses} {shapeClasses} {Width} {Height}".Trim();
+    }
+}

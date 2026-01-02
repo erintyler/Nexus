@@ -1,0 +1,174 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+@* Dropdown menu component following Nexus design system *@
+
+<div class="relative inline-block" @ref="_dropdownRef" @attributes="AdditionalAttributes">
+    <button 
+        type="button"
+        class="@GetTriggerClasses()"
+        @onclick="ToggleDropdown"
+        @onclick:stopPropagation
+        aria-haspopup="true"
+        aria-expanded="@IsOpen">
+        @TriggerContent
+        <span class="@GetChevronClasses()">
+            <NexusIcon Icon="fa-solid fa-chevron-down" Size="fa-xs" />
+        </span>
+    </button>
+
+    <div class="@GetDropdownClasses()" style="@GetDropdownStyle()">
+        @DropdownContent
+    </div>
+</div>
+
+@code {
+    private ElementReference _dropdownRef;
+    private IJSObjectReference? _jsModule;
+    private DotNetObjectReference<NexusDropdown>? _dotNetRef;
+    /// <summary>
+    /// Content for the dropdown trigger button
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TriggerContent { get; set; }
+
+    /// <summary>
+    /// Content for the dropdown menu
+    /// </summary>
+    [Parameter]
+    public RenderFragment? DropdownContent { get; set; }
+
+    /// <summary>
+    /// Dropdown position relative to trigger
+    /// </summary>
+    [Parameter]
+    public DropdownPosition Position { get; set; } = DropdownPosition.BottomLeft;
+
+    /// <summary>
+    /// Dropdown style variant
+    /// </summary>
+    [Parameter]
+    public DropdownStyle Style { get; set; } = DropdownStyle.Elevated;
+
+    /// <summary>
+    /// Whether the dropdown is currently open
+    /// </summary>
+    [Parameter]
+    public bool IsOpen { get; set; }
+
+    /// <summary>
+    /// Callback when dropdown state changes
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> IsOpenChanged { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/DesignSystem/NexusDropdown.razor.js");
+            await _jsModule.InvokeVoidAsync("initializeDropdown", _dropdownRef, _dotNetRef);
+        }
+
+        if (_jsModule != null && IsOpen)
+        {
+            await _jsModule.InvokeVoidAsync("addClickOutsideListener", _dropdownRef, _dotNetRef);
+        }
+        else if (_jsModule != null && !IsOpen)
+        {
+            await _jsModule.InvokeVoidAsync("removeClickOutsideListener");
+        }
+    }
+
+    private async Task ToggleDropdown()
+    {
+        IsOpen = !IsOpen;
+        await IsOpenChanged.InvokeAsync(IsOpen);
+    }
+
+    [JSInvokable]
+    public async Task CloseDropdownFromJs()
+    {
+        if (IsOpen)
+        {
+            IsOpen = false;
+            await IsOpenChanged.InvokeAsync(IsOpen);
+            StateHasChanged();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule != null)
+        {
+            try
+            {
+                await _jsModule.InvokeVoidAsync("removeClickOutsideListener");
+                await _jsModule.DisposeAsync();
+            }
+            catch
+            {
+                // Ignore errors during disposal
+            }
+        }
+
+        _dotNetRef?.Dispose();
+    }
+
+    private string GetTriggerClasses()
+    {
+        return "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200";
+    }
+
+    private string GetChevronClasses()
+    {
+        var baseClasses = "flex items-center justify-center transition-transform duration-200";
+        var rotateClasses = IsOpen ? "transform rotate-180" : "";
+        return $"{baseClasses} {rotateClasses}".Trim();
+    }
+
+    private string GetDropdownClasses()
+    {
+        // Use CSS transitions for smooth open/close animations
+        // Removed backdrop-blur to avoid stacking context issues
+        var baseClasses = "absolute mt-2 w-56 rounded-xl shadow-2xl overflow-hidden transition-all duration-200 ease-out";
+        
+        // Animate opacity, scale, and translate based on IsOpen state
+        var visibilityClasses = IsOpen 
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto" 
+            : "opacity-0 scale-95 -translate-y-2 pointer-events-none";
+        
+        var positionClasses = Position switch
+        {
+            DropdownPosition.BottomLeft => "left-0 origin-top-left",
+            DropdownPosition.BottomRight => "right-0 origin-top-right",
+            DropdownPosition.TopLeft => "bottom-full left-0 mb-2 origin-bottom-left",
+            DropdownPosition.TopRight => "bottom-full right-0 mb-2 origin-bottom-right",
+            _ => "left-0 origin-top-left"
+        };
+
+        var styleClasses = Style switch
+        {
+            DropdownStyle.Elevated => "bg-white border border-gray-100",
+            DropdownStyle.Glass => "bg-white/95 border border-white/20",
+            DropdownStyle.Gradient => "bg-gradient-to-br from-purple-50 to-fuchsia-50 border border-purple-100",
+            _ => "bg-white border border-gray-100"
+        };
+
+        return $"{baseClasses} {visibilityClasses} {positionClasses} {styleClasses}".Trim();
+    }
+
+    private string GetDropdownStyle()
+    {
+        // High z-index to ensure dropdown appears above cards and other elements
+        return "z-index: 10000;";
+    }
+}

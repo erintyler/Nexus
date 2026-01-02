@@ -1,0 +1,137 @@
+@* Modern alert component following Nexus design system *@
+
+<div class="@GetAlertClasses()" role="alert" @attributes="AdditionalAttributes">
+    <div class="flex items-start gap-3">
+        @if (ShowIcon)
+        {
+            <div class="flex-shrink-0">
+                @GetIcon()
+            </div>
+        }
+        <div class="flex-1">
+            @if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <h4 class="@GetTitleClasses()">@Title</h4>
+            }
+            <div class="text-sm">
+                @ChildContent
+            </div>
+        </div>
+        @if (Dismissible)
+        {
+            <button type="button" class="flex-shrink-0 text-current opacity-70 hover:opacity-100 transition-opacity" @onclick="HandleDismiss">
+                <NexusIcon Icon="fa-solid fa-xmark" />
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// Alert content
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Alert type
+    /// </summary>
+    [Parameter]
+    public AlertType Type { get; set; } = AlertType.Info;
+
+    /// <summary>
+    /// Alert title
+    /// </summary>
+    [Parameter]
+    public string? Title { get; set; }
+
+    /// <summary>
+    /// Whether to show the icon
+    /// </summary>
+    [Parameter]
+    public bool ShowIcon { get; set; } = true;
+
+    /// <summary>
+    /// Whether the alert can be dismissed
+    /// </summary>
+    [Parameter]
+    public bool Dismissible { get; set; }
+
+    /// <summary>
+    /// Callback when alert is dismissed
+    /// </summary>
+    [Parameter]
+    public EventCallback OnDismiss { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetAlertClasses()
+    {
+        var baseClasses = "p-4 rounded-xl border-l-4 shadow-md";
+        
+        var typeClasses = Type switch
+        {
+            AlertType.Success => "bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-800 border-emerald-500",
+            AlertType.Error => "bg-gradient-to-r from-red-50 to-pink-50 text-red-800 border-red-500",
+            AlertType.Warning => "bg-gradient-to-r from-amber-50 to-yellow-50 text-amber-800 border-amber-500",
+            AlertType.Info => "bg-gradient-to-r from-purple-50 to-violet-50 text-purple-800 border-purple-500",
+            _ => "bg-gradient-to-r from-purple-50 to-violet-50 text-purple-800 border-purple-500"
+        };
+
+        return $"{baseClasses} {typeClasses}".Trim();
+    }
+
+    private string GetTitleClasses()
+    {
+        return Type switch
+        {
+            AlertType.Success => "font-semibold text-emerald-900 mb-1",
+            AlertType.Error => "font-semibold text-red-900 mb-1",
+            AlertType.Warning => "font-semibold text-amber-900 mb-1",
+            AlertType.Info => "font-semibold text-purple-900 mb-1",
+            _ => "font-semibold text-purple-900 mb-1"
+        };
+    }
+
+    private RenderFragment GetIcon() => Type switch
+    {
+        AlertType.Success => builder =>
+        {
+            builder.OpenComponent<NexusIcon>(0);
+            builder.AddAttribute(1, "Icon", "fa-solid fa-circle-check");
+            builder.AddAttribute(2, "class", "text-emerald-600");
+            builder.CloseComponent();
+        },
+        AlertType.Error => builder =>
+        {
+            builder.OpenComponent<NexusIcon>(0);
+            builder.AddAttribute(1, "Icon", "fa-solid fa-circle-xmark");
+            builder.AddAttribute(2, "class", "text-red-600");
+            builder.CloseComponent();
+        },
+        AlertType.Warning => builder =>
+        {
+            builder.OpenComponent<NexusIcon>(0);
+            builder.AddAttribute(1, "Icon", "fa-solid fa-triangle-exclamation");
+            builder.AddAttribute(2, "class", "text-amber-600");
+            builder.CloseComponent();
+        },
+        AlertType.Info => builder =>
+        {
+            builder.OpenComponent<NexusIcon>(0);
+            builder.AddAttribute(1, "Icon", "fa-solid fa-circle-info");
+            builder.AddAttribute(2, "class", "text-purple-600");
+            builder.CloseComponent();
+        },
+        _ => builder => { }
+    };
+
+    private async Task HandleDismiss()
+    {
+        await OnDismiss.InvokeAsync();
+    }
+}

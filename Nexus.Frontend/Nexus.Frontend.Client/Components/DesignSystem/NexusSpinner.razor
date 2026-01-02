@@ -1,0 +1,102 @@
+@* Modern circular ripple spinner following Nexus design system *@
+
+<div class="@GetContainerClasses()" @attributes="AdditionalAttributes">
+    <div class="nexus-spinner-ring nexus-spinner-ring-1"></div>
+    <div class="nexus-spinner-ring nexus-spinner-ring-2"></div>
+    <div class="nexus-spinner-ring nexus-spinner-ring-3"></div>
+</div>
+
+<style>
+    .nexus-spinner-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .nexus-spinner-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        animation: nexus-ripple 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    .nexus-spinner-ring-1 {
+        animation-delay: 0s;
+    }
+
+    .nexus-spinner-ring-2 {
+        animation-delay: 0.5s;
+    }
+
+    .nexus-spinner-ring-3 {
+        animation-delay: 1s;
+    }
+
+    @@keyframes nexus-ripple {
+        0% {
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+        100% {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+</style>
+
+@code {
+    /// <summary>
+    /// Spinner size
+    /// </summary>
+    [Parameter]
+    public SpinnerSize Size { get; set; } = SpinnerSize.Medium;
+
+    /// <summary>
+    /// Spinner color
+    /// </summary>
+    [Parameter]
+    public SpinnerColor Color { get; set; } = SpinnerColor.Primary;
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetContainerClasses()
+    {
+        var sizeClasses = GetSizeClasses();
+        var colorClasses = GetColorClasses();
+        return $"nexus-spinner-container {sizeClasses} {colorClasses}".Trim();
+    }
+
+    private string GetSizeClasses()
+    {
+        return Size switch
+        {
+            SpinnerSize.Small => "w-8 h-8",
+            SpinnerSize.Medium => "w-12 h-12",
+            SpinnerSize.Large => "w-16 h-16",
+            SpinnerSize.ExtraLarge => "w-24 h-24",
+            _ => "w-12 h-12"
+        };
+    }
+
+    private string GetColorClasses()
+    {
+        return Color switch
+        {
+            SpinnerColor.Primary => "text-purple-600",
+            SpinnerColor.Success => "text-emerald-600",
+            SpinnerColor.Danger => "text-red-600",
+            SpinnerColor.Warning => "text-amber-600",
+            SpinnerColor.Info => "text-blue-600",
+            SpinnerColor.Accent => "text-indigo-600",
+            SpinnerColor.White => "text-white",
+            _ => "text-purple-600"
+        };
+    }
+}

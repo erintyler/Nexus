@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Nexus.Domain.Common;
 using Nexus.Domain.Errors;
 using Nexus.Domain.Events.Users;
@@ -12,6 +13,8 @@ namespace Nexus.Domain.Entities;
 public sealed class User : BaseEntity
 {
     internal User() { }
+
+    [JsonConstructor]
     internal User(Guid id) : base(id) { }
 
     // Properties with private setters for encapsulation

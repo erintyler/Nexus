@@ -1,0 +1,29 @@
+@* Label component following Nexus design system *@
+
+<label for="@For" class="block text-sm font-semibold text-gray-700 mb-2">
+    @ChildContent
+    @if (IsRequired)
+    {
+        <span class="text-red-500">*</span>
+    }
+</label>
+
+@code {
+    /// <summary>
+    /// Label content
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// ID of the associated input element
+    /// </summary>
+    [Parameter]
+    public string For { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Whether the field is required
+    /// </summary>
+    [Parameter]
+    public bool IsRequired { get; set; }
+}

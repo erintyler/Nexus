@@ -17,7 +17,7 @@ builder.Services.AddRazorComponents()
 // Register token exchange service with service discovery
 builder.Services.AddHttpClient<ITokenExchangeService, TokenExchangeService>(client =>
 {
-    client.BaseAddress = new Uri("https://nexus-api");
+    client.BaseAddress = new Uri("https+http://nexus-api");
 });
 
 // Configure authentication
@@ -74,9 +74,20 @@ builder.Services.AddAuthentication(options =>
                     new AuthenticationToken { Name = "token_type", Value = exchangeResult.TokenType }
                 });
 
-                // Add claims from the user info endpoint
-                var identity = (ClaimsIdentity)context.Principal!.Identity!;
-                identity.AddClaim(new Claim("jwt_token", exchangeResult.AccessToken));
+                // Use existing identity if available, otherwise create a new one
+                var identity = context.Principal?.Identity as ClaimsIdentity
+                    ?? new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                foreach (var claim in exchangeResult.Claims)
+                {
+                    identity.AddClaim(new Claim(claim.Key, claim.Value));
+                }
+
+                // Only create a new principal if one does not already exist
+                if (context.Principal == null)
+                {
+                    context.Principal = new ClaimsPrincipal(identity);
+                }
             }
         };
     });

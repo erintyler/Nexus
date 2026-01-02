@@ -1,0 +1,84 @@
+@* Modern card component following Nexus design system *@
+
+<div class="@GetCardClasses()" @onclick="HandleClick" @attributes="AdditionalAttributes">
+    @if (Variant == CardVariant.Interactive)
+    {
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative z-10">
+            @if (ShowArrow)
+            {
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex-1">
+                        @ChildContent
+                    </div>
+                    <span class="text-gray-400 group-hover:text-purple-500 transition-colors">
+                        <NexusIcon Icon="fa-solid fa-chevron-right" />
+                    </span>
+                </div>
+            }
+            else
+            {
+                @ChildContent
+            }
+        </div>
+    }
+    else
+    {
+        @ChildContent
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Card content
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Card style variant
+    /// </summary>
+    [Parameter]
+    public CardVariant Variant { get; set; } = CardVariant.Elevated;
+
+    /// <summary>
+    /// Whether to show arrow icon for interactive cards
+    /// </summary>
+    [Parameter]
+    public bool ShowArrow { get; set; } = true;
+
+    /// <summary>
+    /// Click event callback
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetCardClasses()
+    {
+        var baseClasses = "rounded-2xl p-6";
+        
+        var variantClasses = Variant switch
+        {
+            CardVariant.Elevated => "bg-white/95 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300",
+            CardVariant.Interactive => "group relative bg-white shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer",
+            CardVariant.Bordered => "bg-white shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200",
+            _ => "bg-white/95 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
+        };
+
+        return $"{baseClasses} {variantClasses}".Trim();
+    }
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync(e);
+        }
+    }
+}

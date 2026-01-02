@@ -1,0 +1,319 @@
+@page "/Upload"
+@rendermode InteractiveAuto
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Header with gradient text -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                Upload Image Post
+            </h1>
+            <p class="text-gray-600">Share your creativity with the world ✨</p>
+        </div>
+        
+        <div class="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-gray-100">
+            <EditForm Model="@_model" OnValidSubmit="HandleSubmit" FormName="upload-image-form">
+                <DataAnnotationsValidator />
+                
+                <!-- Image File Upload -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        Image File
+                    </label>
+                    <label class="group relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gradient-to-br from-gray-50 to-white hover:from-blue-50 hover:to-indigo-50 hover:border-blue-400 transition-all duration-300">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            @if (_selectedFile is null)
+                            {
+                                <div class="mb-4 p-4 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full group-hover:scale-110 transition-transform duration-300">
+                                    <NexusIcon Icon="fa-solid fa-cloud-arrow-up" Size="fa-2x" />
+                                </div>
+                                <p class="mb-2 text-sm text-gray-600 font-semibold">
+                                    <span class="text-blue-600">Click to upload</span> or drag and drop
+                                </p>
+                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                            }
+                            else
+                            {
+                                <div class="mb-4 p-4 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full">
+                                    <NexusIcon Icon="fa-solid fa-check" Size="fa-2x" />
+                                </div>
+                                <p class="mb-2 text-sm text-gray-700 font-bold">@_selectedFile.Name</p>
+                                <p class="text-xs text-gray-500">@_selectedFile.ContentType - @FormatFileSize(_selectedFile.Size)</p>
+                            }
+                        </div>
+                        <InputFile OnChange="OnFileChanged" class="hidden" accept="image/*" />
+                    </label>
+                    <ValidationMessage For="@(() => _model.File)" class="text-red-600 text-sm mt-2 font-medium" />
+                </div>
+
+                <!-- Title Input -->
+                <div class="mb-8">
+                    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Title <span class="text-red-500">*</span>
+                    </label>
+                    <InputText 
+                        id="title" 
+                        @bind-Value="_model.Title" 
+                        class="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:shadow-md"
+                        placeholder="Enter a descriptive title (5-200 characters)"
+                        maxlength="200" />
+                    <ValidationMessage For="@(() => _model.Title)" class="text-red-600 text-sm mt-2 font-medium" />
+                    @if (!string.IsNullOrWhiteSpace(_model.Title))
+                    {
+                        <div class="flex justify-between items-center mt-2">
+                            <p class="text-xs text-gray-500">@_model.Title.Length / 200 characters</p>
+                            @if (_model.Title.Length >= 5)
+                            {
+                                <span class="text-xs text-emerald-600 font-medium">✓ Valid length</span>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Tags Section -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Tags <span class="text-red-500">*</span> <span class="text-gray-500 text-xs font-normal">(At least one tag required)</span>
+                    </label>
+                    
+                    <!-- Display Added Tags -->
+                    @if (_model.Tags.Any())
+                    {
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            @foreach (var tag in _model.Tags)
+                            {
+                                <div class="inline-flex items-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 animate-in fade-in slide-in-from-top">
+                                    <span class="font-semibold">@tag.Type:</span>
+                                    <span class="ml-1">@tag.Value</span>
+                                    <button type="button" @onclick="() => RemoveTag(tag)" class="ml-2 text-white/90 hover:text-white focus:outline-none transform hover:scale-110 transition-transform">
+                                        <NexusIcon Icon="fa-solid fa-xmark" />
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- Add Tag Form -->
+                    <div class="flex gap-2">
+                        <div class="flex-1">
+                            <InputText 
+                                @bind-Value="_newTagType" 
+                                class="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+                                placeholder="Tag type (e.g., category, artist)" />
+                        </div>
+                        <div class="flex-1">
+                            <InputText 
+                                @bind-Value="_newTagValue" 
+                                class="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+                                placeholder="Tag value (e.g., landscape)" />
+                        </div>
+                        <button 
+                            type="button" 
+                            @onclick="AddTag"
+                            class="px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white font-medium rounded-lg hover:from-violet-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-violet-500 transform hover:scale-105 active:scale-95 transition-all duration-200 shadow-md">
+                            Add Tag
+                        </button>
+                    </div>
+                    
+                    @if (!string.IsNullOrWhiteSpace(_tagError))
+                    {
+                        <p class="text-red-600 text-sm mt-2 font-medium">@_tagError</p>
+                    }
+                    @if (_model.Tags.Count == 0)
+                    {
+                        <p class="text-red-600 text-sm mt-2 font-medium">At least one tag is required</p>
+                    }
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex gap-3 pt-6 border-t border-gray-200">
+                    <button 
+                        type="submit" 
+                        disabled="@_isSubmitting"
+                        class="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transform hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+                        @if (_isSubmitting)
+                        {
+                            <span class="flex items-center justify-center">
+                                <NexusIcon Icon="fa-solid fa-spinner fa-spin" Size="fa-lg" />
+                                <span class="ml-2">Uploading...</span>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>✨ Upload Image Post</span>
+                        }
+                    </button>
+                    <button 
+                        type="button" 
+                        @onclick="ClearForm"
+                        disabled="@_isSubmitting"
+                        class="px-6 py-3 bg-gray-50 text-gray-700 font-semibold rounded-xl hover:bg-gray-100 border-2 border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transform hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+                        Clear
+                    </button>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(_submitMessage))
+                {
+                    <div class="mt-6 p-4 rounded-xl @(_isError ? "bg-gradient-to-r from-red-50 to-pink-50 text-red-800 border-l-4 border-red-500" : "bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-800 border-l-4 border-emerald-500") shadow-md backdrop-blur-sm animate-in fade-in slide-in-from-top">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0">
+                                @if (_isError)
+                                {
+                                    <NexusIcon Icon="fa-solid fa-circle-xmark" Size="fa-lg" />
+                                }
+                                else
+                                {
+                                    <NexusIcon Icon="fa-solid fa-circle-check" Size="fa-lg" />
+                                }
+                            </div>
+                            <p class="font-medium">@_submitMessage</p>
+                        </div>
+                    </div>
+                }
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private ImagePostUploadModel _model = new();
+    private IBrowserFile? _selectedFile;
+    private string _newTagType = string.Empty;
+    private string _newTagValue = string.Empty;
+    private string _tagError = string.Empty;
+    private bool _isSubmitting;
+    private string _submitMessage = string.Empty;
+    private bool _isError;
+
+    private void OnFileChanged(InputFileChangeEventArgs e)
+    {
+        _selectedFile = e.File;
+        _model.File = e.File;
+        _submitMessage = string.Empty;
+    }
+
+    private void AddTag()
+    {
+        _tagError = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(_newTagType))
+        {
+            _tagError = "Tag type is required";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(_newTagValue))
+        {
+            _tagError = "Tag value is required";
+            return;
+        }
+
+        var tag = new TagModel { Type = _newTagType.Trim(), Value = _newTagValue.Trim() };
+        
+        if (_model.Tags.Any(t => t.Type.Equals(tag.Type, StringComparison.OrdinalIgnoreCase) && 
+                                  t.Value.Equals(tag.Value, StringComparison.OrdinalIgnoreCase)))
+        {
+            _tagError = "This tag already exists";
+            return;
+        }
+
+        _model.Tags.Add(tag);
+        _newTagType = string.Empty;
+        _newTagValue = string.Empty;
+    }
+
+    private void RemoveTag(TagModel tag)
+    {
+        _model.Tags.Remove(tag);
+        _tagError = string.Empty;
+    }
+
+    private async Task HandleSubmit()
+    {
+        _isSubmitting = true;
+        _submitMessage = string.Empty;
+        _isError = false;
+
+        try
+        {
+            // Validate
+            if (_selectedFile is null)
+            {
+                _submitMessage = "Please select an image file";
+                _isError = true;
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(_model.Title) || _model.Title.Length < 5 || _model.Title.Length > 200)
+            {
+                _submitMessage = "Title must be between 5 and 200 characters";
+                _isError = true;
+                return;
+            }
+
+            if (_model.Tags.Count == 0)
+            {
+                _submitMessage = "At least one tag is required";
+                _isError = true;
+                return;
+            }
+
+            // TODO: Implement actual upload logic here
+            // This is where you would call your API service to upload the image
+            await Task.Delay(1500); // Simulate upload
+
+            _submitMessage = "Image post uploaded successfully! 🎉";
+            _isError = false;
+            
+            // Clear form after successful upload
+            await Task.Delay(2000);
+            ClearForm();
+        }
+        catch (Exception ex)
+        {
+            _submitMessage = $"Error uploading image: {ex.Message}";
+            _isError = true;
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private void ClearForm()
+    {
+        _model = new ImagePostUploadModel();
+        _selectedFile = null;
+        _newTagType = string.Empty;
+        _newTagValue = string.Empty;
+        _tagError = string.Empty;
+        _submitMessage = string.Empty;
+        _isError = false;
+    }
+
+    private static string FormatFileSize(long bytes)
+    {
+        string[] sizes = { "B", "KB", "MB", "GB" };
+        double len = bytes;
+        int order = 0;
+        while (len >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            len = len / 1024;
+        }
+        return $"{len:0.##} {sizes[order]}";
+    }
+
+    public class ImagePostUploadModel
+    {
+        public IBrowserFile? File { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public List<TagModel> Tags { get; set; } = new();
+    }
+
+    public class TagModel
+    {
+        public string Type { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
+    }
+}
