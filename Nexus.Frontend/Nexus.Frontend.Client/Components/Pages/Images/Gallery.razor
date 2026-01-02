@@ -42,7 +42,7 @@
                         @foreach (var tag in _selectedTags)
                         {
                             <NexusBadge 
-                                Color="BadgeColor.Primary" 
+                                Color="@GetTagColor(tag)" 
                                 Style="BadgeStyle.Gradient"
                                 Removable="true"
                                 OnRemove="@(() => RemoveSearchTag(tag))">
