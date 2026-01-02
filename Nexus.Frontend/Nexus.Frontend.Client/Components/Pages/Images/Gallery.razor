@@ -281,7 +281,7 @@
     {
         get
         {
-            var query = _images.AsEnumerable();
+            var query = _images;
 
             // Filter by search query
             if (!string.IsNullOrWhiteSpace(_searchQuery))
@@ -289,16 +289,15 @@
                 var searchLower = _searchQuery.ToLower();
                 query = query.Where(img => 
                     img.Title.ToLower().Contains(searchLower) ||
-                    img.Tags.Any(tag => tag.ToLower().Contains(searchLower)));
+                    img.Tags.Any(tag => tag.ToLower().Contains(searchLower))).ToList();
             }
 
             // Filter by selected tags
             if (_selectedTags.Any())
             {
+                var selectedTagsSet = new HashSet<string>(_selectedTags, StringComparer.OrdinalIgnoreCase);
                 query = query.Where(img => 
-                    _selectedTags.Any(selectedTag => 
-                        img.Tags.Any(imgTag => 
-                            imgTag.Equals(selectedTag, StringComparison.OrdinalIgnoreCase))));
+                    img.Tags.Any(imgTag => selectedTagsSet.Contains(imgTag))).ToList();
             }
 
             return query;
@@ -315,7 +314,7 @@
 
     private void RemoveSearchTag(string tag)
     {
-        _selectedTags.Remove(tag);
+        _selectedTags.RemoveAll(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
     }
 
     private BadgeColor GetTagColor(string tag)
