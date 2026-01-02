@@ -64,7 +64,7 @@
                         type="button"
                         @onclick="@(() => AddSearchTag(tag))"
                         class="cursor-pointer"
-                        disabled="@_selectedTags.Contains(tag)">
+                        disabled="@_selectedTags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase))">
                         <NexusBadge 
                             Color="@GetTagColor(tag)" 
                             Style="BadgeStyle.Soft">
@@ -281,7 +281,7 @@
     {
         get
         {
-            var query = _images;
+            IEnumerable<ImagePostModel> query = _images;
 
             // Filter by search query
             if (!string.IsNullOrWhiteSpace(_searchQuery))
@@ -289,7 +289,7 @@
                 var searchLower = _searchQuery.ToLower();
                 query = query.Where(img => 
                     img.Title.ToLower().Contains(searchLower) ||
-                    img.Tags.Any(tag => tag.ToLower().Contains(searchLower))).ToList();
+                    img.Tags.Any(tag => tag.ToLower().Contains(searchLower)));
             }
 
             // Filter by selected tags
@@ -297,7 +297,7 @@
             {
                 var selectedTagsSet = new HashSet<string>(_selectedTags, StringComparer.OrdinalIgnoreCase);
                 query = query.Where(img => 
-                    img.Tags.Any(imgTag => selectedTagsSet.Contains(imgTag))).ToList();
+                    img.Tags.Any(imgTag => selectedTagsSet.Contains(imgTag)));
             }
 
             return query;
