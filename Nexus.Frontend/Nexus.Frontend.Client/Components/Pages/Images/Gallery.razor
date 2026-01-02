@@ -144,7 +144,7 @@
 
 @code {
     private string _searchQuery = string.Empty;
-    private List<string> _selectedTags = new();
+    private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly List<string> _popularTags = new()
     {
@@ -286,18 +286,16 @@
             // Filter by search query
             if (!string.IsNullOrWhiteSpace(_searchQuery))
             {
-                var searchLower = _searchQuery.ToLower();
                 query = query.Where(img => 
-                    img.Title.ToLower().Contains(searchLower) ||
-                    img.Tags.Any(tag => tag.ToLower().Contains(searchLower)));
+                    img.Title.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                    img.Tags.Any(tag => tag.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase)));
             }
 
             // Filter by selected tags
             if (_selectedTags.Any())
             {
-                var selectedTagsSet = new HashSet<string>(_selectedTags, StringComparer.OrdinalIgnoreCase);
                 query = query.Where(img => 
-                    img.Tags.Any(imgTag => selectedTagsSet.Contains(imgTag)));
+                    img.Tags.Any(imgTag => _selectedTags.Contains(imgTag)));
             }
 
             return query;
@@ -306,15 +304,12 @@
 
     private void AddSearchTag(string tag)
     {
-        if (!_selectedTags.Contains(tag, StringComparer.OrdinalIgnoreCase))
-        {
-            _selectedTags.Add(tag);
-        }
+        _selectedTags.Add(tag);
     }
 
     private void RemoveSearchTag(string tag)
     {
-        _selectedTags.RemoveAll(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        _selectedTags.Remove(tag);
     }
 
     private BadgeColor GetTagColor(string tag)
