@@ -105,14 +105,14 @@
                             }
                             @if (image.Tags.Count > 2)
                             {
-                                <span class="inline-flex items-center bg-gray-100 text-gray-600 text-[10px] font-medium px-1.5 py-0.5 rounded">
+                                <span class="inline-flex items-center bg-gray-100 text-gray-600 text-xs font-medium px-1.5 py-0.5 rounded">
                                     +@(image.Tags.Count - 2)
                                 </span>
                             }
                         </div>
                         
                         <!-- Stats -->
-                        <div class="flex items-center gap-2 text-[10px] text-gray-500">
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
                             <div class="flex items-center gap-0.5">
                                 <NexusIcon Icon="fa-solid fa-heart" />
                                 <span>@image.Likes</span>
