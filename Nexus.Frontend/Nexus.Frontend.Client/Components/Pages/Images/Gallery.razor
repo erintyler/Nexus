@@ -411,7 +411,7 @@
 
         public int GetHashCode(TagDto obj)
         {
-            return HashCode.Combine(obj.Type, obj.Value.ToLowerInvariant());
+            return HashCode.Combine(obj.Type, obj.Value?.ToLowerInvariant() ?? string.Empty);
         }
     }
 }
