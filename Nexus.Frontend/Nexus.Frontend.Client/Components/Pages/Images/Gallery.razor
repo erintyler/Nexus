@@ -424,6 +424,8 @@
     }
 
     // Autocomplete state
+    private const int MaxSuggestions = 8;
+    private const int SuggestionClickDelayMs = 200;
     private bool _showSuggestions;
     private int _selectedSuggestionIndex = -1;
     private List<TagDto> _suggestedTags = new();
@@ -464,7 +466,7 @@
             .Where(tag => 
                 !_selectedTags.Contains(tag) && 
                 tag.Value.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase))
-            .Take(8)
+            .Take(MaxSuggestions)
             .ToList();
 
         _showSuggestions = _suggestedTags.Any();
@@ -479,7 +481,7 @@
     private async Task HandleSearchBlur()
     {
         // Delay to allow click events on suggestions to fire
-        await Task.Delay(200);
+        await Task.Delay(SuggestionClickDelayMs);
         _showSuggestions = false;
     }
 
