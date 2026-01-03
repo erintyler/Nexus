@@ -165,6 +165,9 @@ builder.Services.AddAuthentication("Test") // Set default scheme name
     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
 builder.Services.AddAuthorization();
 
+// Register ClaimsTransformation to enrich claims with user data
+builder.Services.AddScoped<IClaimsTransformation, UserClaimsTransformation>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
