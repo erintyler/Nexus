@@ -1,20 +1,27 @@
 @* Image tag component that displays TagDto with type-specific prefix icons *@
 @using Nexus.Frontend.Client.Models
 
-<span class="@GetTagClasses()">
-    @if (!string.IsNullOrWhiteSpace(GetTagIcon()))
-    {
-        <NexusIcon Icon="@GetTagIcon()" />
-    }
-    <span class="ml-1">@Value</span>
-    
-    @if (Removable)
-    {
-        <button type="button" class="ml-1.5 text-current/80 hover:text-current focus:outline-none transform hover:scale-110 transition-transform" @onclick="HandleRemove">
-            <NexusIcon Icon="fa-solid fa-xmark" />
-        </button>
-    }
-</span>
+<NexusTooltip Position="TooltipPosition.Top">
+    <ChildContent>
+        <span class="@GetTagClasses()">
+            @if (!string.IsNullOrWhiteSpace(GetTagIcon()))
+            {
+                <NexusIcon Icon="@GetTagIcon()" />
+            }
+            <span class="ml-1">@Value</span>
+            
+            @if (Removable)
+            {
+                <button type="button" class="ml-1.5 text-current/80 hover:text-current focus:outline-none transform hover:scale-110 transition-transform cursor-pointer" @onclick="HandleRemove">
+                    <NexusIcon Icon="fa-solid fa-xmark" />
+                </button>
+            }
+        </span>
+    </ChildContent>
+    <TooltipContent>
+        @GetTagTypeDescription()
+    </TooltipContent>
+</NexusTooltip>
 
 @code {
     /// <summary>
@@ -88,6 +95,19 @@
             TagType.General => "fa-solid fa-tag",
             TagType.Meta => "fa-solid fa-circle-info",
             _ => "fa-solid fa-tag"
+        };
+    }
+
+    private string GetTagTypeDescription()
+    {
+        return Type switch
+        {
+            TagType.Artist => "Artist: Creator or illustrator",
+            TagType.Series => "Series: From a specific series or franchise",
+            TagType.Character => "Character: Character depicted",
+            TagType.General => "General: General descriptive tag",
+            TagType.Meta => "Meta: Metadata about the image",
+            _ => "Tag type"
         };
     }
 

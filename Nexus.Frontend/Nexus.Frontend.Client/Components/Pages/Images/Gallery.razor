@@ -24,11 +24,37 @@
                         type="text"
                         @bind="_searchQuery"
                         @bind:event="oninput"
+                        @onkeydown="HandleSearchKeyDown"
+                        @onfocus="HandleSearchFocus"
+                        @onblur="HandleSearchBlur"
                         class="w-full px-3 py-2 pl-10 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 text-sm"
                         placeholder="Search by title or tags..." />
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <NexusIcon Icon="fa-solid fa-magnifying-glass" />
                     </div>
+
+                    <!-- Tag Suggestions Dropdown -->
+                    @if (_showSuggestions && _suggestedTags.Any())
+                    {
+                        <div class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-200 max-h-60 overflow-y-auto z-50">
+                            @for (int i = 0; i < _suggestedTags.Count; i++)
+                            {
+                                var tag = _suggestedTags[i];
+                                var index = i;
+                                var isSelected = index == _selectedSuggestionIndex;
+                                <button 
+                                    type="button"
+                                    @onclick="@(() => SelectSuggestedTag(tag))"
+                                    @onmouseenter="@(() => _selectedSuggestionIndex = index)"
+                                    class="@GetSuggestionClasses(isSelected)">
+                                    <ImageTag 
+                                        Type="@tag.Type" 
+                                        Value="@tag.Value"
+                                        Size="TagSize.Small" />
+                                </button>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 
@@ -142,7 +168,16 @@
 </div>
 
 @code {
-    private string _searchQuery = string.Empty;
+    private string _internalSearchQuery = string.Empty;
+    private string _searchQuery
+    {
+        get => _internalSearchQuery;
+        set
+        {
+            _internalSearchQuery = value;
+            UpdateSuggestions();
+        }
+    }
     private readonly HashSet<TagDto> _selectedTags = new(new TagDtoComparer());
 
     private readonly List<TagDto> _popularTags = new()
@@ -386,6 +421,110 @@
     private bool IsTagSelected(TagDto tag)
     {
         return _selectedTags.Contains(tag);
+    }
+
+    // Autocomplete state
+    private bool _showSuggestions;
+    private int _selectedSuggestionIndex = -1;
+    private List<TagDto> _suggestedTags = new();
+
+    private List<TagDto> GetAllAvailableTags()
+    {
+        // Get all unique tags from images and popular tags
+        var allTags = new HashSet<TagDto>(new TagDtoComparer());
+        
+        foreach (var tag in _popularTags)
+        {
+            allTags.Add(tag);
+        }
+        
+        foreach (var image in _images)
+        {
+            foreach (var tag in image.Tags)
+            {
+                allTags.Add(tag);
+            }
+        }
+        
+        return allTags.ToList();
+    }
+
+    private void UpdateSuggestions()
+    {
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            _suggestedTags.Clear();
+            _showSuggestions = false;
+            _selectedSuggestionIndex = -1;
+            return;
+        }
+
+        var allTags = GetAllAvailableTags();
+        _suggestedTags = allTags
+            .Where(tag => 
+                !_selectedTags.Contains(tag) && 
+                tag.Value.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase))
+            .Take(8)
+            .ToList();
+
+        _showSuggestions = _suggestedTags.Any();
+        _selectedSuggestionIndex = _suggestedTags.Any() ? 0 : -1;
+    }
+
+    private void HandleSearchFocus()
+    {
+        UpdateSuggestions();
+    }
+
+    private async Task HandleSearchBlur()
+    {
+        // Delay to allow click events on suggestions to fire
+        await Task.Delay(200);
+        _showSuggestions = false;
+    }
+
+    private void HandleSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (!_showSuggestions || !_suggestedTags.Any())
+        {
+            UpdateSuggestions();
+            return;
+        }
+
+        switch (e.Key)
+        {
+            case "ArrowDown":
+                _selectedSuggestionIndex = Math.Min(_selectedSuggestionIndex + 1, _suggestedTags.Count - 1);
+                break;
+            case "ArrowUp":
+                _selectedSuggestionIndex = Math.Max(_selectedSuggestionIndex - 1, 0);
+                break;
+            case "Enter":
+                if (_selectedSuggestionIndex >= 0 && _selectedSuggestionIndex < _suggestedTags.Count)
+                {
+                    SelectSuggestedTag(_suggestedTags[_selectedSuggestionIndex]);
+                }
+                break;
+            case "Escape":
+                _showSuggestions = false;
+                _selectedSuggestionIndex = -1;
+                break;
+        }
+    }
+
+    private void SelectSuggestedTag(TagDto tag)
+    {
+        AddSearchTag(tag);
+        _searchQuery = string.Empty;
+        _showSuggestions = false;
+        _selectedSuggestionIndex = -1;
+    }
+
+    private string GetSuggestionClasses(bool isSelected)
+    {
+        var baseClasses = "w-full text-left px-3 py-2 hover:bg-purple-50 transition-colors duration-150 cursor-pointer";
+        var selectedClasses = isSelected ? "bg-purple-100" : "bg-white";
+        return $"{baseClasses} {selectedClasses}".Trim();
     }
 
     private class ImagePostModel
