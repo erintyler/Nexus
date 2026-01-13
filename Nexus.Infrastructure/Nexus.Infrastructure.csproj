@@ -9,6 +9,7 @@
         <PackageReference Include="AWSSDK.S3" Version="4.0.17.1" />
         <PackageReference Include="LocalStack.Client" Version="2.0.0" />
         <PackageReference Include="LocalStack.Client.Extensions" Version="2.0.0" />
+        <PackageReference Include="ZiggyCreatures.FusionCache" Version="1.5.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />

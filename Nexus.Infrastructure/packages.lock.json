@@ -47,6 +47,15 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.32"
         }
       },
+      "ZiggyCreatures.FusionCache": {
+        "type": "Direct",
+        "requested": "[1.5.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "fwUwz4iS9Avq5oh7AI01/RktdG4yEp/jlCrlcq1ww6/mCoQzxq5dJDZhyhLVdx0s7MN22rUW3N+huGYXignrMA==",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Memory": "9.0.0"
+        }
+      },
       "AWSSDK.Core": {
         "type": "Transitive",
         "resolved": "4.0.3.8",
