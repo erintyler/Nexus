@@ -47,6 +47,15 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.32"
         }
       },
+      "WolverineFx.Http": {
+        "type": "Direct",
+        "requested": "[5.10.0, )",
+        "resolved": "5.10.0",
+        "contentHash": "70EakeKwFYth5PrV9yrHHvAqcNlSj71+pYiQ/AZgH7mDKmD8Wvolib8WsdHHy25aE2TLDWXd9nRLz6BFrisqwA==",
+        "dependencies": {
+          "WolverineFx": "5.10.0"
+        }
+      },
       "AWSSDK.Core": {
         "type": "Transitive",
         "resolved": "4.0.3.8",
@@ -744,8 +753,8 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.9.2",
-        "contentHash": "xlvRapCadtLp6F16mI/2GjrHljEV1JObKTf+fvbrRS/SeTGg2XW0qYgEraX6pBhT1tBlj+itX9c2Dop7WrM30A==",
+        "resolved": "5.10.0",
+        "contentHash": "TN4lAJei1V/5i3HD9qqqJWxU3IDZ/6CpK3BDJs3mHFuuQqM935o1lX3ddB15ED70SoXwS4OE08TDsEf68miMAw==",
         "dependencies": {
           "JasperFx": "1.12.0",
           "JasperFx.Events": "1.12.2",
@@ -760,14 +769,6 @@
           "Microsoft.Extensions.ObjectPool": "10.0.0",
           "NewId": "4.0.1",
           "Newtonsoft.Json": "13.0.3"
-        }
-      },
-      "WolverineFx.Http": {
-        "type": "Transitive",
-        "resolved": "5.9.2",
-        "contentHash": "eN/4XqBqyMcUp38WeE59bArDKDx0iZeJwJnh3/qCDl47xoY1qYCMtGcUE8fOLgpiBZLcXB+zXbvYzl8WkRJ6jA==",
-        "dependencies": {
-          "WolverineFx": "5.9.2"
         }
       },
       "WolverineFx.Http.Marten": {
@@ -825,6 +826,7 @@
           "SkiaSharp.NativeAssets.Linux": "[3.119.1, )",
           "SkiaSharp.NativeAssets.Win32": "[3.119.1, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.1, )",
+          "WolverineFx.Http": "[5.10.0, )",
           "WolverineFx.Http.Marten": "[5.9.2, )",
           "WolverineFx.Marten": "[5.9.2, )",
           "WolverineFx.RabbitMQ": "[5.9.2, )"
