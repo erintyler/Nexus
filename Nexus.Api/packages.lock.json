@@ -43,9 +43,9 @@
       },
       "Scalar.AspNetCore": {
         "type": "Direct",
-        "requested": "[2.12.12, )",
-        "resolved": "2.12.12",
-        "contentHash": "dSoKedvYjRhnR3oVBXidoFqBq3jk4FPdatPinC4IEmcbPGkxfabmSZMIYnzBc/CJbTlv+V7DzzjfOSxDMFapxw=="
+        "requested": "[2.12.13, )",
+        "resolved": "2.12.13",
+        "contentHash": "/6+dbb3pUttWItEHZKRTE1zyfMCUUnm+Ibn13k2+FxF08QQRz5+aYkWWur4GZutrIVOHICwGzyNzghhv82Ke3Q=="
       },
       "Serilog.AspNetCore": {
         "type": "Direct",
@@ -102,23 +102,23 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.3.9",
-        "contentHash": "bHpTJBw1sSteI70fbdDNa6iKUi4YF0tSDwG4GrDZGmKsvK9MrcjrzBPbjWECe1DJlZtLmUFbB6laCQiNi/AeJA=="
+        "resolved": "4.0.3.10",
+        "contentHash": "PiGDGvWwHeZqbRVcUVrCs/sOjuMLqnH/VRWHe6yop8ZZG9LXuxL3GsfwbgatfzHuJsf1yhy2DuUu6rO3FulA5g=="
       },
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Transitive",
-        "resolved": "4.0.3.20",
-        "contentHash": "hczQXA0y6uSMx+wFEP/Nje5hk2t6tvq+SZe+uKReWaEBDrgS+psqlfIJChjAkp5SjJ6CipdgiQG5jWkviITMow==",
+        "resolved": "4.0.3.21",
+        "contentHash": "DwL6NanboPZVxPYR5D5s55ezlh2vhs5C6lzEzqFDoI7fOOmiTZtkfLLDzIXaWxrvw10/KFZfEVFqgT1kVO5nWA==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.3.9"
+          "AWSSDK.Core": "4.0.3.10"
         }
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.17.2",
-        "contentHash": "5f+4D4fBseGTSCd6XceVf5R+mFWHS/+JSgLH3fr/Vy1wy9VMRKh8uHHy0Zq2oN1iDtERWxSWrIEuP/jwbNBRFQ==",
+        "resolved": "4.0.17.3",
+        "contentHash": "VBnJ57rB6jM1ZJDVZ1zLAKD/8cp7GfVPvRdF8PGShxcTRPAVQtGEg7QBMOZ5Sd2Sh/TPLSXKCqzlfSKxVnTQBw==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.3.9, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.10, 5.0.0)"
         }
       },
       "DistributedLock.Core": {
@@ -577,39 +577,39 @@
       },
       "OpenTelemetry": {
         "type": "Transitive",
-        "resolved": "1.14.0",
-        "contentHash": "aiPBAr1+0dPDItH++MQQr5UgMf4xiybruzNlAoYYMYN3UUk+mGRcoKuZy4Z4rhhWUZIpK2Xhe7wUUXSTM32duQ==",
+        "resolved": "1.15.0",
+        "contentHash": "7mS/oZFF8S6xyqGQfMU1btp0nXJQUPWV535Vp/XMLYwRAUv36xQN+U4vufWBF1+z4HnRTOwuFHtUSGnHbyN6FQ==",
         "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "1.14.0"
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "1.15.0"
         }
       },
       "OpenTelemetry.Api": {
         "type": "Transitive",
-        "resolved": "1.14.0",
-        "contentHash": "foHci6viUw1f3gUB8qzz3Rk02xZIWMo299X0rxK0MoOWok/3dUVru+KKdY7WIoSHwRGpxGKkmAz9jIk2RFNbsQ=="
+        "resolved": "1.15.0",
+        "contentHash": "vk5OGdf6K9kQScCWo3bRjhDWCv6Pqw92IpX4dlARZ8B1WL7/2NGTDtCkkw42eQf7UdwyoHKzVvMH/PtL8d6z7w=="
       },
       "OpenTelemetry.Api.ProviderBuilderExtensions": {
         "type": "Transitive",
-        "resolved": "1.14.0",
-        "contentHash": "i/lxOM92v+zU5I0rGl5tXAGz6EJtxk2MvzZ0VN6F6L5pMqT6s6RCXnGWXg6fW+vtZJsllBlQaf/VLPTzgefJpg==",
+        "resolved": "1.15.0",
+        "contentHash": "OnuSUlRpGvowkOzGFQfy+KZFu0cITfKfh2IYJJiZskxVJiOuexwOOuvfDAgpJdmTzVWAHjYdz2shcHZaJ06UjQ==",
         "dependencies": {
-          "OpenTelemetry.Api": "1.14.0"
+          "OpenTelemetry.Api": "1.15.0"
         }
       },
       "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
         "type": "Transitive",
-        "resolved": "1.14.0",
-        "contentHash": "7ELExeje+T/KOywHuHwZBGQNtYlepUaYRFXWgoEaT1iKpFJVwOlE1Y2+uqHI2QQmah0Ue+XgRmDy924vWHfJ6Q==",
+        "resolved": "1.15.0",
+        "contentHash": "VH8ANc/js9IRvfYt0Q2UaAxNCOWm+IU+vWrtoH7pfx4oWPVdISUt+9uWfBCFMWZg5WzQip5dhslyDjeyZXXfSQ==",
         "dependencies": {
-          "OpenTelemetry": "1.14.0"
+          "OpenTelemetry": "1.15.0"
         }
       },
       "OpenTelemetry.Extensions.Hosting": {
         "type": "Transitive",
-        "resolved": "1.14.0",
-        "contentHash": "ZAxkCIa3Q3YWZ1sGrolXfkhPqn2PFSz2Cel74em/fATZgY5ixlw6MQp2icmqKCz4C7M1W2G0b92K3rX8mOtFRg==",
+        "resolved": "1.15.0",
+        "contentHash": "RixjKyB1pbYGhWdvPto4KJs+exdQknJsnjUO9WszdLles5Vcd0EYzxPNJdwmLjYfP+Jfbr4B5nktM4ZgeHSWtg==",
         "dependencies": {
-          "OpenTelemetry": "1.14.0"
+          "OpenTelemetry": "1.15.0"
         }
       },
       "OpenTelemetry.Instrumentation.AspNetCore": {
@@ -844,48 +844,48 @@
       },
       "WolverineFx.Http.Marten": {
         "type": "Transitive",
-        "resolved": "5.10.0",
-        "contentHash": "yRl5IFkomswrYXDscAmRAsafH6fC/yspdovzXygnlFLQI84ID75FSPjR0LOq2nfTWcjcWoMvG1wEw//9uNi6Og==",
+        "resolved": "5.11.0",
+        "contentHash": "Mt1VmS9GzwtH8C8d4ZOGCZaltNUlgT7TiIor1zV5w99X6YsDmVB7Kgot/fn2QXJJ+zGUplzdJlNM+Ib0wZcKQQ==",
         "dependencies": {
           "Marten.AspNetCore": "8.15.0",
-          "WolverineFx.Http": "5.10.0",
-          "WolverineFx.Marten": "5.10.0"
+          "WolverineFx.Http": "5.11.0",
+          "WolverineFx.Marten": "5.11.0"
         }
       },
       "WolverineFx.Marten": {
         "type": "Transitive",
-        "resolved": "5.10.0",
-        "contentHash": "KKLq4+n7LFXU6pPHpLht+GYd7baBosnkuxCjwGXFenLFpZAYgy/Y0DFOaM6LHWUVe/wH/iFiIldFVgIHmMnGhQ==",
+        "resolved": "5.11.0",
+        "contentHash": "jTzTMjUbhEiBEBDP9bBjXeuaZqfMIjhKvXlLRNym8/sfnJOMMFkiujaGxAVemLlGYq3KROGLHulDSIuP6HdOdw==",
         "dependencies": {
-          "Marten": "8.16.4",
-          "WolverineFx.Postgresql": "5.10.0"
+          "Marten": "8.18.0",
+          "WolverineFx.Postgresql": "5.11.0"
         }
       },
       "WolverineFx.Postgresql": {
         "type": "Transitive",
-        "resolved": "5.10.0",
-        "contentHash": "D+JQVgrllxeF/VW23P6AosKaYxW0+JWOnLwqxkMFG/ZosIkTLjNHhchyaYFYvbeLa2u0jaCC3dnKmcnGylp16w==",
+        "resolved": "5.11.0",
+        "contentHash": "m9htqelHmX1ZZxDC99sl8ywXJKYGAEBzBaXr2/bMwfMxGwE0uXiCJthXG4dpKJ0kcHsBYippJ8YnbsJyCamFgQ==",
         "dependencies": {
           "Weasel.Postgresql": "8.4.2",
-          "WolverineFx.RDBMS": "5.10.0"
+          "WolverineFx.RDBMS": "5.11.0"
         }
       },
       "WolverineFx.RabbitMQ": {
         "type": "Transitive",
-        "resolved": "5.10.0",
-        "contentHash": "lXOPMInRYJJQ8xQSv0/UX9VewnBgR4HgV+FxDBN3S5YNeNOVHRNocOfd2J4IgWOMyVmPg02alCtoRZtJdUgtlg==",
+        "resolved": "5.11.0",
+        "contentHash": "5KsN1qzRkYYtiP3uWj5fT/ijSLYFKZ+xRkPTQ0Xh9k9jzw2Nl2GRwUkmkrd4ryiIp28R0imSH9dQKBSrGx/Xfw==",
         "dependencies": {
           "RabbitMQ.Client": "7.1.2",
-          "WolverineFx": "5.10.0"
+          "WolverineFx": "5.11.0"
         }
       },
       "WolverineFx.RDBMS": {
         "type": "Transitive",
-        "resolved": "5.10.0",
-        "contentHash": "hPyE6/9cZU7GdWBh153I+a2d0vKoqCjsKOPika41nTgzI76pxp9AdjBbNtEuE+VvLO9V7SHay6AWUR4LovWi2A==",
+        "resolved": "5.11.0",
+        "contentHash": "7Eguxve0rkffPZGzAXm/JurkkyOjF5FfPgyNnv7Gg6YxCJwaXgYLNvPwYFstCUWbAQgkGF4EuA2jMUpXzO20jQ==",
         "dependencies": {
           "Weasel.Core": "8.4.2",
-          "WolverineFx": "5.10.0"
+          "WolverineFx": "5.11.0"
         }
       },
       "nexus.application": {
@@ -899,9 +899,9 @@
           "SkiaSharp.NativeAssets.Win32": "[3.119.1, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.1, )",
           "WolverineFx.Http": "[5.11.0, )",
-          "WolverineFx.Http.Marten": "[5.10.0, )",
-          "WolverineFx.Marten": "[5.10.0, )",
-          "WolverineFx.RabbitMQ": "[5.10.0, )"
+          "WolverineFx.Http.Marten": "[5.11.0, )",
+          "WolverineFx.Marten": "[5.11.0, )",
+          "WolverineFx.RabbitMQ": "[5.11.0, )"
         }
       },
       "nexus.domain": {
@@ -910,8 +910,8 @@
       "nexus.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.20, )",
-          "AWSSDK.S3": "[4.0.17.2, )",
+          "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.21, )",
+          "AWSSDK.S3": "[4.0.17.3, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Nexus.Application": "[1.0.0, )",
@@ -923,8 +923,8 @@
         "dependencies": {
           "Microsoft.Extensions.Http.Resilience": "[10.2.0, )",
           "Microsoft.Extensions.ServiceDiscovery": "[10.2.0, )",
-          "OpenTelemetry.Exporter.OpenTelemetryProtocol": "[1.14.0, )",
-          "OpenTelemetry.Extensions.Hosting": "[1.14.0, )",
+          "OpenTelemetry.Exporter.OpenTelemetryProtocol": "[1.15.0, )",
+          "OpenTelemetry.Extensions.Hosting": "[1.15.0, )",
           "OpenTelemetry.Instrumentation.AspNetCore": "[1.14.0, )",
           "OpenTelemetry.Instrumentation.Http": "[1.14.0, )",
           "OpenTelemetry.Instrumentation.Runtime": "[1.14.0, )"
