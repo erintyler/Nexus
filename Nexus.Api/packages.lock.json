@@ -43,9 +43,9 @@
       },
       "Scalar.AspNetCore": {
         "type": "Direct",
-        "requested": "[2.12.14, )",
-        "resolved": "2.12.14",
-        "contentHash": "VEGl5/zr5G/g/OYrYxBuYzt3/VCHnxzaOGZC3JoOV7i4quP0bbTrt4oDKCp+rqzjJqg6AkeWH5mJ/iMFysLwbQ=="
+        "requested": "[2.12.18, )",
+        "resolved": "2.12.18",
+        "contentHash": "SVO8iTlSZPxAklOl8BROup3GLNknLseWKMgLweSG7xyuAydnNt76YmKQfrIiRXmw7mx0z3zCcd0ZRva+vkPn0w=="
       },
       "Serilog.AspNetCore": {
         "type": "Direct",
@@ -188,8 +188,8 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.14.1",
-        "contentHash": "eSfAl5fCfLBy5s94OfCxZJMdsSL7qSZIneboshNXgRs8Rgmk6XX+nh3v/xCiaAOewJKQS20JmgXh6yh5dTHx8Q==",
+        "resolved": "1.16.0",
+        "contentHash": "5yr0dEd8jBMQXJZhj2Jgh4BjeW8RVcaRhk8orxKiEjetPUI49vQqUll1UKjz6mkqqA62htn0Fx+qOi0scjKquQ==",
         "dependencies": {
           "FastExpressionCompiler": "5.3.0",
           "ImTools": "4.0.0",
@@ -200,10 +200,10 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.14.0",
-        "contentHash": "gSGZuHMd4Nj6b4TmpGDtvAXY5r9eeanVf2hay01hqzO047gNtWWvwYGy1SnQj7aZLnRXXP7tcvBvwoujvE2KBA==",
+        "resolved": "1.15.0",
+        "contentHash": "/oJN9aD2jX8i3VoDhDkBeH8hT1becxA7g9UzyeszxZWQ35d0WQYWwZ7OmiJ8TBK24cqhZhyN8iH+l/F2mLRnvg==",
         "dependencies": {
-          "JasperFx": "1.14.0"
+          "JasperFx": "1.16.0"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -236,12 +236,12 @@
       },
       "Marten": {
         "type": "Transitive",
-        "resolved": "8.18.0",
-        "contentHash": "t+UmLCKUFqfm3oXGPniwd3DmNj3bZ4F2lurRxeAT8LtgUkfs1hAHi4IU+e7RfBO78AtuHD3IVUBQt2czRkyVfw==",
+        "resolved": "8.18.1",
+        "contentHash": "sci4bJ5DrcJXb54I7acMVQZwybYZpPK9+E1fJYafeGXmmWf3FGVXn3VM6vf76OOJX0GLR1ELY1OYIzQtO6Zx5Q==",
         "dependencies": {
           "FSharp.Core": "9.0.100",
-          "JasperFx": "1.14.0",
-          "JasperFx.Events": "1.14.0",
+          "JasperFx": "1.16.0",
+          "JasperFx.Events": "1.15.0",
           "JasperFx.RuntimeCompiler": "4.3.1",
           "Newtonsoft.Json": "13.0.3",
           "Npgsql.Json.NET": "9.0.4",
@@ -892,7 +892,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.18.0, )",
+          "Marten": "[8.18.1, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.1, )",
           "SkiaSharp.NativeAssets.Linux": "[3.119.1, )",
