@@ -4,11 +4,11 @@
     "net10.0": {
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Direct",
-        "requested": "[4.0.3.21, )",
-        "resolved": "4.0.3.21",
-        "contentHash": "DwL6NanboPZVxPYR5D5s55ezlh2vhs5C6lzEzqFDoI7fOOmiTZtkfLLDzIXaWxrvw10/KFZfEVFqgT1kVO5nWA==",
+        "requested": "[4.0.3.22, )",
+        "resolved": "4.0.3.22",
+        "contentHash": "ntrhUo3m8iCGdBhVbURM3W2b4wv1zlo9XR2hVG43h2vRxhfuq+TitJEE2bLgm2pQHeDWikbraeKiCF+BhlNFDg==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.3.10",
+          "AWSSDK.Core": "4.0.3.12",
           "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "2.0.0"
@@ -16,11 +16,11 @@
       },
       "AWSSDK.S3": {
         "type": "Direct",
-        "requested": "[4.0.18, )",
-        "resolved": "4.0.18",
-        "contentHash": "pTPjD1uUT3jcIPM5OdGF4Qfkfg7eA9pbAdh/K0vPhgDpuPP7ChbiIJJGf0gWFmk58HbE8lgX8akHBU4stcMXCA==",
+        "requested": "[4.0.18.1, )",
+        "resolved": "4.0.18.1",
+        "contentHash": "T4tT121H4vpRk2X5ML2zU/IbgIg/BLpZdY4EVE2OhQh/8g96ZtquyCu8UmhQl6769Avv+245jSknR3ADOJavYw==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.3.10, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.12, 5.0.0)"
         }
       },
       "LocalStack.Client": {
@@ -58,8 +58,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.3.10",
-        "contentHash": "PiGDGvWwHeZqbRVcUVrCs/sOjuMLqnH/VRWHe6yop8ZZG9LXuxL3GsfwbgatfzHuJsf1yhy2DuUu6rO3FulA5g=="
+        "resolved": "4.0.3.12",
+        "contentHash": "/FyE96xV2qJLgJN++ZW8M7udRf2NBLoku9AkEHLQqpH9uv0r0QQK2sw2pF3OvzKnuKsyp+Mx5wYwgFXPLnBb9g=="
       },
       "DistributedLock.Core": {
         "type": "Transitive",
@@ -137,8 +137,8 @@
       },
       "Marten": {
         "type": "Transitive",
-        "resolved": "8.18.2",
-        "contentHash": "+YozDzf5DrWKmKxPLCGj1SdvOVEsbgDO/wSla0CPU0Mr7LuiC7O7mjpCLfH/L34oXABhGmPfhz4uCa5xXb6DrQ==",
+        "resolved": "8.18.3",
+        "contentHash": "x62KQK0f5X5QYu7M2q4QrihDnm5UiwwDDe7wqNEWwg0W6FEePWE9IZ0ZVdUEZYYMwy8lQ0xzRyy8In/DcnkQ2w==",
         "dependencies": {
           "FSharp.Core": "9.0.100",
           "JasperFx": "1.16.0",
@@ -821,7 +821,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.18.2, )",
+          "Marten": "[8.18.3, )",
           "Microsoft.Extensions.Hosting": "[10.0.2, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.1, )",
