@@ -10,13 +10,13 @@
       },
       "Marten": {
         "type": "Direct",
-        "requested": "[8.19.0, )",
-        "resolved": "8.19.0",
-        "contentHash": "kZXpOCBbPKAvjcTS8Eco0n8N31cbPwNDuJuPktet2IKhXd9RWweSfWNh1XG8PEAQqc1oZksZty2ZD9mSOFA6gw==",
+        "requested": "[8.20.0, )",
+        "resolved": "8.20.0",
+        "contentHash": "RiTVN9nZ4JiLAAEY5YUqedstnqQ5wiBw0+6OPDyLPH1meli+VJCmE4cLYCm/soUxPNf8qdPTOFJ9RWCC652ihQ==",
         "dependencies": {
           "FSharp.Core": "9.0.100",
           "JasperFx": "1.17.0",
-          "JasperFx.Events": "1.17.0",
+          "JasperFx.Events": "1.18.0",
           "JasperFx.RuntimeCompiler": "4.3.2",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Newtonsoft.Json": "13.0.3",
@@ -173,8 +173,8 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.17.0",
-        "contentHash": "sLvOvE5ABMcATyFLVIKDHeWbjVlhPL8TuK3To1cUdX452Xk6zyEAoW8u/UHfDr4meI9rXoMu4a5GaG8xDjp50A==",
+        "resolved": "1.18.0",
+        "contentHash": "Q6rUm6NTWuf7qtMs7WASVNu7vPyQxvNMl5IAjJr9GCE+eARZqITeD63iCfHaSl61q+0DuQWsxeiOMWuHU0bMJA==",
         "dependencies": {
           "JasperFx": "1.17.0"
         }
