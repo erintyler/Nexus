@@ -49,11 +49,11 @@
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.13.0, )",
-        "resolved": "5.13.0",
-        "contentHash": "OlO8k8Ho6ReBgtn3GazvqcPmrcYbL9SY5VLLZUIOCNU5AyG9TrM4wbUNBK0bjwONC9JI7MgDMsF8o/CJpUH1eg==",
+        "requested": "[5.14.0, )",
+        "resolved": "5.14.0",
+        "contentHash": "LGWus79zUGRBFit6oqumhxrhNmN3owdihOV9QAlDHhr1lAxhkI81nAQ2k2TiSLQ/uZktOFDrMGitbtqNeA7Hyg==",
         "dependencies": {
-          "WolverineFx": "5.13.0"
+          "WolverineFx": "5.14.0"
         }
       },
       "AWSSDK.Core": {
@@ -753,8 +753,8 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.13.0",
-        "contentHash": "FB5Yo6M0SyQWDgHz2EjwQcflhrjRd9mERV6/N6WHQHJO1kW8fSxEIcOHndhikcVkZvmhUdwu5PW4V4ypEmpKTA==",
+        "resolved": "5.14.0",
+        "contentHash": "7yjmFBlQKistYi7RHMNwE6GoNQm/6439nglsJFFZ0SO+4TYepVXvVIk+TnWvOtNk31E45WUltZ17ypaTmo7Oag==",
         "dependencies": {
           "JasperFx": "1.17.0",
           "JasperFx.Events": "1.17.0",
@@ -828,7 +828,7 @@
           "SkiaSharp.NativeAssets.Linux": "[3.119.1, )",
           "SkiaSharp.NativeAssets.Win32": "[3.119.1, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.1, )",
-          "WolverineFx.Http": "[5.13.0, )",
+          "WolverineFx.Http": "[5.14.0, )",
           "WolverineFx.Http.Marten": "[5.13.0, )",
           "WolverineFx.Marten": "[5.13.0, )",
           "WolverineFx.RabbitMQ": "[5.13.0, )"
