@@ -1,0 +1,560 @@
+@page "/gallery"
+@rendermode InteractiveAuto
+@using Nexus.Frontend.Client.Components.DesignSystem
+@using Nexus.Frontend.Client.Models
+
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent mb-2">
+                Image Gallery ✨
+            </h1>
+            <p class="text-gray-600 text-sm">Discover amazing image posts from the community</p>
+        </div>
+
+        <!-- Search Bar with Tags -->
+        <div class="bg-white/90 shadow-lg rounded-xl p-4 border border-gray-100 mb-4">
+            <div class="mb-3">
+                <label class="block text-xs font-semibold text-gray-700 mb-2">
+                    Search Images
+                </label>
+                <div class="relative">
+                    <input 
+                        type="text"
+                        @bind="_searchQuery"
+                        @bind:event="oninput"
+                        @onkeydown="HandleSearchKeyDown"
+                        @onfocus="HandleSearchFocus"
+                        @onblur="HandleSearchBlur"
+                        class="w-full px-3 py-2 pl-10 bg-white/80 border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 text-sm"
+                        placeholder="Search by title or tags..." />
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <NexusIcon Icon="fa-solid fa-magnifying-glass" />
+                    </div>
+
+                    <!-- Tag Suggestions Dropdown -->
+                    @if (_showSuggestions && _suggestedTags.Any())
+                    {
+                        <div class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-200 max-h-60 overflow-y-auto z-50">
+                            @for (int i = 0; i < _suggestedTags.Count; i++)
+                            {
+                                var tag = _suggestedTags[i];
+                                var index = i;
+                                var isSelected = index == _selectedSuggestionIndex;
+                                <button 
+                                    type="button"
+                                    @onclick="@(() => SelectSuggestedTag(tag))"
+                                    @onmouseenter="@(() => _selectedSuggestionIndex = index)"
+                                    class="@GetSuggestionClasses(isSelected)">
+                                    <ImageTag 
+                                        Type="@tag.Type" 
+                                        Value="@tag.Value"
+                                        Size="TagSize.Small" />
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Active Search Tags -->
+            @if (_selectedTags.Any())
+            {
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-2">
+                        Active Filters
+                    </label>
+                    <div class="flex flex-wrap gap-1.5">
+                        @foreach (var tag in _selectedTags.OrderBy(t => t.Type).ThenBy(t => t.Value))
+                        {
+                            <ImageTag 
+                                Type="@tag.Type" 
+                                Value="@tag.Value"
+                                Size="TagSize.Small"
+                                Removable="true"
+                                OnRemove="@(() => RemoveSearchTag(tag))" />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Popular Tags -->
+        <div class="bg-white/90 shadow-lg rounded-xl p-4 border border-gray-100 mb-6">
+            <h2 class="text-sm font-bold text-gray-800 mb-3">Popular Tags</h2>
+            <div class="flex flex-wrap gap-1.5">
+                @foreach (var tag in _popularTags.OrderBy(t => t.Type).ThenBy(t => t.Value))
+                {
+                    <button 
+                        type="button"
+                        @onclick="@(() => AddSearchTag(tag))"
+                        class="cursor-pointer"
+                        disabled="@IsTagSelected(tag)">
+                        <ImageTag 
+                            Type="@tag.Type" 
+                            Value="@tag.Value"
+                            Size="TagSize.Small" />
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- Image Gallery Grid - Compact Thumbnail View -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            @foreach (var image in FilteredImages)
+            {
+                <div class="group relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer">
+                    <!-- Thumbnail -->
+                    <div class="relative aspect-square bg-gradient-to-br @image.GradientClasses overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <NexusIcon Icon="@image.Icon" Size="fa-2x" />
+                        </div>
+                        <!-- Hover overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-2">
+                        <h3 class="text-xs font-semibold text-gray-800 mb-1 truncate group-hover:text-purple-600 transition-colors duration-300">
+                            @image.Title
+                        </h3>
+                        
+                        <!-- Image Tags - Show first 2 -->
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            @foreach (var tag in image.Tags.OrderBy(t => t.Type).ThenBy(t => t.Value).Take(2))
+                            {
+                                <ImageTag 
+                                    Type="@tag.Type" 
+                                    Value="@tag.Value"
+                                    Size="TagSize.Tiny" />
+                            }
+                            @if (image.Tags.Count > 2)
+                            {
+                                <span class="inline-flex items-center bg-gray-100 text-gray-600 text-xs font-medium px-1.5 py-0.5 rounded">
+                                    +@(image.Tags.Count - 2)
+                                </span>
+                            }
+                        </div>
+                        
+                        <!-- Stats -->
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <div class="flex items-center gap-0.5">
+                                <NexusIcon Icon="fa-solid fa-heart" />
+                                <span>@image.Likes</span>
+                            </div>
+                            <div class="flex items-center gap-0.5">
+                                <NexusIcon Icon="fa-solid fa-eye" />
+                                <span>@image.Views</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Empty State -->
+        @if (!FilteredImages.Any())
+        {
+            <div class="bg-white/90 shadow-lg rounded-xl p-8 border border-gray-100 text-center">
+                <div class="mb-3">
+                    <NexusIcon Icon="fa-solid fa-image" Size="fa-3x" />
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-1">No images found</h3>
+                <p class="text-sm text-gray-600">Try adjusting your search or filters</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private string _internalSearchQuery = string.Empty;
+    private string _searchQuery
+    {
+        get => _internalSearchQuery;
+        set
+        {
+            _internalSearchQuery = value;
+            UpdateSuggestions();
+        }
+    }
+    private readonly HashSet<TagDto> _selectedTags = new(new TagDtoComparer());
+
+    private readonly List<TagDto> _popularTags = new()
+    {
+        new TagDto(TagType.General, "nature"),
+        new TagDto(TagType.General, "landscape"),
+        new TagDto(TagType.Character, "portrait"),
+        new TagDto(TagType.General, "abstract"),
+        new TagDto(TagType.General, "cityscape"),
+        new TagDto(TagType.General, "wildlife"),
+        new TagDto(TagType.General, "architecture"),
+        new TagDto(TagType.General, "street"),
+        new TagDto(TagType.General, "sunset"),
+        new TagDto(TagType.General, "minimalist"),
+        new TagDto(TagType.General, "vintage"),
+        new TagDto(TagType.Meta, "monochrome"),
+        new TagDto(TagType.General, "colorful"),
+        new TagDto(TagType.Meta, "night"),
+        new TagDto(TagType.General, "macro")
+    };
+
+    private readonly List<ImagePostModel> _images = new()
+    {
+        new ImagePostModel
+        {
+            Id = 1,
+            Title = "Sunset Over Mountains",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "nature"), 
+                new TagDto(TagType.General, "landscape"), 
+                new TagDto(TagType.General, "sunset") 
+            },
+            Likes = 342,
+            Views = 1520,
+            Icon = "fa-solid fa-mountain-sun",
+            GradientClasses = "from-orange-400 to-pink-600"
+        },
+        new ImagePostModel
+        {
+            Id = 2,
+            Title = "Urban Architecture",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "architecture"), 
+                new TagDto(TagType.General, "cityscape"), 
+                new TagDto(TagType.Meta, "monochrome") 
+            },
+            Likes = 189,
+            Views = 890,
+            Icon = "fa-solid fa-building",
+            GradientClasses = "from-gray-400 to-gray-600"
+        },
+        new ImagePostModel
+        {
+            Id = 3,
+            Title = "Portrait Study",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.Character, "portrait"), 
+                new TagDto(TagType.General, "vintage"), 
+                new TagDto(TagType.General, "colorful") 
+            },
+            Likes = 567,
+            Views = 2340,
+            Icon = "fa-solid fa-user",
+            GradientClasses = "from-purple-400 to-pink-500"
+        },
+        new ImagePostModel
+        {
+            Id = 4,
+            Title = "Abstract Patterns",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "abstract"), 
+                new TagDto(TagType.General, "colorful"), 
+                new TagDto(TagType.General, "minimalist") 
+            },
+            Likes = 423,
+            Views = 1890,
+            Icon = "fa-solid fa-palette",
+            GradientClasses = "from-blue-400 to-purple-600"
+        },
+        new ImagePostModel
+        {
+            Id = 5,
+            Title = "Wildlife in Nature",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "wildlife"), 
+                new TagDto(TagType.General, "nature"), 
+                new TagDto(TagType.General, "macro") 
+            },
+            Likes = 789,
+            Views = 3210,
+            Icon = "fa-solid fa-paw",
+            GradientClasses = "from-green-400 to-teal-600"
+        },
+        new ImagePostModel
+        {
+            Id = 6,
+            Title = "Night City Lights",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "cityscape"), 
+                new TagDto(TagType.Meta, "night"), 
+                new TagDto(TagType.General, "street") 
+            },
+            Likes = 654,
+            Views = 2780,
+            Icon = "fa-solid fa-city",
+            GradientClasses = "from-indigo-600 to-purple-800"
+        },
+        new ImagePostModel
+        {
+            Id = 7,
+            Title = "Minimalist Design",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "minimalist"), 
+                new TagDto(TagType.General, "abstract"), 
+                new TagDto(TagType.Meta, "monochrome") 
+            },
+            Likes = 298,
+            Views = 1120,
+            Icon = "fa-solid fa-circle",
+            GradientClasses = "from-gray-300 to-gray-500"
+        },
+        new ImagePostModel
+        {
+            Id = 8,
+            Title = "Vintage Photography",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "vintage"), 
+                new TagDto(TagType.Character, "portrait"), 
+                new TagDto(TagType.General, "street") 
+            },
+            Likes = 445,
+            Views = 1650,
+            Icon = "fa-solid fa-camera-retro",
+            GradientClasses = "from-amber-400 to-orange-500"
+        },
+        new ImagePostModel
+        {
+            Id = 9,
+            Title = "Colorful Street Art",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "street"), 
+                new TagDto(TagType.General, "colorful"), 
+                new TagDto(TagType.General, "cityscape") 
+            },
+            Likes = 876,
+            Views = 3890,
+            Icon = "fa-solid fa-spray-can",
+            GradientClasses = "from-pink-500 to-yellow-500"
+        },
+        new ImagePostModel
+        {
+            Id = 10,
+            Title = "Macro Photography",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "macro"), 
+                new TagDto(TagType.General, "nature"), 
+                new TagDto(TagType.General, "colorful") 
+            },
+            Likes = 512,
+            Views = 2100,
+            Icon = "fa-solid fa-leaf",
+            GradientClasses = "from-emerald-400 to-green-600"
+        },
+        new ImagePostModel
+        {
+            Id = 11,
+            Title = "Architectural Details",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "architecture"), 
+                new TagDto(TagType.General, "minimalist"), 
+                new TagDto(TagType.General, "abstract") 
+            },
+            Likes = 367,
+            Views = 1450,
+            Icon = "fa-solid fa-archway",
+            GradientClasses = "from-slate-400 to-blue-600"
+        },
+        new ImagePostModel
+        {
+            Id = 12,
+            Title = "Golden Hour Landscape",
+            Tags = new List<TagDto> 
+            { 
+                new TagDto(TagType.General, "landscape"), 
+                new TagDto(TagType.General, "sunset"), 
+                new TagDto(TagType.General, "nature") 
+            },
+            Likes = 921,
+            Views = 4230,
+            Icon = "fa-solid fa-sun",
+            GradientClasses = "from-yellow-400 to-orange-600"
+        }
+    };
+
+    private IEnumerable<ImagePostModel> FilteredImages
+    {
+        get
+        {
+            IEnumerable<ImagePostModel> query = _images;
+
+            // Filter by search query
+            if (!string.IsNullOrWhiteSpace(_searchQuery))
+            {
+                query = query.Where(img => 
+                    img.Title.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                    img.Tags.Any(tag => tag.Value.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            // Filter by selected tags
+            if (_selectedTags.Any())
+            {
+                query = query.Where(img => 
+                    img.Tags.Any(imgTag => _selectedTags.Contains(imgTag)));
+            }
+
+            return query;
+        }
+    }
+
+    private void AddSearchTag(TagDto tag)
+    {
+        _selectedTags.Add(tag);
+    }
+
+    private void RemoveSearchTag(TagDto tag)
+    {
+        _selectedTags.Remove(tag);
+    }
+
+    private bool IsTagSelected(TagDto tag)
+    {
+        return _selectedTags.Contains(tag);
+    }
+
+    // Autocomplete state
+    private const int MaxSuggestions = 8;
+    private const int SuggestionClickDelayMs = 200;
+    private bool _showSuggestions;
+    private int _selectedSuggestionIndex = -1;
+    private List<TagDto> _suggestedTags = new();
+
+    private List<TagDto> GetAllAvailableTags()
+    {
+        // Get all unique tags from images and popular tags
+        var allTags = new HashSet<TagDto>(new TagDtoComparer());
+        
+        foreach (var tag in _popularTags)
+        {
+            allTags.Add(tag);
+        }
+        
+        foreach (var image in _images)
+        {
+            foreach (var tag in image.Tags)
+            {
+                allTags.Add(tag);
+            }
+        }
+        
+        return allTags.ToList();
+    }
+
+    private void UpdateSuggestions()
+    {
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            _suggestedTags.Clear();
+            _showSuggestions = false;
+            _selectedSuggestionIndex = -1;
+            return;
+        }
+
+        var allTags = GetAllAvailableTags();
+        _suggestedTags = allTags
+            .Where(tag => 
+                !_selectedTags.Contains(tag) && 
+                tag.Value.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(tag => tag.Type)
+            .ThenBy(tag => tag.Value)
+            .Take(MaxSuggestions)
+            .ToList();
+
+        _showSuggestions = _suggestedTags.Any();
+        _selectedSuggestionIndex = _suggestedTags.Any() ? 0 : -1;
+    }
+
+    private void HandleSearchFocus()
+    {
+        UpdateSuggestions();
+    }
+
+    private async Task HandleSearchBlur()
+    {
+        // Delay to allow click events on suggestions to fire
+        await Task.Delay(SuggestionClickDelayMs);
+        _showSuggestions = false;
+    }
+
+    private void HandleSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (!_showSuggestions || !_suggestedTags.Any())
+        {
+            UpdateSuggestions();
+            return;
+        }
+
+        switch (e.Key)
+        {
+            case "ArrowDown":
+                _selectedSuggestionIndex = Math.Min(_selectedSuggestionIndex + 1, _suggestedTags.Count - 1);
+                break;
+            case "ArrowUp":
+                _selectedSuggestionIndex = Math.Max(_selectedSuggestionIndex - 1, 0);
+                break;
+            case "Enter":
+                if (_selectedSuggestionIndex >= 0 && _selectedSuggestionIndex < _suggestedTags.Count)
+                {
+                    SelectSuggestedTag(_suggestedTags[_selectedSuggestionIndex]);
+                }
+                break;
+            case "Escape":
+                _showSuggestions = false;
+                _selectedSuggestionIndex = -1;
+                break;
+        }
+    }
+
+    private void SelectSuggestedTag(TagDto tag)
+    {
+        AddSearchTag(tag);
+        _searchQuery = string.Empty;
+        _showSuggestions = false;
+        _selectedSuggestionIndex = -1;
+    }
+
+    private string GetSuggestionClasses(bool isSelected)
+    {
+        var baseClasses = "w-full text-left px-3 py-2 hover:bg-purple-50 transition-colors duration-150 cursor-pointer";
+        var selectedClasses = isSelected ? "bg-purple-100" : "bg-white";
+        return $"{baseClasses} {selectedClasses}".Trim();
+    }
+
+    private class ImagePostModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public List<TagDto> Tags { get; set; } = new();
+        public int Likes { get; set; }
+        public int Views { get; set; }
+        public string Icon { get; set; } = "fa-solid fa-image";
+        public string GradientClasses { get; set; } = "from-gray-300 to-gray-500";
+    }
+
+    private class TagDtoComparer : IEqualityComparer<TagDto>
+    {
+        public bool Equals(TagDto? x, TagDto? y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null || y is null) return false;
+            return x.Type == y.Type && 
+                   string.Equals(x.Value, y.Value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public int GetHashCode(TagDto obj)
+        {
+            return HashCode.Combine(obj.Type, obj.Value?.ToLowerInvariant() ?? string.Empty);
+        }
+    }
+}
