@@ -75,21 +75,21 @@
       },
       "WolverineFx.FluentValidation": {
         "type": "Direct",
-        "requested": "[5.16.4, )",
-        "resolved": "5.16.4",
-        "contentHash": "AaJydbHbMyhHhiNEjJbFd1UN+QWudIEqw5Ov7cyiCB7uAdfn+FOEvbb7eb4kvxv2mK6T6if/EMuMtQUg5okO5w==",
+        "requested": "[5.17.0, )",
+        "resolved": "5.17.0",
+        "contentHash": "554SLOp+oACJx5SelHLzWiURh599xQXBFdNw/cfdS+WfYQ4s7ofXJs+X+0lubkAMTLB32wXjxLmbbILzwtAcEA==",
         "dependencies": {
           "FluentValidation": "12.0.0",
-          "WolverineFx": "5.16.4"
+          "WolverineFx": "5.17.0"
         }
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.16.4, )",
-        "resolved": "5.16.4",
-        "contentHash": "2SNn45hn/6X7r7r84Q/EuAxLthKVtTO0MvXXzK3ICbSZG+bdmSMHRi8e3AjwD0cdoQRj0qNLOG6f1hZlBUd5cg==",
+        "requested": "[5.17.0, )",
+        "resolved": "5.17.0",
+        "contentHash": "TOKtIiNAwjSQRw6I8JEJZTzY1gAnOxdUCTL/bJaPNEeTup0hGvOJu4uQ3Fjnsh+frvLLVr670/RVQhII/gY6uw==",
         "dependencies": {
-          "WolverineFx": "5.16.4"
+          "WolverineFx": "5.17.0"
         }
       },
       "AspNetCore.HealthChecks.NpgSql": {
@@ -838,8 +838,8 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.16.4",
-        "contentHash": "IDEDhimluawCxCn5Oo4I/+QEkRWdB0rlKRLMCkUE5Hule3weQTLA8uIAhkij4Gjb7Pxp4ZaIT2HXEN9n2slgBw==",
+        "resolved": "5.17.0",
+        "contentHash": "B7EWuzVBuyJaYoAsTEnKBKMjR+1DhjleopbHF9S2jzj0G7T3s/movynOgtq2CqlVi2EMRIyOrPhAlSm9wSPrtA==",
         "dependencies": {
           "JasperFx": "1.20.0",
           "JasperFx.Events": "1.22.0",
@@ -904,7 +904,7 @@
           "SkiaSharp.NativeAssets.Linux": "[3.119.2, )",
           "SkiaSharp.NativeAssets.Win32": "[3.119.2, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.2, )",
-          "WolverineFx.Http": "[5.16.4, )",
+          "WolverineFx.Http": "[5.17.0, )",
           "WolverineFx.Http.Marten": "[5.16.4, )",
           "WolverineFx.Marten": "[5.16.4, )",
           "WolverineFx.RabbitMQ": "[5.16.4, )"
@@ -921,7 +921,7 @@
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Nexus.Application": "[1.0.0, )",
-          "WolverineFx.Http": "[5.16.4, )"
+          "WolverineFx.Http": "[5.17.0, )"
         }
       },
       "nexus.servicedefaults": {
