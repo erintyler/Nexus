@@ -16,9 +16,9 @@
       },
       "MicroElements.OpenApi.FluentValidation": {
         "type": "Direct",
-        "requested": "[7.0.5, )",
-        "resolved": "7.0.5",
-        "contentHash": "G1b9dUkZ0Hdk1DhOV4S7CFgH+ghIht8xayeGSRw8eEc2M8hUKJ4SXn2gXSKtPKxdT/5hYRHYRlUlSmMKD6HvvQ==",
+        "requested": "[7.0.6, )",
+        "resolved": "7.0.6",
+        "contentHash": "c08Obtsx9ylwqHXr9asIa4Q78nfSf/RtnV5OSwGIXOyhyYRDvlqlRT31kaSvWPDPptaoTetTRBEw1sqw9TbHTw==",
         "dependencies": {
           "FluentValidation": "12.0.0"
         }
@@ -850,48 +850,48 @@
       },
       "WolverineFx.Http.Marten": {
         "type": "Transitive",
-        "resolved": "5.16.4",
-        "contentHash": "I/2Tfvafl5suk0u9QHm9QgBu6FZdkO671VTh4QltXUWRIrGIRbfkTMjC7qMDbS1crro+37jfDnmq15pmD71V7Q==",
+        "resolved": "5.17.0",
+        "contentHash": "Y01K2y7iHas1iGHzVapQQOb45czAENXaTwgDAg1+lrYBhvf1S5oleuJCqbpBrY1R6WN91ryYLAoT1twzEjVocw==",
         "dependencies": {
           "Marten.AspNetCore": "8.22.2",
-          "WolverineFx.Http": "5.16.4",
-          "WolverineFx.Marten": "5.16.4"
+          "WolverineFx.Http": "5.17.0",
+          "WolverineFx.Marten": "5.17.0"
         }
       },
       "WolverineFx.Marten": {
         "type": "Transitive",
-        "resolved": "5.16.4",
-        "contentHash": "ahCfx7d4eH3yJ+YA+Zo1ImtwZzvtS2YR8NGvmLCiMHdXq3WorQwByVX68hVYAejX7l/WE8hZPdgPx/LWgsnawQ==",
+        "resolved": "5.17.0",
+        "contentHash": "c5IRRthPGenkESo3iVLjfOxEhUv5hgIi0KjPJmUk4OIalFIMf7REjeYsveh7o51QeVB+cuwoUmEf9OkOylpEyw==",
         "dependencies": {
           "Marten": "8.22.2",
-          "WolverineFx.Postgresql": "5.16.4"
+          "WolverineFx.Postgresql": "5.17.0"
         }
       },
       "WolverineFx.Postgresql": {
         "type": "Transitive",
-        "resolved": "5.16.4",
-        "contentHash": "Of6UvvwpJxE8RE3ZwQpGsAE2pkLKyLNKBPnX3wN3W/zjiABN48yK9WBnUKtydvJXlS04ErC07r85gRhgO3jjQQ==",
+        "resolved": "5.17.0",
+        "contentHash": "SLzKH/gdC9g42nAXpbjyplZY345LSnrnjroIa2Fj1Q0QL9W+zm5P/l55cRSLuibmN12TeTkZ6G6PQWqGv5irFQ==",
         "dependencies": {
           "Weasel.Postgresql": "8.8.1",
-          "WolverineFx.RDBMS": "5.16.4"
+          "WolverineFx.RDBMS": "5.17.0"
         }
       },
       "WolverineFx.RabbitMQ": {
         "type": "Transitive",
-        "resolved": "5.16.4",
-        "contentHash": "srdrMeA6VOlvt9Af21Y/mowqTHoKiGI8vYBHlMki4CVJ7DfMH4LBiuKWplpMtvydfiCMXf6nKntmsF+ryklM4Q==",
+        "resolved": "5.17.0",
+        "contentHash": "zHi/l+7H/lYPsIfdOHRhbLVs8/pkgx7tb8yLZT4+KV17pfGpsu3f5+JMF/ylARM5ok0DKX+8zNObj0QDhTQtGg==",
         "dependencies": {
           "RabbitMQ.Client": "7.1.2",
-          "WolverineFx": "5.16.4"
+          "WolverineFx": "5.17.0"
         }
       },
       "WolverineFx.RDBMS": {
         "type": "Transitive",
-        "resolved": "5.16.4",
-        "contentHash": "E16txcEkBNxY+YcTjF4QQaL3tM2n1BJuKJ8WqA6OrIm+eDnOOmdfT8IYjOj6yuchhDbq1ly0mdhOngVOxBuwHw==",
+        "resolved": "5.17.0",
+        "contentHash": "PwHOICMum8gRmQgJvaSsMDTHOImPQdtPWVcCdauHT41tuOcc7WBDp+SH9ogT1csqjO8TuVJCGBIzSoxagsBqKw==",
         "dependencies": {
           "Weasel.Core": "8.8.1",
-          "WolverineFx": "5.16.4"
+          "WolverineFx": "5.17.0"
         }
       },
       "nexus.application": {
@@ -905,9 +905,9 @@
           "SkiaSharp.NativeAssets.Win32": "[3.119.2, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.2, )",
           "WolverineFx.Http": "[5.17.0, )",
-          "WolverineFx.Http.Marten": "[5.16.4, )",
-          "WolverineFx.Marten": "[5.16.4, )",
-          "WolverineFx.RabbitMQ": "[5.16.4, )"
+          "WolverineFx.Http.Marten": "[5.17.0, )",
+          "WolverineFx.Marten": "[5.17.0, )",
+          "WolverineFx.RabbitMQ": "[5.17.0, )"
         }
       },
       "nexus.domain": {
