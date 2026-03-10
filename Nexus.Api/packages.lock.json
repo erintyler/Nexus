@@ -16,9 +16,9 @@
       },
       "MicroElements.OpenApi.FluentValidation": {
         "type": "Direct",
-        "requested": "[7.0.6, )",
-        "resolved": "7.0.6",
-        "contentHash": "c08Obtsx9ylwqHXr9asIa4Q78nfSf/RtnV5OSwGIXOyhyYRDvlqlRT31kaSvWPDPptaoTetTRBEw1sqw9TbHTw==",
+        "requested": "[7.1.2, )",
+        "resolved": "7.1.2",
+        "contentHash": "oq9R3URKHf9Lmc2ab4KsHKFNMnwVF8Lq4ldMgRFCprcKaXlaDcAYkQAvbEDrpjFDX563V0dZQV61A/y0pVN9WQ==",
         "dependencies": {
           "FluentValidation": "12.0.0"
         }
