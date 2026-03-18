@@ -12,9 +12,9 @@
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Marten" Version="8.25.0" />
-      <PackageReference Include="WolverineFx.Http" Version="5.20.0" />
-      <PackageReference Include="WolverineFx.Http.Marten" Version="5.20.0" />
-    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.20.0" />
+      <PackageReference Include="WolverineFx.Http" Version="5.21.0" />
+      <PackageReference Include="WolverineFx.Http.Marten" Version="5.21.0" />
+    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.21.0" />
         <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />
     </ItemGroup>
 </Project>

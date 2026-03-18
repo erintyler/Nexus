@@ -75,21 +75,21 @@
       },
       "WolverineFx.FluentValidation": {
         "type": "Direct",
-        "requested": "[5.20.0, )",
-        "resolved": "5.20.0",
-        "contentHash": "eT1OSZEQ7t4WZt3+2fTA9Xs/F0SAnWSs0lC0nx3UTNm8ME7df2nenM2BKxmJssZx363uCBnr1Qw5hABcJPyHCg==",
+        "requested": "[5.21.0, )",
+        "resolved": "5.21.0",
+        "contentHash": "T0vdmTObXUZ3MjeUZ4WN4SrBtXI7mqLtPk1JDXy0NvzrHpZ3RKmSun/EZs63xeutExXdO6BhqQscd9PdFdKwgw==",
         "dependencies": {
           "FluentValidation": "12.0.0",
-          "WolverineFx": "5.20.0"
+          "WolverineFx": "5.21.0"
         }
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.20.0, )",
-        "resolved": "5.20.0",
-        "contentHash": "QFhojShfVWYq79bGCvCwGzTaIDTK174qjzC43GpXUQkZsufvbCQWyZv628u0H1q0sCMuDaYeOraQ4ksz+Hb/7g==",
+        "requested": "[5.21.0, )",
+        "resolved": "5.21.0",
+        "contentHash": "pmOgOtV79pTExg4JaJDhFlNjizcO1lN27tWLwlpflBD77uo+fv2wo3GcHVMwzAGKND8AYW1ruW7C/Me3ZJY/iQ==",
         "dependencies": {
-          "WolverineFx": "5.20.0"
+          "WolverineFx": "5.21.0"
         }
       },
       "AspNetCore.HealthChecks.NpgSql": {
@@ -251,10 +251,10 @@
       },
       "Marten.AspNetCore": {
         "type": "Transitive",
-        "resolved": "8.23.0",
-        "contentHash": "s5eO6KQgnuRxeIs3JuylZrRlYtJTLmDpTdNRhnOEZpdac4ZEj7vjsA4o0FblU+Ox0xT6xr1wlJwY9daE4IGuUQ==",
+        "resolved": "8.25.0",
+        "contentHash": "vxf4tPDdAKjhyhuE5ZmDO6XfZCUkMSdV/QjPdnjVT489f6FvNGn8ndTYM2OIzZ8k/Ir/PSAOQKGoIK4ZXM163Q==",
         "dependencies": {
-          "Marten": "8.23.0"
+          "Marten": "8.25.0"
         }
       },
       "Microsoft.Bcl.AsyncInterfaces": {
@@ -838,8 +838,8 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.20.0",
-        "contentHash": "FJykS3j3mIC//E7bsUozBlxYmjhSe7WZ2dX4HybTpy0w6+JWiXC42R6kQk9TPNUv8ldRIV4IlBnMPx5M4G9EtQ==",
+        "resolved": "5.21.0",
+        "contentHash": "2FxtZ4o/STJnEz8DVPFkzvIchRJUvINKpIvDJXNlAikAR5p15Jtn+THknOXiKyEKdDHsJQ//Z4TFAZfn2UBOvQ==",
         "dependencies": {
           "JasperFx": "1.21.1",
           "JasperFx.Events": "1.24.0",
@@ -850,48 +850,48 @@
       },
       "WolverineFx.Http.Marten": {
         "type": "Transitive",
-        "resolved": "5.19.1",
-        "contentHash": "CKevkZnWnVQiig14/xrqJU+TTAxY73+IQUgqsaXMvE4EG9oS9VI5ThKYHrvFg7kWcCpTpKsUY0jIg9v/OpRdKw==",
+        "resolved": "5.20.0",
+        "contentHash": "1Ma3VUIH/p2WrkqBbflJmjBjb7PQt1CS8BBaEUBaVu5GFJHh+Ofaq8aIs4sI15LLP38f4hhGkFjtbPF+216JXg==",
         "dependencies": {
-          "Marten.AspNetCore": "8.23.0",
-          "WolverineFx.Http": "5.19.1",
-          "WolverineFx.Marten": "5.19.1"
+          "Marten.AspNetCore": "8.25.0",
+          "WolverineFx.Http": "5.20.0",
+          "WolverineFx.Marten": "5.20.0"
         }
       },
       "WolverineFx.Marten": {
         "type": "Transitive",
-        "resolved": "5.19.1",
-        "contentHash": "ZPMYnWODZBKownxMSZFrqH5+/5rZ2X9DfQiAoeBpdnz5AW/h+5l5BReEbD2MMrXfq/GrU3jmKPypgx3+nojfpg==",
+        "resolved": "5.20.0",
+        "contentHash": "ebilEL/Q9icJcIrxR3hm8IO23bBiC75iRN3vL14GEYCsg3XDdSGoShj6a8eAgOfbCvMU0LlSfKpQfb5pkvO8nw==",
         "dependencies": {
-          "Marten": "8.23.0",
-          "WolverineFx.Postgresql": "5.19.1"
+          "Marten": "8.25.0",
+          "WolverineFx.Postgresql": "5.20.0"
         }
       },
       "WolverineFx.Postgresql": {
         "type": "Transitive",
-        "resolved": "5.19.1",
-        "contentHash": "gRnEXbkckAETReTKwDHMvorsu3waS/i/d9lNIVgwhtQY/f7Se0PbHsHOq4F3T0v6qJt189q7Hh3E2T1c1X9Ayg==",
+        "resolved": "5.20.0",
+        "contentHash": "uesMMYytPkWA3VLLl6+ak2v+KOLkl1JcHIrGhLgYFw2RuZ7rYgNY3YSCc1YZ3Lgn5xlrYcMGRnwZLBUvGYLWMg==",
         "dependencies": {
           "Weasel.Postgresql": "8.9.0",
-          "WolverineFx.RDBMS": "5.19.1"
+          "WolverineFx.RDBMS": "5.20.0"
         }
       },
       "WolverineFx.RabbitMQ": {
         "type": "Transitive",
-        "resolved": "5.19.1",
-        "contentHash": "U1Mn60M7tlO4H2bppK+1rS/00we1R4ymzhRQwMbCD6whzne8kdNKthgR8LXB8N1wdhnpuRET4MZv0uH+aRJlyw==",
+        "resolved": "5.20.0",
+        "contentHash": "hadajuhQYzTUYieXmK/cPPvBMwT2vfwh19gBcR58/zjabw2M2YxLX+5lpNUdWaipc+AAvFfZIFuUKTlRgcZ0Vw==",
         "dependencies": {
           "RabbitMQ.Client": "7.1.2",
-          "WolverineFx": "5.19.1"
+          "WolverineFx": "5.20.0"
         }
       },
       "WolverineFx.RDBMS": {
         "type": "Transitive",
-        "resolved": "5.19.1",
-        "contentHash": "tH2el1Q2BG/5Do9gLHmDgsfQTasItdXlsSVqhBQlgSlWy5yMDt0y+0UR3dVjNZzpEKT3NJgcEHWCnYPnsRjd0A==",
+        "resolved": "5.20.0",
+        "contentHash": "s4cwHJZ2vG6gVefKxLUFL2jri0PXmcJ+3R98B86BeXEcWmYOrEAENCW7l0Cb0TghdxZ9PhEHjFdiP9pcSN1ymw==",
         "dependencies": {
           "Weasel.Core": "8.9.0",
-          "WolverineFx": "5.19.1"
+          "WolverineFx": "5.20.0"
         }
       },
       "nexus.application": {
@@ -904,10 +904,10 @@
           "SkiaSharp.NativeAssets.Linux": "[3.119.2, )",
           "SkiaSharp.NativeAssets.Win32": "[3.119.2, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.2, )",
-          "WolverineFx.Http": "[5.20.0, )",
-          "WolverineFx.Http.Marten": "[5.19.1, )",
-          "WolverineFx.Marten": "[5.19.1, )",
-          "WolverineFx.RabbitMQ": "[5.19.1, )"
+          "WolverineFx.Http": "[5.21.0, )",
+          "WolverineFx.Http.Marten": "[5.20.0, )",
+          "WolverineFx.Marten": "[5.20.0, )",
+          "WolverineFx.RabbitMQ": "[5.20.0, )"
         }
       },
       "nexus.domain": {
@@ -922,9 +922,9 @@
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Marten": "[8.25.0, )",
           "Nexus.Application": "[1.0.0, )",
-          "WolverineFx.Http": "[5.20.0, )",
-          "WolverineFx.Http.Marten": "[5.19.1, )",
-          "WolverineFx.RabbitMQ": "[5.19.1, )"
+          "WolverineFx.Http": "[5.21.0, )",
+          "WolverineFx.Http.Marten": "[5.20.0, )",
+          "WolverineFx.RabbitMQ": "[5.20.0, )"
         }
       },
       "nexus.servicedefaults": {
