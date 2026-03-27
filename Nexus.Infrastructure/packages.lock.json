@@ -16,11 +16,11 @@
       },
       "AWSSDK.S3": {
         "type": "Direct",
-        "requested": "[4.0.19.2, )",
-        "resolved": "4.0.19.2",
-        "contentHash": "UWmkyCDrCc4E25K1htdRAprjMM5/dnkeFhmQ4fn9AqWk2H9dvceFVfrGOzAxTgfjdyl4PN7WhorKasN2BM2/Pw==",
+        "requested": "[4.0.19.3, )",
+        "resolved": "4.0.19.3",
+        "contentHash": "aa/ChYJBQVU8xQ4wmAQdFxS0C3jQJUztZgaCb++fxsmSsZkimg8wHfzaWyAfxMIIqN4DXX2/pSkkI9gXC+7Hvw==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.3.19, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.23, 5.0.0)"
         }
       },
       "LocalStack.Client": {
