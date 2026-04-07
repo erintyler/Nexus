@@ -4,11 +4,11 @@
     "net10.0": {
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Direct",
-        "requested": "[4.0.3.31, )",
-        "resolved": "4.0.3.31",
-        "contentHash": "jCDbn7YX36Dj+gMphe+ajYh7LfO/6vbeIFenHyKM+yv+CWBOYbQ/kl5ksjpI5Ss/Oi315QlfmBY0eOaanpRdEA==",
+        "requested": "[4.0.3.32, )",
+        "resolved": "4.0.3.32",
+        "contentHash": "P+7WqQp4/aHFLFXnMkqyfjYNHuX8hMNoGtJzPMtm00hCdDp7EyRDz8M62DLao3Dt7t7jHjph5gPbsXF4hxGxkA==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.3.27",
+          "AWSSDK.Core": "4.0.3.28",
           "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "2.0.0"
