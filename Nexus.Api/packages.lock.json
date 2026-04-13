@@ -75,21 +75,21 @@
       },
       "WolverineFx.FluentValidation": {
         "type": "Direct",
-        "requested": "[5.29.0, )",
-        "resolved": "5.29.0",
-        "contentHash": "w67jbuLe90e8cKOH3mx3B9KSKmdZ/ElGILNsk3ID2FSW1SWK3QHCkbnmtR3i7OFEpv3ZMMaZDat4UtZ8wLwDVA==",
+        "requested": "[5.30.0, )",
+        "resolved": "5.30.0",
+        "contentHash": "HCcc7LiNWnUQShjmzlAifDTKIdeYxg+p1xEM9uzb3BNK1WHqg4mB+tRIsmUuDj0bnVnCGpOHRdUb0Yd0kxBApA==",
         "dependencies": {
           "FluentValidation": "12.0.0",
-          "WolverineFx": "5.29.0"
+          "WolverineFx": "5.30.0"
         }
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.29.0, )",
-        "resolved": "5.29.0",
-        "contentHash": "mmeNNZw4KGeFksTzHZ/qRM/Tk2daURkYeqQOtkspXkBz5bj8VEzdiF6+ebjgptnM2LqZnfU/CoVJR1GrPSbXQw==",
+        "requested": "[5.30.0, )",
+        "resolved": "5.30.0",
+        "contentHash": "G6H9c7uXOljUnbrawUDcBAL171aQiGXxfdery9Pqs5wJ/2KyyVNjXlr6FCyOwiSGblOZ8qZNQmmW8kobQeHaFA==",
         "dependencies": {
-          "WolverineFx": "5.29.0"
+          "WolverineFx": "5.30.0"
         }
       },
       "AspNetCore.HealthChecks.NpgSql": {
@@ -183,8 +183,8 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.23.0",
-        "contentHash": "Tr7fZJjPQegv+aCWEXQiZJuIqVcs+rBW0K4EkMAZ6Ns3AhfzRszySClEXIfnOOCJco5rZa07vf/oMsStpZYivQ==",
+        "resolved": "1.24.1",
+        "contentHash": "aZlQx92iNtt4XT5u7j1Qwsx4fjabneWGco2TP4Ms7ivNwLNN6jFxwX084i/HyRAW1NIbro7T0VeFpstlDNEEdw==",
         "dependencies": {
           "FastExpressionCompiler": "5.3.0",
           "ImTools": "4.0.0",
@@ -195,10 +195,10 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.26.1",
-        "contentHash": "G61Zry/+mxMHEOQ7s9HWwoHurtdk4Hj4u1crM160dTlPW6oTmUrdZzRm4W9otETZQFy46Cb+H3mAF0zZZeg3sQ==",
+        "resolved": "1.27.0",
+        "contentHash": "OAnWVIbLp7qZxLGLixvzeRnwm+cEl7qEL/GVWAK8ndsAqXBKsGU26RGf2rNJE2qxiWHTs+f4nh1bkAbtk+Ps9Q==",
         "dependencies": {
-          "JasperFx": "1.23.0"
+          "JasperFx": "1.24.0"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -211,6 +211,11 @@
           "Microsoft.CodeAnalysis.CSharp": "5.0.0",
           "Microsoft.CodeAnalysis.Scripting": "5.0.0"
         }
+      },
+      "JasperFx.SourceGeneration": {
+        "type": "Transitive",
+        "resolved": "1.1.0",
+        "contentHash": "yIOaiA/OrlXQLGPjxFDubHnOU8MCzPTz465xBGRITMm4fDf7DbWKogb2SZC2jYLWEj27q3smTz1Z7lU4h1KkOQ=="
       },
       "LocalStack.Client": {
         "type": "Transitive",
@@ -832,12 +837,13 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.29.0",
-        "contentHash": "7MpScVBv9zymGVJ8VVeZ7/UewsN+PRTp5xUZrLdOGEI1Ele0Z+fXsMLBFoe4gc4HfURIlXggYgy3cJ2ujcqy3Q==",
+        "resolved": "5.30.0",
+        "contentHash": "2ttDgTC66TgoM6MSCxVVbHSkGVMt+muHdwLBFVOkQKmTjPigj69JTW4bV6AQHMFX7fBQ6NknEl9OU48saLFmuA==",
         "dependencies": {
-          "JasperFx": "1.23.0",
-          "JasperFx.Events": "1.25.0",
+          "JasperFx": "1.24.1",
+          "JasperFx.Events": "1.27.0",
           "JasperFx.RuntimeCompiler": "4.4.0",
+          "JasperFx.SourceGeneration": "1.1.0",
           "NewId": "4.0.1",
           "Newtonsoft.Json": "13.0.3"
         }
@@ -898,7 +904,7 @@
           "SkiaSharp.NativeAssets.Linux": "[3.119.2, )",
           "SkiaSharp.NativeAssets.Win32": "[3.119.2, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.2, )",
-          "WolverineFx.Http": "[5.29.0, )",
+          "WolverineFx.Http": "[5.30.0, )",
           "WolverineFx.Http.Marten": "[5.29.0, )",
           "WolverineFx.Marten": "[5.29.0, )",
           "WolverineFx.RabbitMQ": "[5.29.0, )"
@@ -916,7 +922,7 @@
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Marten": "[8.29.2, )",
           "Nexus.Application": "[1.0.0, )",
-          "WolverineFx.Http": "[5.29.0, )",
+          "WolverineFx.Http": "[5.30.0, )",
           "WolverineFx.Http.Marten": "[5.29.0, )",
           "WolverineFx.RabbitMQ": "[5.29.0, )"
         }
