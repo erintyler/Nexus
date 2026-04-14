@@ -49,18 +49,18 @@
       },
       "Marten": {
         "type": "Direct",
-        "requested": "[8.29.2, )",
-        "resolved": "8.29.2",
-        "contentHash": "jmIsFhAUuC1fYS3aQdSh5OsOdwbMNPDbBXz2rx/AN9OVujA+W2pEK09rXSNmxjoxHWkuglJqcmFJZFi+ytLW6A==",
+        "requested": "[8.29.3, )",
+        "resolved": "8.29.3",
+        "contentHash": "EZ2xFrt68N/FbQg3WWz+6QogV+37y//CPDdZAm7twgIKWTeJBAca4HUX1iIlpjjlYt2j1+wBcfWLqBUYU9EYkg==",
         "dependencies": {
-          "JasperFx": "1.23.0",
+          "JasperFx": "1.23.1",
           "JasperFx.Events": "1.26.1",
           "JasperFx.RuntimeCompiler": "4.4.0",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
           "Newtonsoft.Json": "13.0.3",
           "Npgsql.Json.NET": "9.0.4",
-          "Weasel.Postgresql": "8.12.0"
+          "Weasel.Postgresql": "8.12.1"
         }
       },
       "WolverineFx.Http": {
@@ -837,7 +837,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.29.2, )",
+          "Marten": "[8.29.3, )",
           "Microsoft.Extensions.Hosting": "[10.0.5, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.2, )",
