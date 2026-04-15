@@ -18,9 +18,9 @@
       },
       "Marten": {
         "type": "Direct",
-        "requested": "[8.29.3, )",
-        "resolved": "8.29.3",
-        "contentHash": "EZ2xFrt68N/FbQg3WWz+6QogV+37y//CPDdZAm7twgIKWTeJBAca4HUX1iIlpjjlYt2j1+wBcfWLqBUYU9EYkg==",
+        "requested": "[8.30.0, )",
+        "resolved": "8.30.0",
+        "contentHash": "5osbJO8c7dfLGQQL1iipgaJF0OQJ8rYLmyvGzTJOmVU+QM45ODRtmEGsTp1PM+G2jRspzNW8fXOU+qs+uE0m0g==",
         "dependencies": {
           "JasperFx": "1.23.1",
           "JasperFx.Events": "1.26.1",
@@ -1026,7 +1026,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.29.3, )",
+          "Marten": "[8.30.0, )",
           "Microsoft.Extensions.Hosting": "[10.0.5, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.2, )",
