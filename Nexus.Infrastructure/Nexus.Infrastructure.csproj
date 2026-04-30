@@ -11,10 +11,10 @@
         <PackageReference Include="LocalStack.Client.Extensions" Version="2.0.0" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Marten" Version="8.33.0" />
-      <PackageReference Include="WolverineFx.Http" Version="5.33.0" />
-      <PackageReference Include="WolverineFx.Http.Marten" Version="5.33.0" />
-    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.33.0" />
+      <PackageReference Include="Marten" Version="8.34.0" />
+      <PackageReference Include="WolverineFx.Http" Version="5.35.1" />
+      <PackageReference Include="WolverineFx.Http.Marten" Version="5.35.1" />
+    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.35.1" />
         <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />
     </ItemGroup>
 </Project>
