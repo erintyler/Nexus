@@ -75,22 +75,22 @@
       },
       "WolverineFx.FluentValidation": {
         "type": "Direct",
-        "requested": "[5.39.0, )",
-        "resolved": "5.39.0",
-        "contentHash": "Cn9W5QmAxz+emiAhq9o9eGkWPrwIKz44MkbgVBhLnA+esoJYs5jRl0s0Ft7KESPXXt8KkeL1WNJSve3QMeStqA==",
+        "requested": "[5.39.1, )",
+        "resolved": "5.39.1",
+        "contentHash": "ILlorbLBOA+3HFrQeRBFGL7ywn7mz/v2PVYG9XJnug4T/hWn+UCHtRDAKK+mI434ALDGwYTInLL8XP9qaHJvUg==",
         "dependencies": {
           "FluentValidation": "12.0.0",
-          "WolverineFx": "5.39.0"
+          "WolverineFx": "5.39.1"
         }
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.39.0, )",
-        "resolved": "5.39.0",
-        "contentHash": "aIzVjS2L4AnWixd5H9M/S7utKky945lL0m8yeXuZGm7kwu20qIhM+1PmKTj0yNUYw/tH4+Q8OdEMYrGdCOVYNg==",
+        "requested": "[5.39.1, )",
+        "resolved": "5.39.1",
+        "contentHash": "geN2415LSzsVUJYD2l4JOlWDaER81XhAFU2HcOHO0BQLmG51avL4iSDqGZBhgE3gk48Pz9GzB5vgEibRUmafcg==",
         "dependencies": {
           "Asp.Versioning.Abstractions": "[10.0.0, 11.0.0)",
-          "WolverineFx": "5.39.0"
+          "WolverineFx": "5.39.1"
         }
       },
       "Asp.Versioning.Abstractions": {
@@ -851,8 +851,8 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.39.0",
-        "contentHash": "x1aXrnxRcezLioZnesFLgGZO0BINqI4tKxiS411iaZw/z/JVtoJ575IZML4FvEBjMkFBPirrSF3hkuveL4i2sQ==",
+        "resolved": "5.39.1",
+        "contentHash": "9knt72xXkqQOGk2ppRAJEDYH0eOtXMuCsMlya9O/uGVdDVxceUbnZlzzSZmL/nUUkcUtkDjBx40vDBxYKH+RTw==",
         "dependencies": {
           "JasperFx": "1.31.0",
           "JasperFx.Events": "1.36.0",
@@ -918,7 +918,7 @@
           "SkiaSharp.NativeAssets.Linux": "[3.119.2, )",
           "SkiaSharp.NativeAssets.Win32": "[3.119.2, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.2, )",
-          "WolverineFx.Http": "[5.39.0, )",
+          "WolverineFx.Http": "[5.39.1, )",
           "WolverineFx.Http.Marten": "[5.39.0, )",
           "WolverineFx.Marten": "[5.39.0, )",
           "WolverineFx.RabbitMQ": "[5.39.0, )"
@@ -936,7 +936,7 @@
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Marten": "[8.37.0, )",
           "Nexus.Application": "[1.0.0, )",
-          "WolverineFx.Http": "[5.39.0, )",
+          "WolverineFx.Http": "[5.39.1, )",
           "WolverineFx.Http.Marten": "[5.39.0, )",
           "WolverineFx.RabbitMQ": "[5.39.0, )"
         }
