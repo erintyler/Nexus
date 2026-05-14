@@ -84,43 +84,43 @@
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.39.0, )",
-        "resolved": "5.39.0",
-        "contentHash": "aIzVjS2L4AnWixd5H9M/S7utKky945lL0m8yeXuZGm7kwu20qIhM+1PmKTj0yNUYw/tH4+Q8OdEMYrGdCOVYNg==",
+        "requested": "[5.39.1, )",
+        "resolved": "5.39.1",
+        "contentHash": "geN2415LSzsVUJYD2l4JOlWDaER81XhAFU2HcOHO0BQLmG51avL4iSDqGZBhgE3gk48Pz9GzB5vgEibRUmafcg==",
         "dependencies": {
           "Asp.Versioning.Abstractions": "[10.0.0, 11.0.0)",
-          "WolverineFx": "5.39.0"
+          "WolverineFx": "5.39.1"
         }
       },
       "WolverineFx.Http.Marten": {
         "type": "Direct",
-        "requested": "[5.39.0, )",
-        "resolved": "5.39.0",
-        "contentHash": "adud+JYEDM31PdCHLtb0H809GQFiJU0cvnHHjjyuwNvHOkxj+ioI7YUpiRKLmrfEIO1Lc0xcmHYCIebxSXSTOA==",
+        "requested": "[5.39.1, )",
+        "resolved": "5.39.1",
+        "contentHash": "bwCCDSs1VO7gu/Zy8r1OvSGuqP16ktzdaEgE9QIIZRHqRgbCTwnVHIFBILqptffrEtdTYhXm4YjfBVTphVugLg==",
         "dependencies": {
           "Marten.AspNetCore": "8.35.0",
-          "WolverineFx.Http": "5.39.0",
-          "WolverineFx.Marten": "5.39.0"
+          "WolverineFx.Http": "5.39.1",
+          "WolverineFx.Marten": "5.39.1"
         }
       },
       "WolverineFx.Marten": {
         "type": "Direct",
-        "requested": "[5.39.0, )",
-        "resolved": "5.39.0",
-        "contentHash": "uL4vlCExJ84irWOwCxFpFH4NxMw4tyTWqDdr5gi/Ns9dTFVEHDtBv61SI6VRXqr9+eG9wAomZFZAv/6tsTJ+uw==",
+        "requested": "[5.39.1, )",
+        "resolved": "5.39.1",
+        "contentHash": "w3oi2LdQe7U9V3mssneR+T9in0Qjp29a75mfqR2SS7W05Apr5VGJlu4wL23hZgvKelbYKIQPn2zmMoPbfxbMtg==",
         "dependencies": {
           "Marten": "8.35.0",
-          "WolverineFx.Postgresql": "5.39.0"
+          "WolverineFx.Postgresql": "5.39.1"
         }
       },
       "WolverineFx.RabbitMQ": {
         "type": "Direct",
-        "requested": "[5.39.0, )",
-        "resolved": "5.39.0",
-        "contentHash": "sNcLKSwlTfKIgDUUB67AHNi0BcLYKjUIrhSmFSGfZLO7LKj4sG4CKMG7ixcew0ebKJ60Ftpw2Go2moLdPvEK5g==",
+        "requested": "[5.39.1, )",
+        "resolved": "5.39.1",
+        "contentHash": "EVeP4hr2pwNq19TYnRH48l1CV17WulUVwwWl7N8cN+UIPVwqERdHKB7DCvF9rhaXs9Jl449zv6cA591gBasUrA==",
         "dependencies": {
           "RabbitMQ.Client": "7.1.2",
-          "WolverineFx": "5.39.0"
+          "WolverineFx": "5.39.1"
         }
       },
       "Asp.Versioning.Abstractions": {
@@ -769,8 +769,8 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.39.0",
-        "contentHash": "x1aXrnxRcezLioZnesFLgGZO0BINqI4tKxiS411iaZw/z/JVtoJ575IZML4FvEBjMkFBPirrSF3hkuveL4i2sQ==",
+        "resolved": "5.39.1",
+        "contentHash": "9knt72xXkqQOGk2ppRAJEDYH0eOtXMuCsMlya9O/uGVdDVxceUbnZlzzSZmL/nUUkcUtkDjBx40vDBxYKH+RTw==",
         "dependencies": {
           "JasperFx": "1.31.0",
           "JasperFx.Events": "1.36.0",
@@ -791,20 +791,20 @@
       },
       "WolverineFx.Postgresql": {
         "type": "Transitive",
-        "resolved": "5.39.0",
-        "contentHash": "lwKbD6hdg2sSmX+kNMfqSp6LCY8iO8s21qhn0ZxcUUx7pxMzZHC42uRxU79UPHUxTVG4QJ+lZmkHFPaz6vGBow==",
+        "resolved": "5.39.1",
+        "contentHash": "P8kDsLm119d6uJo5ryXOzIbAgfGw0UoHgB9L8rF0mOwQCTcT31rbZun7DxeGnaZ/Uo1ZfPlqnr0xB9Yr0t7DNA==",
         "dependencies": {
           "Weasel.Postgresql": "8.15.1",
-          "WolverineFx.RDBMS": "5.39.0"
+          "WolverineFx.RDBMS": "5.39.1"
         }
       },
       "WolverineFx.RDBMS": {
         "type": "Transitive",
-        "resolved": "5.39.0",
-        "contentHash": "qLwcwCaQzkbcJpX3MFftHDLVXDTUFl+8XRFwLDZPwLHAf4FeRfRE/u/eOnrWyrQ/sv189WDZx5UmoEdxnRynTw==",
+        "resolved": "5.39.1",
+        "contentHash": "iB9eDNrh0+jeG21xoAvjnl33K076QjmWtIZWF5JN97uXywxgmvxxvDiTB09tDRO5AeUToyQ7G10iqoryHb+udA==",
         "dependencies": {
           "Weasel.Core": "8.15.1",
-          "WolverineFx": "5.39.0"
+          "WolverineFx": "5.39.1"
         }
       },
       "nexus.domain": {
