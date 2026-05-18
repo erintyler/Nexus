@@ -4,9 +4,9 @@
     "net10.0": {
       "Aspire.Npgsql": {
         "type": "Direct",
-        "requested": "[13.3.2, )",
-        "resolved": "13.3.2",
-        "contentHash": "aAGw3J7Sptuyk7D+e4frxRP3++7nRIJPO2y+2LhlRJ/ps7eMvfqk8ALvX6wRymiEOGCShKp4Mg5GgYCcpTjkZQ==",
+        "requested": "[13.3.3, )",
+        "resolved": "13.3.3",
+        "contentHash": "1sZ8tny9ae5p+Z5OqbmbO6eAIG4vvegCvxAeSXuXjSev+k+QfrhxjW9lqptLtl2lI106FgG9n4ollmNfJ0LysA==",
         "dependencies": {
           "AspNetCore.HealthChecks.NpgSql": "9.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.7",
@@ -116,15 +116,15 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.6.2",
-        "contentHash": "pG9FjeQZeiZQRTWf/L+v7wMr0eABc4wnjF+jA1OabmJXGlSX8RNuU44IPXfLDBfw9g9L4E61kHrQg/w8VkEdVA=="
+        "resolved": "4.0.7",
+        "contentHash": "Uz3Yznhx3OOprM7I9Xhqd2a8qd0EAppFGw/4g9Iw/Vu4MlDCpYKEyD5Lkffcdv9VeP9HOJQiOVkaV/YOH3+yrA=="
       },
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Transitive",
-        "resolved": "4.0.3.38",
-        "contentHash": "XYZflGRZUDe+VkCbKgEGqRflv3M/31FlZ8ONZ+yIUOabQNSCRDvwt3xNHzB1AH+l87K8LQp5j/rF4cGyG/Mhpg==",
+        "resolved": "4.0.3.39",
+        "contentHash": "TPXf0yvzDjuHvR99RQlUlJIPKjMwDCwrMHmpaSepceyOcZmW/DwTMsL12NSXzIg4ViUsUjcXV5KFB8J1ngeQ1Q==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.6.2",
+          "AWSSDK.Core": "4.0.7",
           "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "2.0.0"
@@ -132,10 +132,10 @@
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.23.1",
-        "contentHash": "1njwJw6zyp+uxq1w+xxChnCj9KHxis48ANTDm/IG7OcaTHLmAkn6S4mJFrTCQOKzch905P69t4mshRoyIArClg==",
+        "resolved": "4.0.23.2",
+        "contentHash": "Zx9sQ8ksze0M34Wv+4uuHBOfYBHa3ACHL3pganelIjn9FWI8qtVrvdxYZmVzlvGm5sbeVLAEwdWkbH8BofEB0A==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.6.2, 5.0.0)"
+          "AWSSDK.Core": "[4.0.7, 5.0.0)"
         }
       },
       "DistributedLock.Core": {
@@ -1232,8 +1232,8 @@
       "nexus.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.38, )",
-          "AWSSDK.S3": "[4.0.23.1, )",
+          "AWSSDK.Extensions.NETCore.Setup": "[4.0.3.39, )",
+          "AWSSDK.S3": "[4.0.23.2, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Marten": "[8.37.0, )",
