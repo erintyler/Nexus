@@ -48,13 +48,13 @@
       },
       "Aspire.Hosting.PostgreSQL": {
         "type": "Direct",
-        "requested": "[13.3.3, )",
-        "resolved": "13.3.3",
-        "contentHash": "Pnr+M1LnU3hP7LFxya/huJQ9WwGIHR4QozOrdy88bU5iE12Sj5BUIHQ0FkWHKdJOYdJPnKp9vY27Gdy2GoK5wQ==",
+        "requested": "[13.3.4, )",
+        "resolved": "13.3.4",
+        "contentHash": "eSdJV1spRa4NNdlOybViQrDhLiMCEBshstCIA/v+adhInSG2gIaJLUUG/9ZFRmsj/xqhzVo5VqlwQ5ozi03G7g==",
         "dependencies": {
           "AspNetCore.HealthChecks.NpgSql": "9.0.0",
           "AspNetCore.HealthChecks.Uris": "9.0.0",
-          "Aspire.Hosting": "13.3.3",
+          "Aspire.Hosting": "13.3.4",
           "Google.Protobuf": "3.33.5",
           "Grpc.AspNetCore": "2.76.0",
           "Grpc.Net.ClientFactory": "2.76.0",
@@ -84,13 +84,13 @@
       },
       "Aspire.Hosting.RabbitMQ": {
         "type": "Direct",
-        "requested": "[13.3.3, )",
-        "resolved": "13.3.3",
-        "contentHash": "M6NHKwWj9rIoYJrfqRkmtmDzysNCecyNEvzy1y7041bsfPxWDrPdNTjTUafYZZqDOv2ys6+ZvalfwQ0cP09OoQ==",
+        "requested": "[13.3.4, )",
+        "resolved": "13.3.4",
+        "contentHash": "3CBELSBKHjFLOA5zVkafcV9Ni3m9nyT5dJCPPFAjIRfgzLg+njGyCcnOaVTK2QUj7khxtPRXxx72Ngx0TuQJEg==",
         "dependencies": {
           "AspNetCore.HealthChecks.Rabbitmq": "9.0.0",
           "AspNetCore.HealthChecks.Uris": "9.0.0",
-          "Aspire.Hosting": "13.3.3",
+          "Aspire.Hosting": "13.3.4",
           "Google.Protobuf": "3.33.5",
           "Grpc.AspNetCore": "2.76.0",
           "Grpc.Net.ClientFactory": "2.76.0",
@@ -179,8 +179,8 @@
       },
       "Aspire.Hosting": {
         "type": "Transitive",
-        "resolved": "13.3.3",
-        "contentHash": "HUM1EgCDKT4hzNkoHjLHkNXaT3K9a34UsbiCatFUoOhIBCoHTEsb8shgbQ50oAfRTm6uLXXo2s91gDQKJHLnXw==",
+        "resolved": "13.3.4",
+        "contentHash": "Y0bPB95Lc34WeDx03PR0Ca1qmCQOmjDDxSD1zwJ0noF/yI/p669rCdXKMdRgxOWqOpfLVMUUr8YyLbIIq/inhA==",
         "dependencies": {
           "AspNetCore.HealthChecks.Uris": "9.0.0",
           "Google.Protobuf": "3.33.5",
