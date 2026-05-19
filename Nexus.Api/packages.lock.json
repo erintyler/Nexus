@@ -4,9 +4,9 @@
     "net10.0": {
       "Aspire.Npgsql": {
         "type": "Direct",
-        "requested": "[13.3.3, )",
-        "resolved": "13.3.3",
-        "contentHash": "1sZ8tny9ae5p+Z5OqbmbO6eAIG4vvegCvxAeSXuXjSev+k+QfrhxjW9lqptLtl2lI106FgG9n4ollmNfJ0LysA==",
+        "requested": "[13.3.4, )",
+        "resolved": "13.3.4",
+        "contentHash": "Twyrrk47MVSd+QAYq4sqbgs6Plapcia1vhGqVI/MkBaxENTFxysjLZpDbyXE816X3NUzlyO+uj37bLS7SsEcDA==",
         "dependencies": {
           "AspNetCore.HealthChecks.NpgSql": "9.0.0",
           "Npgsql.DependencyInjection": "10.0.1",
