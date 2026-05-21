@@ -4,9 +4,9 @@
     "net10.0": {
       "Aspire.Npgsql": {
         "type": "Direct",
-        "requested": "[13.3.4, )",
-        "resolved": "13.3.4",
-        "contentHash": "Twyrrk47MVSd+QAYq4sqbgs6Plapcia1vhGqVI/MkBaxENTFxysjLZpDbyXE816X3NUzlyO+uj37bLS7SsEcDA==",
+        "requested": "[13.3.5, )",
+        "resolved": "13.3.5",
+        "contentHash": "40y346BHfgOCeuV/zxjz5BB7RTa+7T/oT5PA7BzYjjmu1umV1GYX0b56BYikCOrn3d0UwGoHAFv7fj/kaU94jw==",
         "dependencies": {
           "AspNetCore.HealthChecks.NpgSql": "9.0.0",
           "Npgsql.DependencyInjection": "10.0.1",
@@ -864,48 +864,48 @@
       },
       "WolverineFx.Http.Marten": {
         "type": "Transitive",
-        "resolved": "5.39.2",
-        "contentHash": "etsn6S5o/TfsFmCo0F5NTzNgxQJF2EptsBphEVeLnpm8JLKfXGSHpq5jaSH69NzYvJ1pShkqmxURVK/GRfMfug==",
+        "resolved": "5.39.3",
+        "contentHash": "Ge2EIu+IxF8RqSWixDeXgO2urz80SwZ5VUILNBW0CZBmp/jNoDtDgnWSZlXNvqtcLJ+EXct06+RpvbmKvlq+AA==",
         "dependencies": {
           "Marten.AspNetCore": "8.35.0",
-          "WolverineFx.Http": "5.39.2",
-          "WolverineFx.Marten": "5.39.2"
+          "WolverineFx.Http": "5.39.3",
+          "WolverineFx.Marten": "5.39.3"
         }
       },
       "WolverineFx.Marten": {
         "type": "Transitive",
-        "resolved": "5.39.2",
-        "contentHash": "rRZPJw3W082T0Tfl0FtiDFbY2CoP/eA6Q0x5AYn7zVEZPiwsC2s3HFVkm865+nVEpFwcrnVcexXdFK/Zuv5XUA==",
+        "resolved": "5.39.3",
+        "contentHash": "wtqA4nGO4cju27SwhmTVnsBnRQ9c9UnEHrJiaeeK9ZyCpcNn3U5lKT7Wa30jP/6SnfCH9RmgBNov0KRQYyCxLw==",
         "dependencies": {
           "Marten": "8.35.0",
-          "WolverineFx.Postgresql": "5.39.2"
+          "WolverineFx.Postgresql": "5.39.3"
         }
       },
       "WolverineFx.Postgresql": {
         "type": "Transitive",
-        "resolved": "5.39.2",
-        "contentHash": "CjQp7tSyzS61AER/ws9e7S+7oqsl+5hgpsfu1/lMcU8tM0S9t7BWA3AQhAh4BU0GI1eohTNe2/13/l7F5OOFtA==",
+        "resolved": "5.39.3",
+        "contentHash": "8ILv7In0RK02EXlOVpb9qumX+XJEZ8fSvyYqzHjykTMMp4t8aM5qp0W3TP4b5HT0zI3BbpaNgoUvlGbEYJYkKw==",
         "dependencies": {
           "Weasel.Postgresql": "8.15.1",
-          "WolverineFx.RDBMS": "5.39.2"
+          "WolverineFx.RDBMS": "5.39.3"
         }
       },
       "WolverineFx.RabbitMQ": {
         "type": "Transitive",
-        "resolved": "5.39.2",
-        "contentHash": "AqZuVOeW0dzi1LFu4p6nH5+8PSu1Bf0dz7QKEY+zqPcLfgqzfh5A0vM3ZRwQip+FhVOVdCdNU4q3Yb0ycS9lMw==",
+        "resolved": "5.39.3",
+        "contentHash": "ZYFiNsmxORL4UFj9qdlPhsn0u5muPFBtr/HSiGmQjs9KN4FDLJPDoJ6qisAfAU1oYl735IHswgsSveZzIgMddw==",
         "dependencies": {
           "RabbitMQ.Client": "7.1.2",
-          "WolverineFx": "5.39.2"
+          "WolverineFx": "5.39.3"
         }
       },
       "WolverineFx.RDBMS": {
         "type": "Transitive",
-        "resolved": "5.39.2",
-        "contentHash": "I5zU4RTffbafLuyF/UPwLtIv6uNyQjgOf8ekNf3wadD7pLDe7CQqNJZWDfCRAERRXCSrXDlNak1bvXSFRFHxww==",
+        "resolved": "5.39.3",
+        "contentHash": "P9rdWZMhJjqn9t68wu9YekvnpQcOKywQlbDWK8sLKE5gv07mWY6wULXQYjjxXAfNPr7QddC0r1WvSJOZITkRcQ==",
         "dependencies": {
           "Weasel.Core": "8.15.1",
-          "WolverineFx": "5.39.2"
+          "WolverineFx": "5.39.3"
         }
       },
       "nexus.application": {
@@ -919,9 +919,9 @@
           "SkiaSharp.NativeAssets.Win32": "[3.119.2, )",
           "SkiaSharp.NativeAssets.macOS": "[3.119.2, )",
           "WolverineFx.Http": "[5.39.3, )",
-          "WolverineFx.Http.Marten": "[5.39.2, )",
-          "WolverineFx.Marten": "[5.39.2, )",
-          "WolverineFx.RabbitMQ": "[5.39.2, )"
+          "WolverineFx.Http.Marten": "[5.39.3, )",
+          "WolverineFx.Marten": "[5.39.3, )",
+          "WolverineFx.RabbitMQ": "[5.39.3, )"
         }
       },
       "nexus.domain": {
@@ -937,8 +937,8 @@
           "Marten": "[8.37.1, )",
           "Nexus.Application": "[1.0.0, )",
           "WolverineFx.Http": "[5.39.3, )",
-          "WolverineFx.Http.Marten": "[5.39.2, )",
-          "WolverineFx.RabbitMQ": "[5.39.2, )"
+          "WolverineFx.Http.Marten": "[5.39.3, )",
+          "WolverineFx.RabbitMQ": "[5.39.3, )"
         }
       },
       "nexus.servicedefaults": {
