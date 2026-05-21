@@ -4,9 +4,9 @@
     "net10.0": {
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Direct",
-        "requested": "[4.0.3.40, )",
-        "resolved": "4.0.3.40",
-        "contentHash": "PJI51sGSITimm1VCNg22mAWl2BNjHoTKAWLMRj1B/CoCPNzvJxTAYP1SW+7U7sObid/a8vdtH1F+91p5kyQMyQ==",
+        "requested": "[4.0.4, )",
+        "resolved": "4.0.4",
+        "contentHash": "qP4PcmrjcHxVlE0/fY30RFA3IaoDUPfutaZ8iejKVXUFiLTymayR0d0whg8rzygoEYWm5et45N5cdpdJ8T2TiQ==",
         "dependencies": {
           "AWSSDK.Core": "4.0.7.1",
           "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
