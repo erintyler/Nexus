@@ -13,12 +13,12 @@
         <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.119.2"/>
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.2"/>
         <PackageReference Include="WolverineFx.Http.Marten" Version="5.39.3" />
-        <PackageReference Include="WolverineFx.Marten" Version="5.39.3" />
+        <PackageReference Include="WolverineFx.Marten" Version="6.0.0" />
         <PackageReference Include="WolverineFx.RabbitMQ" Version="5.39.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Marten" Version="8.37.1" />
+      <PackageReference Include="Marten" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
       <PackageReference Include="WolverineFx.Http" Version="5.39.3" />
       <ProjectReference Include="..\Nexus.Domain\Nexus.Domain.csproj" />
