@@ -10,18 +10,15 @@
       },
       "Marten": {
         "type": "Direct",
-        "requested": "[8.37.1, )",
-        "resolved": "8.37.1",
-        "contentHash": "2a6ucegNZHhsdJm4680858iAfRsmlxb2cvUAaFSHwVx9I9qqsyk1fquEV+Zo4QpeQRmfcKAgwtAgX7fGIDacsQ==",
+        "requested": "[9.3.1, )",
+        "resolved": "9.3.1",
+        "contentHash": "Wc6N5CQrJnQ0zDBOJwu3/eW+kyx7mScO7qU4//h5hiAsv76Ht1TNuX71wRtBX201bYXUMa4bqOWGBLsbGD2WDA==",
         "dependencies": {
-          "JasperFx": "1.29.1",
-          "JasperFx.Events": "1.35.0",
-          "JasperFx.RuntimeCompiler": "4.5.0",
+          "JasperFx": "2.2.1",
+          "JasperFx.Events": "2.2.1",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
-          "Newtonsoft.Json": "13.0.3",
-          "Npgsql.Json.NET": "9.0.4",
-          "Weasel.Postgresql": "8.15.0"
+          "Weasel.Postgresql": "9.0.2"
         }
       },
       "Microsoft.Extensions.Hosting": {
@@ -147,8 +144,8 @@
       },
       "FastExpressionCompiler": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "XRmGW48Gdm7B70WUtTJJUnmuc8jRDmOhhjG/a3rix/nXChnrkETaSvA0j2VrcsH4MNeYLe60LA5o5JABmbneag=="
+        "resolved": "5.4.1",
+        "contentHash": "nqMykMspK5cQd35Y8ulQzAujxCcCwZVUne32pC5xNpXqrbPCuKOPMWkKHJ3LveAZPm6dsVvump0TJ1SZ9RzfTQ=="
       },
       "Humanizer.Core": {
         "type": "Transitive",
@@ -162,10 +159,10 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.31.0",
-        "contentHash": "4ixFajJnNJf9Unuc49rq8pKtHYMdUVepE1tX921F48u6BAbf9BNuGdijDioehYLGl/yhsF2yjRrQXpsN9FMZIg==",
+        "resolved": "2.2.1",
+        "contentHash": "UTXjKYIeNUqww2n6VwPsTwR7zLOgBd19RXOMZIkq+Gx6qwSPIVaH/KMguevzYESUxA7KdJE3+dh7PTmRmbqfmw==",
         "dependencies": {
-          "FastExpressionCompiler": "5.3.0",
+          "FastExpressionCompiler": "5.4.1",
           "ImTools": "4.0.0",
           "Microsoft.Bcl.TimeProvider": "10.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
@@ -178,10 +175,10 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.36.0",
-        "contentHash": "xLThG3rvcv8NNkNuCU334Ut+9qODX8tTBqe8J9IAP7auyq4qv/TYmqmKYnkDAJVIW6xl6LECVDFgJMD3YZTbow==",
+        "resolved": "2.2.1",
+        "contentHash": "njPGLkfMQzm1xnwbEILGiTW3pcliV8TMS7KFi0Q3aDI5PyfTsKIxehBtkw1ONBSzw+r8D0QQJLsKqLI07dr8Wg==",
         "dependencies": {
-          "JasperFx": "1.31.0"
+          "JasperFx": "2.2.1"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -645,15 +642,6 @@
           "Microsoft.Extensions.Logging.Abstractions": "8.0.2"
         }
       },
-      "Npgsql.Json.NET": {
-        "type": "Transitive",
-        "resolved": "9.0.4",
-        "contentHash": "Eunq7mqatJujFOaZMdiWT9N7eUXHEFxe4IX/PeN8Nt1BpNYjzF2tPlmqR90EvuGT3tiEicmj4xDviC0UcPwM1w==",
-        "dependencies": {
-          "Newtonsoft.Json": "13.0.3",
-          "Npgsql": "9.0.4"
-        }
-      },
       "Npgsql.NetTopologySuite": {
         "type": "Transitive",
         "resolved": "9.0.4",
@@ -750,21 +738,22 @@
       },
       "Weasel.Core": {
         "type": "Transitive",
-        "resolved": "8.15.1",
-        "contentHash": "+X2GRJCVeC6VjA+REbtb9ULtAvVG4DT8Py0tffIRTPsA9IdY89fLu09MFkcnywgTzQK3JB4hKC7t8d9xwdp6jg==",
+        "resolved": "9.0.2",
+        "contentHash": "JYRsBs/a912dn5z1PGyxkoZvLV0L2Ge4sTLaRjZzHN56hYR8MbkMSRLtJ1MnakmFeFzndWr0H6obRYDKpf9XuA==",
         "dependencies": {
-          "JasperFx": "1.26.0"
+          "JasperFx": "2.0.1"
         }
       },
       "Weasel.Postgresql": {
         "type": "Transitive",
-        "resolved": "8.15.1",
-        "contentHash": "YD/3CWlqCCX5dBVMZmIYvR8/flwcgDHPQq4EtUHJOlFnPrmQX4Lfd5rmFCIW3n/3F53qxMXl2HaJnxGI1Twtsw==",
+        "resolved": "9.0.2",
+        "contentHash": "1rodGze6JxVa8i93VwehHy6BEIV4YV7lhPxRoKDC8l+UGmQGQg/gCT4nYUX/8f+bLXyzlXHhN9XEG3sdNW37hA==",
         "dependencies": {
           "DistributedLock.Postgres": "1.3.0",
+          "JasperFx.Events": "2.0.0",
           "Npgsql": "9.0.4",
           "Npgsql.NetTopologySuite": "9.0.4",
-          "Weasel.Core": "8.15.1"
+          "Weasel.Core": "9.0.2"
         }
       },
       "WolverineFx": {
