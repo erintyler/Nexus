@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Marten" Version="8.37.1" />
+      <PackageReference Include="Marten" Version="9.3.5" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
       <PackageReference Include="WolverineFx.Http" Version="5.39.3" />
       <ProjectReference Include="..\Nexus.Domain\Nexus.Domain.csproj" />
