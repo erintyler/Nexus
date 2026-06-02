@@ -115,12 +115,13 @@
       },
       "WolverineFx.RabbitMQ": {
         "type": "Direct",
-        "requested": "[5.39.3, )",
-        "resolved": "5.39.3",
-        "contentHash": "ZYFiNsmxORL4UFj9qdlPhsn0u5muPFBtr/HSiGmQjs9KN4FDLJPDoJ6qisAfAU1oYl735IHswgsSveZzIgMddw==",
+        "requested": "[6.3.2, )",
+        "resolved": "6.3.2",
+        "contentHash": "Jj3qiaiUzKZu7RKr/A4tQUOw1K0j/BMzpKZJ4vyvDeGcu9NgvPOAKVYjIDJJzH/7FWImXSZzX3k/wk3l5/PtXA==",
         "dependencies": {
           "RabbitMQ.Client": "7.1.2",
-          "WolverineFx": "5.39.3"
+          "WolverineFx": "6.3.2",
+          "WolverineFx.Newtonsoft": "6.3.2"
         }
       },
       "Asp.Versioning.Abstractions": {
@@ -147,8 +148,8 @@
       },
       "FastExpressionCompiler": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "XRmGW48Gdm7B70WUtTJJUnmuc8jRDmOhhjG/a3rix/nXChnrkETaSvA0j2VrcsH4MNeYLe60LA5o5JABmbneag=="
+        "resolved": "5.4.1",
+        "contentHash": "nqMykMspK5cQd35Y8ulQzAujxCcCwZVUne32pC5xNpXqrbPCuKOPMWkKHJ3LveAZPm6dsVvump0TJ1SZ9RzfTQ=="
       },
       "Humanizer.Core": {
         "type": "Transitive",
@@ -162,10 +163,10 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.31.0",
-        "contentHash": "4ixFajJnNJf9Unuc49rq8pKtHYMdUVepE1tX921F48u6BAbf9BNuGdijDioehYLGl/yhsF2yjRrQXpsN9FMZIg==",
+        "resolved": "2.4.1",
+        "contentHash": "DjXqUWS70Zu4GYo9P6TFVGTfq/zOjuYz8US+SdF4QfbiKht/LXus+BJvvGzAwcBN9rQOmDQ0TXLCzdnPIT2rzw==",
         "dependencies": {
-          "FastExpressionCompiler": "5.3.0",
+          "FastExpressionCompiler": "5.4.1",
           "ImTools": "4.0.0",
           "Microsoft.Bcl.TimeProvider": "10.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
@@ -178,10 +179,10 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.36.0",
-        "contentHash": "xLThG3rvcv8NNkNuCU334Ut+9qODX8tTBqe8J9IAP7auyq4qv/TYmqmKYnkDAJVIW6xl6LECVDFgJMD3YZTbow==",
+        "resolved": "2.4.1",
+        "contentHash": "EAdp6U3WnlnmdNwcHbH9qIO3Slb9zs5/IHaGHZ/IDA+hUkJmKVg9ezr7DV2oaTRDpzYFa+qBdm97MzWhfqMLnA==",
         "dependencies": {
-          "JasperFx": "1.31.0"
+          "JasperFx": "2.4.1"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -196,10 +197,10 @@
           "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
         }
       },
-      "JasperFx.SourceGeneration": {
+      "JasperFx.SourceGenerator": {
         "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "yIOaiA/OrlXQLGPjxFDubHnOU8MCzPTz465xBGRITMm4fDf7DbWKogb2SZC2jYLWEj27q3smTz1Z7lU4h1KkOQ=="
+        "resolved": "2.4.1",
+        "contentHash": "AAKwIiROapHBKwjSY/CZXDa5XR8wQZQro7RSiWmxxR95PY5SuLbWB0u4JsiNMf8UtrRkzXgoZjBOymp3LWPQHw=="
       },
       "Marten.AspNetCore": {
         "type": "Transitive",
@@ -769,13 +770,12 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.39.3",
-        "contentHash": "uWlfo1mnUK0G6ktHtBa5htcxbRWep6FVzCWM+DmqFCpKUlg+rZKxv6XyfETmqZ30Xfv/BH+TIaFXemSe95mCVA==",
+        "resolved": "6.3.2",
+        "contentHash": "ZwN308VBGQ9e5SfPVEj1frxenSaq7Y0xpNqie6CVxLl0mrv6BAgbDgw+Bwdoz1ag0Y2kSR3WufY6IDRBbkwU5w==",
         "dependencies": {
-          "JasperFx": "1.31.0",
-          "JasperFx.Events": "1.36.0",
-          "JasperFx.RuntimeCompiler": "4.5.0",
-          "JasperFx.SourceGeneration": "1.1.0",
+          "JasperFx": "2.4.1",
+          "JasperFx.Events": "2.4.1",
+          "JasperFx.SourceGenerator": "2.4.1",
           "Microsoft.Extensions.Caching.Memory": "10.0.0",
           "Microsoft.Extensions.Configuration": "10.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
@@ -785,8 +785,16 @@
           "Microsoft.Extensions.Hosting": "10.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.Extensions.ObjectPool": "10.0.2",
-          "NewId": "4.0.1",
-          "Newtonsoft.Json": "13.0.3"
+          "NewId": "4.0.1"
+        }
+      },
+      "WolverineFx.Newtonsoft": {
+        "type": "Transitive",
+        "resolved": "6.3.2",
+        "contentHash": "sWIx4SjiRWuG4Dh4E+WidrnQlP/Oe9LE38KK7ySWAFqAo449Jfntojbb41mBZ9wPXoGD+8uNC4W0oB+RGEwGBQ==",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "WolverineFx": "6.3.2"
         }
       },
       "WolverineFx.Postgresql": {
