@@ -16,9 +16,9 @@
       },
       "MicroElements.OpenApi.FluentValidation": {
         "type": "Direct",
-        "requested": "[7.1.4, )",
-        "resolved": "7.1.4",
-        "contentHash": "6vhJ8PQPdknGLLYznpOUZTmizvmyhZB6qKd9aVpO0aUWTvGOcSM7eQFFJ0vifJwDgTXv9JnSsT6YQeORV2+orw==",
+        "requested": "[7.1.6, )",
+        "resolved": "7.1.6",
+        "contentHash": "0gJwn9XVH3jDoHtaWhgfGcNDqTsn5J3TmSKemnarjAsNtFdheo6q8kHBgswZtIC97eVmv5Z91pHYPC3Muv+0NA==",
         "dependencies": {
           "FluentValidation": "12.0.0"
         }
@@ -108,23 +108,23 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.7.4",
-        "contentHash": "qNlzH2ygJ6JG8uefpvws782PnJlkVEwqRD5vz4fR8wFfwWU3ttyAjiwEOPEYcxl84mhQdYGI9gR+kroGFI2+wA=="
+        "resolved": "4.0.7.5",
+        "contentHash": "kOx1nlnJic0Ao+tpCia/DxmttQCPuKLWbfuJuXSJnG03yur0TRfPDCvkrroZ/4yuy0fLomPf46vDYnpkk01J9w=="
       },
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Transitive",
-        "resolved": "4.0.4.2",
-        "contentHash": "4uHKkkLHmv9/Qv4AyR8FdZgIHzqDdvmfEL1t3+VHSBF4Ph5CguE2ubfkm3w8aiilCVZraNZM4VShigH4z+RCFw==",
+        "resolved": "4.0.4.3",
+        "contentHash": "LCM0isx2/Ldkl/gEJFI/HH5KXD8Txa3JZLl9PNCINnXWa+UWGdcaxQe6dOIlYfPfOexoP/iuTfY1tfjjgAjodA==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.7.4"
+          "AWSSDK.Core": "4.0.7.5"
         }
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.23.6",
-        "contentHash": "YIvO2mC1NQRfbjAw2MCla+GGpjOoEIYXX0hi9oGt1/Qqa4ZsSfSZVX7ohydgPPmlx2T62diZQo1MBlOBDfNFxg==",
+        "resolved": "4.0.24",
+        "contentHash": "k/tfl1J68hVO8h/JBA4PpQG03s5jJvHySzsIKWZcWZ7mHUrRYDZa3RTDeasAWD9R/N4oa1AlNxiJYvtD1vKViQ==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.7.4, 5.0.0)"
+          "AWSSDK.Core": "[4.0.7.5, 5.0.0)"
         }
       },
       "DistributedLock.Core": {
@@ -242,8 +242,8 @@
       },
       "Marten": {
         "type": "Transitive",
-        "resolved": "8.37.1",
-        "contentHash": "2a6ucegNZHhsdJm4680858iAfRsmlxb2cvUAaFSHwVx9I9qqsyk1fquEV+Zo4QpeQRmfcKAgwtAgX7fGIDacsQ==",
+        "resolved": "8.37.2",
+        "contentHash": "yhzR2TSGA6eYmiiUMcjXW3r7lti/XRTAUzLD+s7x6LSiqu0b+TLlH4g+mHRVwJ0+UTf61bECZe32TfL3DrI7jA==",
         "dependencies": {
           "JasperFx": "1.29.1",
           "JasperFx.Events": "1.35.0",
@@ -912,7 +912,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.37.1, )",
+          "Marten": "[8.37.2, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.4, )",
           "SkiaSharp.NativeAssets.Linux": "[3.119.4, )",
@@ -930,11 +930,11 @@
       "nexus.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "[4.0.4.2, )",
-          "AWSSDK.S3": "[4.0.23.6, )",
+          "AWSSDK.Extensions.NETCore.Setup": "[4.0.4.3, )",
+          "AWSSDK.S3": "[4.0.24, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
-          "Marten": "[8.37.1, )",
+          "Marten": "[8.37.2, )",
           "Nexus.Application": "[1.0.0, )",
           "WolverineFx.Http": "[5.39.3, )",
           "WolverineFx.Http.Marten": "[5.39.3, )",
