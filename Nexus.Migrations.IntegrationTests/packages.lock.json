@@ -4,16 +4,16 @@
     "net10.0": {
       "grate.postgresql": {
         "type": "Direct",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "C8J5vJCkNb2dx16/9713VAY7A782j8deFANbE0snuJsmh8Gl7a3076UVHuZSxVokVMuKi2OkA+sg44gFHf9T7w==",
+        "requested": "[2.0.6, )",
+        "resolved": "2.0.6",
+        "contentHash": "7iJEfsooQ2rA3zzms3STh6mri5cEYtDhA14217e+OMvT1uccrUBy+hocUHOp67CrpNxM5fTF1wyirqgqZNcCwA==",
         "dependencies": {
-          "Dapper": "2.1.35",
+          "Dapper": "2.1.72",
           "Microsoft.Extensions.DependencyInjection": "9.0.0",
           "Microsoft.Extensions.Hosting": "9.0.0",
           "Microsoft.Extensions.Logging.Console": "9.0.0",
           "Npgsql": "9.0.2",
-          "grate.core": "2.0.0"
+          "grate.core": "2.0.6"
         }
       },
       "Marten": {
@@ -88,8 +88,8 @@
       },
       "Dapper": {
         "type": "Transitive",
-        "resolved": "2.1.35",
-        "contentHash": "YKRwjVfrG7GYOovlGyQoMvr1/IJdn+7QzNXJxyMh0YfFF5yvDmTYaJOVYWsckreNjGsGSEtrMTpnzxTUq/tZQw=="
+        "resolved": "2.1.72",
+        "contentHash": "ns4mGqQd9a/MhP8m6w556vVlZIa0/MfUu03zrxjZC/jlr1uVCsUac8bkdB+Fs98Llbd56rRSo1eZH5VVmeGZyw=="
       },
       "DistributedLock.Core": {
         "type": "Transitive",
@@ -178,10 +178,10 @@
       },
       "grate.core": {
         "type": "Transitive",
-        "resolved": "2.0.0",
-        "contentHash": "D9389Mi5JqVdjMYq0bSeF0fFO7InOgUiPcdmwK4u57K2uidAb+7bS+Qb7F+vlXFKcjA3LxtxmuI1QqgU4Qiqkg==",
+        "resolved": "2.0.6",
+        "contentHash": "hxGefnd61URBcuwefYbcD56SbixFkljPluY+b8xUv/KMQqmItzEzrg636mHki/twaZfwLThj3OI7ZA/uxTITmw==",
         "dependencies": {
-          "Dapper": "2.1.35",
+          "Dapper": "2.1.72",
           "Microsoft.Extensions.DependencyInjection": "9.0.0",
           "Microsoft.Extensions.Hosting": "9.0.0",
           "Microsoft.Extensions.Logging.Console": "9.0.0"
