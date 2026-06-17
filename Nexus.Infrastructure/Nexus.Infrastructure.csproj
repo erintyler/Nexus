@@ -12,8 +12,8 @@
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Marten" Version="8.37.2" />
-      <PackageReference Include="WolverineFx.Http" Version="5.39.5" />
-      <PackageReference Include="WolverineFx.Http.Marten" Version="5.39.5" />
+      <PackageReference Include="WolverineFx.Http" Version="6.11.0" />
+      <PackageReference Include="WolverineFx.Http.Marten" Version="6.11.0" />
     <PackageReference Include="WolverineFx.RabbitMQ" Version="5.39.5" />
         <ProjectReference Include="..\Nexus.Application\Nexus.Application.csproj" />
     </ItemGroup>
