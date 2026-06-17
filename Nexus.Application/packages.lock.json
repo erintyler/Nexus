@@ -84,12 +84,13 @@
       },
       "WolverineFx.Http": {
         "type": "Direct",
-        "requested": "[5.39.5, )",
-        "resolved": "5.39.5",
-        "contentHash": "hCV6QFt8XIth6dhgBqQylmgVSqiPy6yrT6sCBdDOOVPgXVDd76Dp5cGWtRKKj70kpTg8CK6JP/znCUeHQGW+DQ==",
+        "requested": "[6.11.0, )",
+        "resolved": "6.11.0",
+        "contentHash": "BokFY3f7d/kJa7IoFJ3k/jq6y6tGh5gHlOnSomdGikd58YnsUsKi6Gi9bKU3ve9rRbryq5o02kDicQC+77+U1A==",
         "dependencies": {
           "Asp.Versioning.Abstractions": "[10.0.0, 11.0.0)",
-          "WolverineFx": "5.39.5"
+          "JasperFx.SourceGenerator": "2.12.0",
+          "WolverineFx": "6.11.0"
         }
       },
       "WolverineFx.Http.Marten": {
@@ -147,8 +148,8 @@
       },
       "FastExpressionCompiler": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "XRmGW48Gdm7B70WUtTJJUnmuc8jRDmOhhjG/a3rix/nXChnrkETaSvA0j2VrcsH4MNeYLe60LA5o5JABmbneag=="
+        "resolved": "5.4.1",
+        "contentHash": "nqMykMspK5cQd35Y8ulQzAujxCcCwZVUne32pC5xNpXqrbPCuKOPMWkKHJ3LveAZPm6dsVvump0TJ1SZ9RzfTQ=="
       },
       "Humanizer.Core": {
         "type": "Transitive",
@@ -162,10 +163,10 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.31.0",
-        "contentHash": "4ixFajJnNJf9Unuc49rq8pKtHYMdUVepE1tX921F48u6BAbf9BNuGdijDioehYLGl/yhsF2yjRrQXpsN9FMZIg==",
+        "resolved": "2.12.0",
+        "contentHash": "4RDsP+6nAcaZngbyW5xcXsio8brdifjdGfDl/NOYpo3BG+bRrzsyIkE4wSDiInyFn15Q0qBetGBhBhlrNp3bCA==",
         "dependencies": {
-          "FastExpressionCompiler": "5.3.0",
+          "FastExpressionCompiler": "5.4.1",
           "ImTools": "4.0.0",
           "Microsoft.Bcl.TimeProvider": "10.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
@@ -178,10 +179,10 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.36.0",
-        "contentHash": "xLThG3rvcv8NNkNuCU334Ut+9qODX8tTBqe8J9IAP7auyq4qv/TYmqmKYnkDAJVIW6xl6LECVDFgJMD3YZTbow==",
+        "resolved": "2.12.0",
+        "contentHash": "D3VBvvnImYGQ+oWiDMbMtmtQkFu3g4Ypjn9jgJUneT8qmGtzup8LeE0uZHVVqwX2AVxThis0IU3jiwHkrKBPjg==",
         "dependencies": {
-          "JasperFx": "1.31.0"
+          "JasperFx": "2.12.0"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -196,10 +197,10 @@
           "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
         }
       },
-      "JasperFx.SourceGeneration": {
+      "JasperFx.SourceGenerator": {
         "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "yIOaiA/OrlXQLGPjxFDubHnOU8MCzPTz465xBGRITMm4fDf7DbWKogb2SZC2jYLWEj27q3smTz1Z7lU4h1KkOQ=="
+        "resolved": "2.12.0",
+        "contentHash": "CgzAEZLn1Ze8afjKT5Ug+b/wNr8PtAS7xGTj37iG/MzI+bQcE7oOrTx/x5zfQxrUpTgq0VFyjn9NxGy7zrQDVQ=="
       },
       "Marten.AspNetCore": {
         "type": "Transitive",
@@ -769,13 +770,12 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.39.5",
-        "contentHash": "rnyz+ZConabOTi/U8N7UQAOaMc9P03hHyFrXZ6///6X0qtsHQ+VKDZtHe87AZJmY7By2w9As9puY6/jGCg5ZCA==",
+        "resolved": "6.11.0",
+        "contentHash": "Y2LIeJqMUTzLASsbVNmsGKXK4Osp5l+RegZQoRhNkg+e7rEFDoZgaZ/cWE1U4f/ai77l6gBnq+VLRBVWNt6HOQ==",
         "dependencies": {
-          "JasperFx": "1.31.0",
-          "JasperFx.Events": "1.36.0",
-          "JasperFx.RuntimeCompiler": "4.5.0",
-          "JasperFx.SourceGeneration": "1.1.0",
+          "JasperFx": "2.12.0",
+          "JasperFx.Events": "2.12.0",
+          "JasperFx.SourceGenerator": "2.12.0",
           "Microsoft.Extensions.Caching.Memory": "10.0.0",
           "Microsoft.Extensions.Configuration": "10.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
@@ -785,8 +785,7 @@
           "Microsoft.Extensions.Hosting": "10.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.Extensions.ObjectPool": "10.0.2",
-          "NewId": "4.0.1",
-          "Newtonsoft.Json": "13.0.3"
+          "NewId": "4.0.1"
         }
       },
       "WolverineFx.Postgresql": {
