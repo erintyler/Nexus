@@ -5,8 +5,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.9" />
-        <PackageReference Include="AWSSDK.S3" Version="4.0.25.1" />
+        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.10" />
+        <PackageReference Include="AWSSDK.S3" Version="4.0.25.2" />
         <PackageReference Include="LocalStack.Client" Version="2.0.0" />
         <PackageReference Include="LocalStack.Client.Extensions" Version="2.0.0" />
     </ItemGroup>
