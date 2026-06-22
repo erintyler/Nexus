@@ -4,9 +4,9 @@
     "net10.0": {
       "Aspire.Npgsql": {
         "type": "Direct",
-        "requested": "[13.4.5, )",
-        "resolved": "13.4.5",
-        "contentHash": "KuHyKxNm2jcYSaW+rNuYT9Ptepy8MF1TyTJpRj4UlXTc9GnDAu1LOeJT+AiY+PTuKbON2DUmq6o07y+m7d2bIg==",
+        "requested": "[13.4.6, )",
+        "resolved": "13.4.6",
+        "contentHash": "7CLWuyj6JZmjrIukGNDAxFuYLB8aEeJfOPv9vhVnvynNSBO0BLsSKgW3Mx2qAVljBGhRwuNDmjlZhzq9POchfQ==",
         "dependencies": {
           "AspNetCore.HealthChecks.NpgSql": "9.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.8",
@@ -116,15 +116,15 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.9.3",
-        "contentHash": "FR+RQZQL+V6M2DdWkQaFFKaerULX6JUeT6Em5DYgcEMsenH9kiABrLRBBJqb1L+JUHC4svPGYu7biJb1a/7BYw=="
+        "resolved": "4.0.9.6",
+        "contentHash": "Lzi5hMHNB+ApeMbQxNDCUNa+Lta00ozr1okKUGqUyNXUC/OG136k8M6jXgNrbwsRxDmVdHHY6UdD4aoUaGVzkQ=="
       },
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Transitive",
-        "resolved": "4.0.4.8",
-        "contentHash": "GAfNNysynIjMKJiV5tTletuJIdOV3E9+ziDJzFDrAEg1YR3amD/nZJaiZE6C9gllTJgB76Si6W5OZ/LnKdUCrg==",
+        "resolved": "4.0.4.10",
+        "contentHash": "exipGMr0T64mhslii1Bh0v6qsS2EvVLmMlNOF+W9DZmRSm5nPMHQZvDaUtgQH0yM96DvVH+H0mLdSgml/FwHIQ==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.9.3",
+          "AWSSDK.Core": "4.0.9.6",
           "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "2.0.0"
@@ -132,10 +132,10 @@
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.24.5",
-        "contentHash": "s6+9ek8V9fUUM/U3JtFUUWqr4gMroFnvIhvM/bK9m8fg2OJvWGPLbLwzvr/v0QUxXvNWRCH3h7uCSzC8tZqDOg==",
+        "resolved": "4.0.25.2",
+        "contentHash": "RZ71S6Ra8rw0jS813PM6FNzFx5gaAL4/gO8ZQoO2dcHCPMwCepCwvb/kJdOCknLnZaqdHIGJcmjCvW3622O9jw==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.9.3, 5.0.0)"
+          "AWSSDK.Core": "[4.0.9.6, 5.0.0)"
         }
       },
       "DistributedLock.Core": {
@@ -217,8 +217,8 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.36.0",
-        "contentHash": "xLThG3rvcv8NNkNuCU334Ut+9qODX8tTBqe8J9IAP7auyq4qv/TYmqmKYnkDAJVIW6xl6LECVDFgJMD3YZTbow==",
+        "resolved": "1.36.2",
+        "contentHash": "VV1xYQOrLjO5vx2OFLlUyph7ZlKTYrg8tCGKmXUEEMz1N+NlhtvkGzXPpLtYgk23fqxAMGuiASrYoq87Wsi8qw==",
         "dependencies": {
           "JasperFx": "1.31.0"
         }
@@ -264,11 +264,11 @@
       },
       "Marten": {
         "type": "Transitive",
-        "resolved": "8.37.2",
-        "contentHash": "yhzR2TSGA6eYmiiUMcjXW3r7lti/XRTAUzLD+s7x6LSiqu0b+TLlH4g+mHRVwJ0+UTf61bECZe32TfL3DrI7jA==",
+        "resolved": "8.37.3",
+        "contentHash": "wXdDVHm5e/M+HqRkb9NEh3O+VfkSnlHaKl7aoWnT6gMqyjIhfkNQuCqaU0rbER2YRL8ZMISELJhjy2cnFs8GRg==",
         "dependencies": {
-          "JasperFx": "1.29.1",
-          "JasperFx.Events": "1.35.0",
+          "JasperFx": "1.31.0",
+          "JasperFx.Events": "1.36.2",
           "JasperFx.RuntimeCompiler": "4.5.0",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
@@ -1213,7 +1213,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.37.2, )",
+          "Marten": "[8.37.3, )",
           "Microsoft.Extensions.Hosting": "[10.0.9, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.4, )",
@@ -1232,11 +1232,11 @@
       "nexus.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "[4.0.4.8, )",
-          "AWSSDK.S3": "[4.0.24.5, )",
+          "AWSSDK.Extensions.NETCore.Setup": "[4.0.4.10, )",
+          "AWSSDK.S3": "[4.0.25.2, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
-          "Marten": "[8.37.2, )",
+          "Marten": "[8.37.3, )",
           "Nexus.Application": "[1.0.0, )",
           "WolverineFx.Http": "[5.39.5, )",
           "WolverineFx.Http.Marten": "[5.39.5, )",
