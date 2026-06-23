@@ -16,9 +16,9 @@
       },
       "MicroElements.OpenApi.FluentValidation": {
         "type": "Direct",
-        "requested": "[7.1.6, )",
-        "resolved": "7.1.6",
-        "contentHash": "0gJwn9XVH3jDoHtaWhgfGcNDqTsn5J3TmSKemnarjAsNtFdheo6q8kHBgswZtIC97eVmv5Z91pHYPC3Muv+0NA==",
+        "requested": "[7.1.7, )",
+        "resolved": "7.1.7",
+        "contentHash": "gBvg7Y9oANctYvtXWNOxTzdpxGOHPCxuRKO2Hd/j+sk8ei3SjTSO+SLu8NZMOg0KIeIihWMXvuSpH97wZl2pXQ==",
         "dependencies": {
           "FluentValidation": "12.0.0"
         }
@@ -108,23 +108,23 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.9.6",
-        "contentHash": "Lzi5hMHNB+ApeMbQxNDCUNa+Lta00ozr1okKUGqUyNXUC/OG136k8M6jXgNrbwsRxDmVdHHY6UdD4aoUaGVzkQ=="
+        "resolved": "4.0.9.7",
+        "contentHash": "zCk+WKedXq45u92RcqWcZodzwvQryrqNpUWFdEPBm3ExuwDhY3BMF0VYMWiD/ko0ThhChqf9libgIpd/hQuBPQ=="
       },
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Transitive",
-        "resolved": "4.0.4.10",
-        "contentHash": "exipGMr0T64mhslii1Bh0v6qsS2EvVLmMlNOF+W9DZmRSm5nPMHQZvDaUtgQH0yM96DvVH+H0mLdSgml/FwHIQ==",
+        "resolved": "4.0.4.11",
+        "contentHash": "QSDhgSnZG3gGl7NhWs5KegJGTMv4FMqh4zlZeCMGdfeY2tBGWjXMAe9Gfmy6JUVbbJrX1AljB1l4MEwhYgyplQ==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.9.6"
+          "AWSSDK.Core": "4.0.9.7"
         }
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.25.2",
-        "contentHash": "RZ71S6Ra8rw0jS813PM6FNzFx5gaAL4/gO8ZQoO2dcHCPMwCepCwvb/kJdOCknLnZaqdHIGJcmjCvW3622O9jw==",
+        "resolved": "4.0.25.3",
+        "contentHash": "xfvFNskg5x/Z10UkRA2XdQxADgMoBPE4LwrGDvE7EGoK7nqoO1CCmLNy1jteprZDBEHwUAZcIfagEDN7YFhH0Q==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.9.6, 5.0.0)"
+          "AWSSDK.Core": "[4.0.9.7, 5.0.0)"
         }
       },
       "DistributedLock.Core": {
@@ -930,8 +930,8 @@
       "nexus.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "[4.0.4.10, )",
-          "AWSSDK.S3": "[4.0.25.2, )",
+          "AWSSDK.Extensions.NETCore.Setup": "[4.0.4.11, )",
+          "AWSSDK.S3": "[4.0.25.3, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
           "Marten": "[8.37.3, )",
