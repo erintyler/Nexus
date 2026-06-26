@@ -75,12 +75,12 @@
       },
       "WolverineFx.FluentValidation": {
         "type": "Direct",
-        "requested": "[5.39.5, )",
-        "resolved": "5.39.5",
-        "contentHash": "GndYpol1608Mahrw4ZTbwEZO/V/qgPXzy5Q5Bkfa1iYvFiRkf9B11eSsC9SOHhtRONPVI1ZI4Q4CeppTumT+2w==",
+        "requested": "[6.15.0, )",
+        "resolved": "6.15.0",
+        "contentHash": "BWTRW1td5XHVfnU2fW38QminR1xbQGS3uEki+sXZyTyOqEj2AcgWNpD7/ptVIc4EtuNSjB20KYGIteDKow8G5Q==",
         "dependencies": {
           "FluentValidation": "12.0.0",
-          "WolverineFx": "5.39.5"
+          "WolverineFx": "6.15.0"
         }
       },
       "WolverineFx.Http": {
@@ -143,8 +143,8 @@
       },
       "FastExpressionCompiler": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "XRmGW48Gdm7B70WUtTJJUnmuc8jRDmOhhjG/a3rix/nXChnrkETaSvA0j2VrcsH4MNeYLe60LA5o5JABmbneag=="
+        "resolved": "5.4.1",
+        "contentHash": "nqMykMspK5cQd35Y8ulQzAujxCcCwZVUne32pC5xNpXqrbPCuKOPMWkKHJ3LveAZPm6dsVvump0TJ1SZ9RzfTQ=="
       },
       "FluentValidation": {
         "type": "Transitive",
@@ -189,10 +189,10 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.31.0",
-        "contentHash": "4ixFajJnNJf9Unuc49rq8pKtHYMdUVepE1tX921F48u6BAbf9BNuGdijDioehYLGl/yhsF2yjRrQXpsN9FMZIg==",
+        "resolved": "2.16.0",
+        "contentHash": "H93hRmqUVeGJSW8Ms5j9ok9I/RwzpMvxjGH6N70bW5Ne8RoYgKBj255JN6s8bjTjXMrz8L0iKCL3YtTsr1T2sg==",
         "dependencies": {
-          "FastExpressionCompiler": "5.3.0",
+          "FastExpressionCompiler": "5.4.1",
           "ImTools": "4.0.0",
           "Microsoft.Bcl.TimeProvider": "10.0.0",
           "Polly.Core": "8.6.5",
@@ -201,10 +201,10 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.36.2",
-        "contentHash": "VV1xYQOrLjO5vx2OFLlUyph7ZlKTYrg8tCGKmXUEEMz1N+NlhtvkGzXPpLtYgk23fqxAMGuiASrYoq87Wsi8qw==",
+        "resolved": "2.16.0",
+        "contentHash": "cVwJpdj8z3k3xabZGCkowHW1rUrUPFX0ULWftR0KgqNxEXmNeU+CIRhvwwQWtMalRDrZUy4awv4+lZyUGBI15Q==",
         "dependencies": {
-          "JasperFx": "1.31.0"
+          "JasperFx": "2.16.0"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -218,10 +218,10 @@
           "Microsoft.CodeAnalysis.Scripting": "5.0.0"
         }
       },
-      "JasperFx.SourceGeneration": {
+      "JasperFx.SourceGenerator": {
         "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "yIOaiA/OrlXQLGPjxFDubHnOU8MCzPTz465xBGRITMm4fDf7DbWKogb2SZC2jYLWEj27q3smTz1Z7lU4h1KkOQ=="
+        "resolved": "2.16.0",
+        "contentHash": "wwjl3taQ1Z40ESBTIAYwf88nms3sXp6osyAzIAjXugrUCj3D4AIYEYQGxHAPF6Yk6o6Roouw/pnMqJuKS2jM0g=="
       },
       "LocalStack.Client": {
         "type": "Transitive",
@@ -625,18 +625,18 @@
       },
       "OpenTelemetry.Instrumentation.AspNetCore": {
         "type": "Transitive",
-        "resolved": "1.15.2",
-        "contentHash": "2nPd7r0ug/gd6/CNFL6Rlu+RSQ9WYGSGHAYQ1ssbSqyzKJpqTunfx2I/1O0WB5k+L0cyXbG4XVZpoSoUc3M7wg==",
+        "resolved": "1.16.0",
+        "contentHash": "vSC5EsmBVNcqXMh9BGkkq8zkoUjrg8ghBDb9zbKR8Bqjd05utjVgVft+fqsqQVsvlV5olGj1pBliHBngcIGSIg==",
         "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.15.3, 2.0.0)"
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.16.0, 2.0.0)"
         }
       },
       "OpenTelemetry.Instrumentation.Http": {
         "type": "Transitive",
-        "resolved": "1.15.1",
-        "contentHash": "vFO4Fj/dXkoVNGo/nhoGpO2zYQmZwr4jTID7oRGo+XlQ8LqksyZjUXQ4p39RfUvTID7IzzL8Qe71tW7CcAFymA==",
+        "resolved": "1.16.0",
+        "contentHash": "+Sz3lfvMXwWE8s/sMruHCDlO/+cArFVc6oBg1tCb70BKlL9FCC7uK4Ar2/VP9Hhwvs+UwaW1vGzE/uiByVHXiA==",
         "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.15.3, 2.0.0)"
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.16.0, 2.0.0)"
         }
       },
       "OpenTelemetry.Instrumentation.Runtime": {
@@ -851,15 +851,13 @@
       },
       "WolverineFx": {
         "type": "Transitive",
-        "resolved": "5.39.5",
-        "contentHash": "rnyz+ZConabOTi/U8N7UQAOaMc9P03hHyFrXZ6///6X0qtsHQ+VKDZtHe87AZJmY7By2w9As9puY6/jGCg5ZCA==",
+        "resolved": "6.15.0",
+        "contentHash": "8i5fDkdb3wyPmMXrwhFxuybdG7cbN7eghe/vTRLCURAxbDjmwpRQBxz/ERsMInwqnKVMlVxqGntNZJIzi5OpMQ==",
         "dependencies": {
-          "JasperFx": "1.31.0",
-          "JasperFx.Events": "1.36.0",
-          "JasperFx.RuntimeCompiler": "4.5.0",
-          "JasperFx.SourceGeneration": "1.1.0",
-          "NewId": "4.0.1",
-          "Newtonsoft.Json": "13.0.3"
+          "JasperFx": "2.16.0",
+          "JasperFx.Events": "2.16.0",
+          "JasperFx.SourceGenerator": "2.16.0",
+          "NewId": "4.0.1"
         }
       },
       "WolverineFx.Http.Marten": {
@@ -948,8 +946,8 @@
           "Microsoft.Extensions.ServiceDiscovery": "[10.7.0, )",
           "OpenTelemetry.Exporter.OpenTelemetryProtocol": "[1.16.0, )",
           "OpenTelemetry.Extensions.Hosting": "[1.16.0, )",
-          "OpenTelemetry.Instrumentation.AspNetCore": "[1.15.2, )",
-          "OpenTelemetry.Instrumentation.Http": "[1.15.1, )",
+          "OpenTelemetry.Instrumentation.AspNetCore": "[1.16.0, )",
+          "OpenTelemetry.Instrumentation.Http": "[1.16.0, )",
           "OpenTelemetry.Instrumentation.Runtime": "[1.15.1, )"
         }
       }
