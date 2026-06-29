@@ -43,9 +43,9 @@
       },
       "Scalar.AspNetCore": {
         "type": "Direct",
-        "requested": "[2.16.5, )",
-        "resolved": "2.16.5",
-        "contentHash": "194DwaZqe9Cd4nJPdY0c7/3ldLhxtgiMMAlWsgGdKuDLvGgKh7Poozd12nowxFS3ytKYzMcyMPjCIWww5n0hDA=="
+        "requested": "[2.16.6, )",
+        "resolved": "2.16.6",
+        "contentHash": "rT7Pdk9wA25xfJJM5cCCTl4HXPsJd6/WcO5UfmB1iCjNl/zKy+ZftsW8rosERio1uJe3VlVJ4SfAaA8w3QmV4w=="
       },
       "Serilog.AspNetCore": {
         "type": "Direct",
@@ -625,18 +625,18 @@
       },
       "OpenTelemetry.Instrumentation.AspNetCore": {
         "type": "Transitive",
-        "resolved": "1.15.2",
-        "contentHash": "2nPd7r0ug/gd6/CNFL6Rlu+RSQ9WYGSGHAYQ1ssbSqyzKJpqTunfx2I/1O0WB5k+L0cyXbG4XVZpoSoUc3M7wg==",
+        "resolved": "1.16.0",
+        "contentHash": "vSC5EsmBVNcqXMh9BGkkq8zkoUjrg8ghBDb9zbKR8Bqjd05utjVgVft+fqsqQVsvlV5olGj1pBliHBngcIGSIg==",
         "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.15.3, 2.0.0)"
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.16.0, 2.0.0)"
         }
       },
       "OpenTelemetry.Instrumentation.Http": {
         "type": "Transitive",
-        "resolved": "1.15.1",
-        "contentHash": "vFO4Fj/dXkoVNGo/nhoGpO2zYQmZwr4jTID7oRGo+XlQ8LqksyZjUXQ4p39RfUvTID7IzzL8Qe71tW7CcAFymA==",
+        "resolved": "1.16.0",
+        "contentHash": "+Sz3lfvMXwWE8s/sMruHCDlO/+cArFVc6oBg1tCb70BKlL9FCC7uK4Ar2/VP9Hhwvs+UwaW1vGzE/uiByVHXiA==",
         "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.15.3, 2.0.0)"
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.16.0, 2.0.0)"
         }
       },
       "OpenTelemetry.Instrumentation.Runtime": {
@@ -948,8 +948,8 @@
           "Microsoft.Extensions.ServiceDiscovery": "[10.7.0, )",
           "OpenTelemetry.Exporter.OpenTelemetryProtocol": "[1.16.0, )",
           "OpenTelemetry.Extensions.Hosting": "[1.16.0, )",
-          "OpenTelemetry.Instrumentation.AspNetCore": "[1.15.2, )",
-          "OpenTelemetry.Instrumentation.Http": "[1.15.1, )",
+          "OpenTelemetry.Instrumentation.AspNetCore": "[1.16.0, )",
+          "OpenTelemetry.Instrumentation.Http": "[1.16.0, )",
           "OpenTelemetry.Instrumentation.Runtime": "[1.15.1, )"
         }
       }
