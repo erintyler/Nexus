@@ -16,9 +16,9 @@
       },
       "MicroElements.OpenApi.FluentValidation": {
         "type": "Direct",
-        "requested": "[7.1.9, )",
-        "resolved": "7.1.9",
-        "contentHash": "sy/OQ56MvRQ8VKgldsSbkfWmO+2AHm0BCG3RuJopaMPXb58OBWYa1JmdZf9HHHXW1iF4cNARy0kfRGkmZCxzCg==",
+        "requested": "[7.2.0, )",
+        "resolved": "7.2.0",
+        "contentHash": "EnQNHbpm7YM21a6cYK7hVUBQgl0RfeJphSr12FrYVkNHa9dxNgXDXF0k8EF64BeQhwNpY19wCAx50KbT50RZlg==",
         "dependencies": {
           "FluentValidation": "12.0.0"
         }
@@ -108,23 +108,23 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.100.2",
-        "contentHash": "1hz6lB2Meymkv9rdOy30p5pIbGpYLK0H4O8XUMGwEMmXUB4FJhyTNk69dLWIFdDUrY66h0NyKy9maHKXMRTwJA=="
+        "resolved": "4.0.100.3",
+        "contentHash": "KU+8IlwHqh68J82FXvsNgehAuG0Z++Ul62oD5sg5Iyj4RgSdUKer3nbLBJbW31DAM7mgEuckhsEcJW+2wYpSVA=="
       },
       "AWSSDK.Extensions.NETCore.Setup": {
         "type": "Transitive",
-        "resolved": "4.0.100.2",
-        "contentHash": "WTZP8ARqP7ekvb50t7F6QDo6iDLYGQd1f98RYx6TqbRdSeMuKaRS42c7mYTyHaCscCXwft7Qqs7gA+Vdu2300w==",
+        "resolved": "4.0.100.3",
+        "contentHash": "TnTFmXdDQKzS+pmY71ID+tSx/pH18FhQlQ51URtGxAJXr3PMEv/Blb3G6U7OVSOMYmlyUxH2e1vYxHLhc81+0w==",
         "dependencies": {
-          "AWSSDK.Core": "4.0.100.2"
+          "AWSSDK.Core": "4.0.100.3"
         }
       },
       "AWSSDK.S3": {
         "type": "Transitive",
-        "resolved": "4.0.100.2",
-        "contentHash": "t7kVd4ckiEVE79yu4fnjt9X4Rq+M4Kxg0ghGogzP0rGzgtBQY3es9wD6vJXFjEvYy/b3ef31NbKqL7wvHTN5Pg==",
+        "resolved": "4.0.100.3",
+        "contentHash": "bHe+BZRyC/TnyPw3/l6N96V/hqtBHyjtXINVrVxVl8LTYx2fxNI1HTwknm0jslSkOiOKeHRZ/oduxMcJXBbtsg==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.100.2, 5.0.0)"
+          "AWSSDK.Core": "[4.0.100.3, 5.0.0)"
         }
       },
       "DistributedLock.Core": {
@@ -242,8 +242,8 @@
       },
       "Marten": {
         "type": "Transitive",
-        "resolved": "8.37.3",
-        "contentHash": "wXdDVHm5e/M+HqRkb9NEh3O+VfkSnlHaKl7aoWnT6gMqyjIhfkNQuCqaU0rbER2YRL8ZMISELJhjy2cnFs8GRg==",
+        "resolved": "8.37.4",
+        "contentHash": "5X8F3jI4VeW8A9QwkOL4EWLJZAE6ikrkMDkxwdhq0A/bVw6G4qLo7oWy1VnogyuH3J6LYrpdAjm1H4bYIQ5piw==",
         "dependencies": {
           "JasperFx": "1.31.0",
           "JasperFx.Events": "1.36.2",
@@ -641,10 +641,10 @@
       },
       "OpenTelemetry.Instrumentation.Runtime": {
         "type": "Transitive",
-        "resolved": "1.15.1",
-        "contentHash": "cpPwlUT5HXcLGPaIgsbSy0W9eFYAPGVbTP1p8/uyQ4Osvf5BJuPpEXE7crL09SmEd44r0DGNKDtsqxaAz0HxQw==",
+        "resolved": "1.16.0",
+        "contentHash": "3mKCZZo32UYn/vcVFxxrWgO+BcDy9EZBdW1rfCzdtK+CGCFIMnf6AY96MrnVnyNK/f3ehq9t6qLec8OTNxgzRw==",
         "dependencies": {
-          "OpenTelemetry.Api": "[1.15.3, 2.0.0)"
+          "OpenTelemetry.Api": "[1.16.0, 2.0.0)"
         }
       },
       "Polly.Core": {
@@ -912,7 +912,7 @@
         "type": "Project",
         "dependencies": {
           "FluentValidation": "[12.1.1, )",
-          "Marten": "[8.37.3, )",
+          "Marten": "[8.37.4, )",
           "Nexus.Domain": "[1.0.0, )",
           "SkiaSharp": "[3.119.4, )",
           "SkiaSharp.NativeAssets.Linux": "[3.119.4, )",
@@ -930,11 +930,11 @@
       "nexus.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "[4.0.100.2, )",
-          "AWSSDK.S3": "[4.0.100.2, )",
+          "AWSSDK.Extensions.NETCore.Setup": "[4.0.100.3, )",
+          "AWSSDK.S3": "[4.0.100.3, )",
           "LocalStack.Client": "[2.0.0, )",
           "LocalStack.Client.Extensions": "[2.0.0, )",
-          "Marten": "[8.37.3, )",
+          "Marten": "[8.37.4, )",
           "Nexus.Application": "[1.0.0, )",
           "WolverineFx.Http": "[5.39.5, )",
           "WolverineFx.Http.Marten": "[5.39.5, )",
@@ -950,7 +950,7 @@
           "OpenTelemetry.Extensions.Hosting": "[1.16.0, )",
           "OpenTelemetry.Instrumentation.AspNetCore": "[1.16.0, )",
           "OpenTelemetry.Instrumentation.Http": "[1.16.0, )",
-          "OpenTelemetry.Instrumentation.Runtime": "[1.15.1, )"
+          "OpenTelemetry.Instrumentation.Runtime": "[1.16.0, )"
         }
       }
     }
