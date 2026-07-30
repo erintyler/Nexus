@@ -34,11 +34,11 @@
       },
       "LocalStack.Client.Extensions": {
         "type": "Direct",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "4jCBUBUDcr+ftTIiE8UZgLowXnzLtpGlR8Gx6svUGYvUxoJqyXP5MDi6uaoXsGg7qJb1DDBTiZ4jsRI2oLg8pA==",
+        "requested": "[2.0.1, )",
+        "resolved": "2.0.1",
+        "contentHash": "yesmxgSMr8H5VMu2+bONIymZ3959J7JuHhfnVACZ5mf2omwdjPtuu/T7p/DPHpwNgyGglyLIRMcEnmUFPzmkPA==",
         "dependencies": {
-          "AWSSDK.Extensions.NETCore.Setup": "4.0.2",
+          "AWSSDK.Extensions.NETCore.Setup": "4.0.100.5",
           "LocalStack.Client": "2.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.32",
           "Microsoft.Extensions.Configuration.Binder": "3.1.32",
