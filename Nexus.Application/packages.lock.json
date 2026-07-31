@@ -66,9 +66,9 @@
       },
       "SkiaSharp.NativeAssets.Linux": {
         "type": "Direct",
-        "requested": "[3.119.4, )",
-        "resolved": "3.119.4",
-        "contentHash": "UAyVzbqNfZsZbKbzj68zXLyUyF/SbTKmzTfOO6qDu++dtIUMMTzPBe8oOuzU/DiewpfKoUUlOSsJmqWc6blxBw=="
+        "requested": "[4.150.1, )",
+        "resolved": "4.150.1",
+        "contentHash": "7IZtljoTBp0EH7/6K3p3yey44db3W7hkV9UPdCOaQQ2TxFkmFOpXwOPiQ865DrG+szgp0aKpQs8vYrzRdF83Ng=="
       },
       "SkiaSharp.NativeAssets.macOS": {
         "type": "Direct",
