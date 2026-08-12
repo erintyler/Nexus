@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <PackageReference Include="grate.postgresql" Version="2.1.6" />
-        <PackageReference Include="Marten" Version="8.37.4" />
+        <PackageReference Include="Marten" Version="9.23.0" />
         <PackageReference Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1"/>
         <PackageReference Include="Npgsql.DependencyInjection" Version="10.0.3" />
