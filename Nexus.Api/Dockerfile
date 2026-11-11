@@ -1,4 +1,4 @@
-﻿# Build stage
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -25,7 +25,7 @@ RUN dotnet publish "./Nexus.Api.csproj" \
     /p:UseAppHost=false
 
 # Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:11.0-alpine AS final
 WORKDIR /app
 
 # Create non-root user for better security
